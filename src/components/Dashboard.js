@@ -1,31 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import "../styles/Dashboard.css";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Chats from "./Chats";
+import Friends from "./Friends";
+import Profile from "./Profile";
 
 function Dashboard(props) {
-  const [user, setUser] = useState();
-
-  // GET call to the back end to have web token decoded and the user payload sent back for use
-  useEffect(() => {
-    const getUser = async () => {
-      const token = await fetch("http://localhost:5000/users", {
-        mode: "cors",
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const response = await token.json();
-      if (response.message) {
-        setUser(response.message);
-        clearStorage();
-      } else {
-        setUser(response.payload.username);
-      }
-    };
-    getUser();
-  }, []);
-
   // This clears the local storage of web tokens, effectively logging out the user
   const clearStorage = () => {
     localStorage.clear();
@@ -33,10 +12,32 @@ function Dashboard(props) {
   };
 
   return (
-    <section>
-      <h1>Dashboard</h1>
-      <p>{user}</p>
-      <button onClick={clearStorage}>Logout</button>
+    <section className="dashboard">
+      <BrowserRouter>
+        <div className="nav-bar">
+          <div>
+            <h1>Mylo Messenger</h1>
+            {props.user && <p>User: {props.user.username}</p>}
+          </div>
+          <Link to="/" className="nav-links">
+            Chats
+          </Link>
+          <Link to="/friends" className="nav-links">
+            Friends
+          </Link>
+          <Link to="/profile" className="nav-links">
+            Profile
+          </Link>
+          <button onClick={clearStorage}>Logout</button>
+        </div>
+        <div className="dashboard-view-container">
+          <Routes>
+            <Route path="/" element={<Chats />} />
+            <Route path="/friends" element={<Friends />} />
+            <Route path="/profile" element={<Profile user={props.user} />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </section>
   );
 }

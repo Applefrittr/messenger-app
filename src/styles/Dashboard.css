@@ -1,0 +1,14 @@
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: var(--main-theme-color);
+  color: white;
+  width: max-content;
+  padding: 2rem;
+}
+
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}

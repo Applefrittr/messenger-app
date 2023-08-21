@@ -1,5 +1,5 @@
 .Login {
-  background-color: #282c34;
+  background-color: var(--main-theme-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -32,25 +32,6 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-}
-
-button,
-.nav-links {
-  color: #00b7ff;
-  text-decoration: none;
-  padding: 0.5rem 2rem;
-  border: 1px solid rgb(0, 183, 255);
-  border-radius: 15px;
-  background-color: whitesmoke;
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-button:hover,
-.nav-links:hover {
-  cursor: pointer;
-  background-color: aliceblue;
 }
 
 .login-msg-container {
