@@ -1,0 +1,124 @@
+import { useRef, useState } from "react";
+import "../styles/Login.css";
+
+function Login(props) {
+  const [errors, setErrors] = useState();
+
+  const signinRef = useRef();
+  const signupRef = useRef();
+
+  const toggleForms = () => {
+    signinRef.current.classList.toggle("hide-form");
+    signupRef.current.classList.toggle("hide-form");
+    setErrors();
+  };
+
+  // Sign up function, sends form data input by user to the API for user creation
+  const signUp = async (e) => {
+    e.preventDefault();
+
+    // FormData API to pull info from the form then convert to standard JS object
+    const formData = new FormData(signupRef.current);
+    const dataObj = Object.fromEntries(formData.entries());
+
+    const submit = await fetch(`http://localhost:5000/users/create`, {
+      mode: "cors",
+      method: "Post",
+      body: JSON.stringify(dataObj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const response = await submit.json();
+    if (response.errors) {
+      console.log(response.errors);
+      const errorArray = [];
+      response.errors.forEach((error) => {
+        errorArray.push(<p>- {error.msg}</p>);
+      });
+      setErrors(errorArray);
+    } else {
+      console.log(response.message);
+      toggleForms();
+    }
+  };
+
+  // Login function sends user credentials to the API for authentication
+  const signIn = async (e) => {
+    e.preventDefault();
+
+    // FormData API to pull info from the form then convert to standard JS object
+    const formData = new FormData(signinRef.current);
+    const dataObj = Object.fromEntries(formData.entries());
+
+    const request = await fetch(`http://localhost:5000/users`, {
+      mode: "cors",
+      method: "Post",
+      body: JSON.stringify(dataObj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const response = await request.json();
+    if (response.errors) {
+      console.log(response.errors);
+      const errorArray = [];
+      response.errors.forEach((error) => {
+        errorArray.push(<p>- {error.msg}</p>);
+      });
+      setErrors(errorArray);
+    } else {
+      if (response.accessToken) {
+        localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
+        props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
+        setErrors();
+      }
+    }
+  };
+
+  return (
+    <div className="Login">
+      <div className="login-container">
+        <form className="signin-form" action="" method="POST" ref={signinRef}>
+          <h1>Sign In</h1>
+          <label htmlFor="username">Username</label>
+          <input type="text" name="username" />
+          <label htmlFor="password">Password</label>
+          <input type="password" name="password" />
+          <div className="login-buttons">
+            <button type="submit" onClick={signIn}>
+              Sign in
+            </button>
+            <p>-OR-</p>
+            <button type="button" onClick={toggleForms}>
+              Sign Up
+            </button>
+          </div>
+        </form>
+        <form className="signup-form hide-form" ref={signupRef}>
+          <h1>Sign Up</h1>
+          <label htmlFor="username">Username</label>
+          <input type="text" name="username" required />
+          <label htmlFor="password">Password</label>
+          <input type="password" name="password" required />
+          <label htmlFor="confirm-password">Confirm Password</label>
+          <input type="password" name="confirm-password" required />
+          <div className="login-buttons">
+            <button type="submit" onClick={signUp}>
+              Sign Up
+            </button>
+            <p>-OR-</p>
+            <button type="button" onClick={toggleForms}>
+              Cancel
+            </button>
+          </div>
+        </form>
+        {errors && <div className="login-msg-container">{errors}</div>}
+      </div>
+    </div>
+  );
+}
+
+export default Login;
