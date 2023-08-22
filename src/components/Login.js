@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
 function Login(props) {
   const [errors, setErrors] = useState();
+  const navigate = useNavigate();
 
   const signinRef = useRef();
   const signupRef = useRef();
@@ -74,6 +76,7 @@ function Login(props) {
         localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
         props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
         setErrors();
+        navigate(`/${dataObj.username}/`); // navigate to the Dashboard component with the current username as the URL base
       }
     }
   };

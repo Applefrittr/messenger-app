@@ -12,3 +12,10 @@
   display: flex;
   min-height: 100vh;
 }
+
+.dashboard-view-container {
+  padding: 0 2rem;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}

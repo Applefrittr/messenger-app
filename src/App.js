@@ -2,6 +2,7 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import { useState, useEffect } from "react";
 import "./styles/App.css";
+import { Routes, Route } from "react-router-dom";
 
 // Main App.  Uses state to determine if there is a jwt in localStorage which sets the user state to be passed to the rest of the app.  Effectively checks if a user is logged in or not and will render either
 // the login page or the dashboard
@@ -41,11 +42,19 @@ function App() {
 
   return (
     <div>
-      {token ? (
-        <Dashboard updateToken={updateToken} token={token} user={user} />
-      ) : (
-        <Login updateToken={updateToken} msg={msg} />
-      )}
+      <Routes>
+        <Route
+          path="/"
+          element={<Login updateToken={updateToken} msg={msg} />}
+        />
+
+        <Route
+          path="/*"
+          element={
+            <Dashboard updateToken={updateToken} token={token} user={user} />
+          }
+        />
+      </Routes>
     </div>
   );
 }
