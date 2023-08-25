@@ -1,12 +1,34 @@
 import "../styles/Dashboard.css";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Chats from "./Chats";
 import Friends from "./Friends";
 import Profile from "./Profile";
 import ProfileEdit from "./ProfileEdit";
+import { useEffect, useState } from "react";
 
 function Dashboard(props) {
+  const [currUser, setCurrUser] = useState(props.user);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getCurrUser = async () => {
+      const request = await fetch(
+        `http://localhost:5000/users/${props.user.username}/profile`
+      );
+
+      const response = await request.json();
+
+      console.log("dashboard user", response.user);
+      setCurrUser(response.user);
+    };
+
+    getCurrUser();
+  }, []);
+
+  const updateUser = (state) => {
+    setCurrUser(state);
+  };
+
   let base; // the base to our URL paths is the current logged in user
   if (props.user) base = `/${props.user.username}`;
 
@@ -41,11 +63,13 @@ function Dashboard(props) {
           <Route path={base + "/friends"} element={<Friends />} />
           <Route
             path={base + "/profile"}
-            element={<Profile user={props.user} />}
-          />
-          <Route
-            path={base + "/profile/edit"}
-            element={<ProfileEdit user={props.user} />}
+            element={
+              <Profile
+                user={currUser}
+                token={props.token}
+                updateUser={updateUser}
+              />
+            }
           />
         </Routes>
       </div>

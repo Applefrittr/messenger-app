@@ -26,19 +26,30 @@ function App() {
       });
 
       const response = await request.json();
+
+      //console.log(response.payload);
+
       if (response.message) {
         setMsg(response.message);
         localStorage.clear();
       } else {
+        console.log("user reset");
+        console.log("user", user);
+        console.log("payload", response.payload);
         setUser(response.payload);
       }
     };
+
     getUser();
   }, [token]);
 
   const updateToken = (state) => {
     setToken(state);
   };
+
+  // const updateUser = (state) => {
+  //   setUser(state);
+  // };
 
   return (
     <div>
@@ -48,12 +59,14 @@ function App() {
           element={<Login updateToken={updateToken} msg={msg} />}
         />
 
-        <Route
-          path="/*"
-          element={
-            <Dashboard updateToken={updateToken} token={token} user={user} />
-          }
-        />
+        {user && (
+          <Route
+            path="/*"
+            element={
+              <Dashboard updateToken={updateToken} token={token} user={user} />
+            }
+          />
+        )}
       </Routes>
     </div>
   );
