@@ -3,11 +3,10 @@ import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Chats from "./Chats";
 import Friends from "./Friends";
 import Profile from "./Profile";
-import ProfileEdit from "./ProfileEdit";
 import { useEffect, useState } from "react";
 
 function Dashboard(props) {
-  const [currUser, setCurrUser] = useState(props.user);
+  const [currUser, setCurrUser] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +25,7 @@ function Dashboard(props) {
   }, []);
 
   const updateUser = (state) => {
+    console.log("state", state);
     setCurrUser(state);
   };
 
@@ -33,9 +33,10 @@ function Dashboard(props) {
   if (props.user) base = `/${props.user.username}`;
 
   // This clears the local storage of web tokens and navigates to login page, effectively logging out the user
-  const clearStorage = () => {
+  const logout = () => {
     localStorage.clear();
     props.updateToken();
+    props.updateUser();
     navigate("/");
   };
 
@@ -55,23 +56,25 @@ function Dashboard(props) {
         <Link to={base + "/profile"} className="nav-links">
           Profile
         </Link>
-        <button onClick={clearStorage}>Logout</button>
+        <button onClick={logout}>Logout</button>
       </div>
       <div className="dashboard-view-container">
-        <Routes>
-          <Route path={base + "/"} element={<Chats />} />
-          <Route path={base + "/friends"} element={<Friends />} />
-          <Route
-            path={base + "/profile"}
-            element={
-              <Profile
-                user={currUser}
-                token={props.token}
-                updateUser={updateUser}
-              />
-            }
-          />
-        </Routes>
+        {currUser && (
+          <Routes>
+            <Route path={base + "/"} element={<Chats />} />
+            <Route path={base + "/friends"} element={<Friends />} />
+            <Route
+              path={base + "/profile"}
+              element={
+                <Profile
+                  user={currUser}
+                  token={props.token}
+                  updateUser={updateUser}
+                />
+              }
+            />
+          </Routes>
+        )}
       </div>
     </section>
   );

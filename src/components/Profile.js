@@ -1,10 +1,9 @@
 import "../styles/Profile.css";
-import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 function Profile(props) {
   const [avatars, setAvatars] = useState("");
-  const [userAvatar, setUserAvatar] = useState();
+  const [userAvatar, setUserAvatar] = useState(props.user.avatar);
   const [editAvatar, setEditAvatar] = useState(props.user.avatar);
   const [user, setUser] = useState(props.user);
 
@@ -13,15 +12,15 @@ function Profile(props) {
   const toolRef = useRef();
   const avatarEdit = useRef();
 
+  // Toggle display of the edit form
   const toggleModal = () => {
     modalRef.current.classList.toggle("toggle-modal");
     setTimeout(() => {
       formRef.current.classList.toggle("toggle-form");
     }, 100);
-
-    //console.log(user);
   };
 
+  // Toggle the display of the avatar selection tool
   const toggleTool = () => {
     toolRef.current.classList.toggle("toggle-tool");
     setTimeout(() => {
@@ -29,14 +28,13 @@ function Profile(props) {
     }, 100);
   };
 
+  // Close the avatar selection tool when a new avatar is selected
   const pickAvatar = (e) => {
     toggleTool();
-    // //console.log(e.target.src);
     setEditAvatar(e.target.src);
-    // console.log(user);
-    //handleChange(e);
   };
 
+  // submit the edits to be saved to the DB.  Update the states of Dashboard as well as Profile to reflect the changes as well
   const submitEdits = async (e) => {
     e.preventDefault();
 
@@ -61,30 +59,27 @@ function Profile(props) {
     const response = await request.json();
     console.log(response.message);
 
-    props.updateUser(user); // Update the App state user with the edits
-    setUser(user); // Update local state user to display current info in the form fields
+    props.updateUser({ ...user, avatar: editAvatar }); // Update the Dashboard state user with the edits
+    setUser({ ...user, avatar: editAvatar }); // Update local state user to display current info in the form fields
     setUserAvatar(editAvatar); // Update profile avatar to match form avatar selection
     toggleModal();
   };
 
   // function will handle changes to form fields "title", "text", or the checkbox. Updates the local state user (handles form manipulation), which is a copy of the App state user
   const handleChange = (e) => {
-    //console.log("change", user);
     let updatedUser = { ...user };
-    //console.log("user", user.personal);
+
     if (e.target.name === "country") updatedUser.country = e.target.value;
     else if (e.target.name === "personal")
       updatedUser.personal = e.target.value;
     else if (e.target.name === "birthday")
       updatedUser.birthday = e.target.value;
-    //else updatedUser.avatar = e.target.src;
-    //console.log("updated", user);
+
     setUser(updatedUser);
-    //props.updateUser(updatedUser);
   };
 
+  // on component mount, retrieve the avatars from the API
   useEffect(() => {
-    //console.log(props.user);
     const getAvatars = async () => {
       const request = await fetch("http://localhost:5000/json/avatars.json");
 
@@ -112,7 +107,7 @@ function Profile(props) {
       <section className="profile-container">
         <div className="profile-header">
           <div className="img-container">
-            <img src={props.user.avatar} alt="avatar"></img>
+            <img src={userAvatar} alt="avatar"></img>
           </div>
           <div className="profile-info">
             <div>
@@ -123,12 +118,9 @@ function Profile(props) {
           </div>
           <div className="profile-info">
             <div>
-              <h2>joined: {props.user.userSince}</h2>
-              <p>birthday: {props.user.birthday}</p>
+              <h2>joined: {props.user.userSince_string}</h2>
+              <p>birthday: {new Date(props.user.birthday).toDateString()}</p>
             </div>
-            {/* <Link to="edit" className="nav-links">
-              Edit Profile
-            </Link> */}
             <button onClick={toggleModal}>Edit Profile</button>
           </div>
         </div>

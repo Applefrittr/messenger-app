@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     // GET call to the back end to have web token decoded and the user payload sent back for use
     const getUser = async () => {
-      const request = await fetch("http://localhost:5000/users", {
+      const request = await fetch("http://localhost:5000/users/login", {
         mode: "cors",
         method: "GET",
         headers: {
@@ -47,9 +47,9 @@ function App() {
     setToken(state);
   };
 
-  // const updateUser = (state) => {
-  //   setUser(state);
-  // };
+  const updateUser = (state) => {
+    setUser(state);
+  };
 
   return (
     <div>
@@ -63,11 +63,20 @@ function App() {
           <Route
             path="/*"
             element={
-              <Dashboard updateToken={updateToken} token={token} user={user} />
+              <Dashboard
+                updateToken={updateToken}
+                updateUser={updateUser}
+                token={token}
+                user={user}
+              />
             }
           />
         )}
       </Routes>
+      {/* {user && (
+        <Dashboard updateToken={updateToken} token={token} user={user} />
+      )}
+      {!user && <Login updateToken={updateToken} msg={msg} />} */}
     </div>
   );
 }

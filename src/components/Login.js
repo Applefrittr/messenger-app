@@ -54,7 +54,7 @@ function Login(props) {
     const formData = new FormData(signinRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const request = await fetch(`http://localhost:5000/users`, {
+    const request = await fetch(`http://localhost:5000/users/login`, {
       mode: "cors",
       method: "Post",
       body: JSON.stringify(dataObj),
