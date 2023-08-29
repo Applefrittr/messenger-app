@@ -1,0 +1,21 @@
+.search-card {
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  gap: 1rem;
+}
+
+.search-avatar {
+  width: 100px;
+  height: 100px;
+}
+
+.search-results-container {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.search-card-btns {
+  justify-self: flex-end;
+}
