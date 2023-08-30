@@ -1,4 +1,4 @@
-.profile-view {
+.component-view {
   height: 100%;
   width: 100%;
   position: relative;
@@ -6,7 +6,7 @@
   justify-content: center;
 }
 
-.profile-container {
+.component-container {
   height: 100%;
   width: 85%;
   background-color: var(--main-theme-color);

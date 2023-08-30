@@ -1,3 +1,33 @@
+.friends-nav {
+  display: flex;
+}
+
+.friends-nav-btn {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  background-image: linear-gradient(white, white);
+  background-size: 0% 0.1rem;
+  background-position-y: 100%;
+  background-position-x: 0%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s ease-in-out;
+}
+
+.friends-nav-btn:hover {
+  cursor: pointer;
+}
+
+.active-tab {
+  background-size: 100% 0.1rem;
+}
+
+.search-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .search-card {
   display: flex;
   align-items: center;
@@ -14,6 +44,17 @@
   display: flex;
   gap: 1rem;
   flex-direction: column;
+  text-align: center;
+  flex: 1;
+  position: relative;
+}
+
+.search-results-container > p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
 }
 
 .search-card-btns {

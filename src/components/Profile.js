@@ -103,8 +103,8 @@ function Profile(props) {
   }, []);
 
   return (
-    <section className="profile-view">
-      <section className="profile-container">
+    <section className="component-view">
+      <section className="component-container">
         <div className="profile-header">
           <div className="img-container">
             <img src={userAvatar} alt="avatar"></img>
