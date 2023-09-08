@@ -119,7 +119,12 @@ function Profile(props) {
           <div className="profile-info">
             <div>
               <h2>joined: {props.user.userSince_string}</h2>
-              <p>birthday: {new Date(props.user.birthday).toDateString()}</p>
+              <p>
+                birthday:{" "}
+                {props.user.birthday
+                  ? new Date(props.user.birthday).toDateString()
+                  : "???"}
+              </p>
             </div>
             <button onClick={toggleModal}>Edit Profile</button>
           </div>

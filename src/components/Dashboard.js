@@ -62,7 +62,10 @@ function Dashboard(props) {
         {currUser && (
           <Routes>
             <Route path={base + "/"} element={<Chats />} />
-            <Route path={base + "/friends"} element={<Friends />} />
+            <Route
+              path={base + "/friends"}
+              element={<Friends user={currUser} token={props.token} />}
+            />
             <Route
               path={base + "/profile"}
               element={

@@ -1,9 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 
-function FriendsSearch() {
+function FriendsSearch(props) {
   const [users, setUsers] = useState();
   const [filteredUsers, setFilteredUsers] = useState([]);
   const formRef = useRef();
+
+  const sendRequest = async (e) => {
+    const request = await fetch(
+      `http://localhost:5000/users/${props.user.username}/request/${e.target.value}`,
+      {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const response = await request.json();
+
+    console.log(response.message);
+  };
 
   useEffect(() => {
     const getUsers = async () => {
@@ -22,7 +40,7 @@ function FriendsSearch() {
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    console.log(dataObj);
+    //console.log(dataObj);
 
     if (!dataObj.search) {
       setFilteredUsers([]);
@@ -30,7 +48,7 @@ function FriendsSearch() {
     }
 
     const filteredObjs = users.filter((user) => {
-      console.log(user.username, dataObj.search);
+      //console.log(user.username, dataObj.search);
       return user.username.indexOf(dataObj.search) >= 0;
     });
 
@@ -38,15 +56,17 @@ function FriendsSearch() {
 
     filteredObjs.forEach((user) => {
       searchResults.push(
-        <div className="search-card" key={user.username}>
-          <div className="search-avatar">
+        <div className="friend-card" key={user.username}>
+          <div className="friend-avatar">
             <img src={user.avatar} alt="avatar" />
           </div>
           <h1>
             <i>{user.username}</i>
           </h1>
           <div className="search-card-btns">
-            <button>Add friend</button>
+            <button value={user.username} onClick={sendRequest}>
+              Add friend
+            </button>
           </div>
         </div>
       );
@@ -54,6 +74,7 @@ function FriendsSearch() {
 
     setFilteredUsers(searchResults);
   };
+
   return (
     <section className="search-container">
       <form ref={formRef}>
