@@ -30,9 +30,17 @@
 
 .friend-card {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   border: 1px solid black;
   gap: 1rem;
+  padding-right: 2rem;
+}
+
+.friend-card-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .friend-avatar {
@@ -57,6 +65,12 @@
   font-size: 1.5rem;
 }
 
-.search-card-btns {
-  justify-self: flex-end;
+.friend-card-btns {
+  display: flex;
+  gap: 1rem;
+}
+
+.disabled {
+  opacity: 0.75;
+  pointer-events: none;
 }

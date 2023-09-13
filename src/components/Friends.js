@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import "../styles/Friends.css";
-import FriendsSearch from "./FriendsSearch";
+import FriendSearch from "./FriendSearch";
 import FriendRequests from "./FriendRequests";
+import FriendList from "./FriendList";
 
 function Friends(props) {
   const listRef = useRef();
@@ -40,12 +41,26 @@ function Friends(props) {
             Search
           </p>
         </div>
-        {tab === listRef && <p>Friend list component</p>}
+        {tab === listRef && (
+          <FriendList
+            user={props.user}
+            token={props.token}
+            updateUser={props.updateUser}
+          />
+        )}
         {tab === requestsRef && (
-          <FriendRequests user={props.user} token={props.token} />
+          <FriendRequests
+            user={props.user}
+            token={props.token}
+            updateUser={props.updateUser}
+          />
         )}
         {tab === searchRef && (
-          <FriendsSearch user={props.user} token={props.token} />
+          <FriendSearch
+            user={props.user}
+            token={props.token}
+            updateUser={props.updateUser}
+          />
         )}
       </div>
     </section>
