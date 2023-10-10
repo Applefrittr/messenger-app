@@ -102,6 +102,21 @@ function Profile(props) {
     getAvatars();
   }, []);
 
+  const friendsList = [];
+
+  props.user.friends.forEach((friend) => {
+    friendsList.push(
+      <div className="friend-card">
+        <div className="friend-avatar-small">
+          <img src={friend.avatar} alt="avatar" />
+        </div>
+        <p>
+          <i>{friend.username}</i>
+        </p>
+      </div>
+    );
+  });
+
   return (
     <section className="component-view">
       <section className="component-container">
@@ -136,6 +151,7 @@ function Profile(props) {
           <div className="friends-container">
             <div className="online-status">ONLINE</div>
             <div className="friend-list">Friends</div>
+            {friendsList}
           </div>
         </div>
       </section>

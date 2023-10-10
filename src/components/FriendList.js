@@ -1,7 +1,20 @@
 import { useEffect, useState } from "react";
+import { Route } from "react-router-dom";
+import FriendProfile from "./FriendProfile";
 
 function FriendList(props) {
   const [friends, setFriends] = useState();
+  const [displayProfile, setDisplayProfile] = useState(false);
+  const [currProfile, setCurrProfile] = useState();
+
+  const viewProfile = (friend) => () => {
+    setCurrProfile(friend);
+    setDisplayProfile(true);
+  };
+
+  const closeProfile = () => {
+    setDisplayProfile(false);
+  };
 
   const handleRemove = async (e) => {
     const request = await fetch(
@@ -33,6 +46,7 @@ function FriendList(props) {
     const friendsArray = [];
 
     props.user.friends.forEach((friend) => {
+      console.log(friend);
       friendsArray.push(
         <div className="friend-card" key={friend.username}>
           <div className="friend-card-info">
@@ -44,7 +58,7 @@ function FriendList(props) {
             </p>
           </div>
           <div className="friend-card-btns">
-            <button value={friend.username}>Profile</button>
+            <button onClick={viewProfile(friend)}>Profile</button>
             <button value={friend.username} onClick={handleRemove}>
               Remove
             </button>
@@ -57,9 +71,20 @@ function FriendList(props) {
   }, [props.user]);
 
   return (
-    <section>
-      <div>Friend List</div>
-      {friends}
+    <section className="friends-list-container">
+      {!displayProfile && (
+        <div className="friends-list">
+          <div>Friend List</div>
+          {friends}
+        </div>
+      )}
+      {displayProfile && (
+        <FriendProfile
+          user={props.user}
+          friend={currProfile}
+          close={closeProfile}
+        />
+      )}
     </section>
   );
 }

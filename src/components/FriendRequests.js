@@ -8,7 +8,7 @@ function FriendRequests(props) {
     const requestInArray = [];
     userArray.forEach((user) => {
       requestInArray.push(
-        <div className="friend-card">
+        <div className="friend-card" key={user.username}>
           <div className="friend-card-info">
             <div className="friend-avatar">
               <img src={user.avatar} alt="avatar" />
@@ -35,7 +35,7 @@ function FriendRequests(props) {
     const requestOutArray = [];
     userArray.forEach((user) => {
       requestOutArray.push(
-        <div className="friend-card">
+        <div className="friend-card" key={user.username}>
           <div className="friend-card-info">
             <div className="friend-avatar">
               <img src={user.avatar} alt="avatar" />
@@ -76,7 +76,7 @@ function FriendRequests(props) {
 
     console.log(response.message);
 
-    // Update the logged in User by calling updateUser from Dashboard.  This will ensure logged in User will include the newly submitted friend request
+    // Update the logged in User by calling updateUser from Dashboard.  This will ensure logged in User will include the newly submitted friend requests
     const requestUser = await fetch(
       `http://localhost:5000/users/${props.user.username}/profile`
     );
@@ -105,7 +105,7 @@ function FriendRequests(props) {
 
     console.log(response.message);
 
-    // Update the logged in User by calling updateUser from Dashboard.  This will ensure logged in User will include the newly submitted friend request
+    // Update the logged in User by calling updateUser from Dashboard.  This will ensure logged in User will include the newly submitted friend requests
     const requestUser = await fetch(
       `http://localhost:5000/users/${props.user.username}/profile`
     );
@@ -120,11 +120,11 @@ function FriendRequests(props) {
 
   return (
     <section>
-      <div>
+      <div className="friends-list">
         <h2>Incoming Requests</h2>
         {incoming}
       </div>
-      <div>
+      <div className="friends-list">
         <h2>Outgoing Requests</h2>
         {outgoing}
       </div>
