@@ -55,6 +55,8 @@
   align-items: center;
   gap: 1rem;
   padding-right: 2rem;
+  text-decoration: none;
+  color: white;
 }
 
 .friend-card-info {

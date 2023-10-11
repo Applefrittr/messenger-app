@@ -1,20 +1,8 @@
 import { useEffect, useState } from "react";
-import { Route } from "react-router-dom";
-import FriendProfile from "./FriendProfile";
+import { Link } from "react-router-dom";
 
 function FriendList(props) {
   const [friends, setFriends] = useState();
-  const [displayProfile, setDisplayProfile] = useState(false);
-  const [currProfile, setCurrProfile] = useState();
-
-  const viewProfile = (friend) => () => {
-    setCurrProfile(friend);
-    setDisplayProfile(true);
-  };
-
-  const closeProfile = () => {
-    setDisplayProfile(false);
-  };
 
   const handleRemove = async (e) => {
     const request = await fetch(
@@ -58,7 +46,13 @@ function FriendList(props) {
             </p>
           </div>
           <div className="friend-card-btns">
-            <button onClick={viewProfile(friend)}>Profile</button>
+            {/* <button onClick={viewProfile(friend)}>Profile</button> */}
+            <Link
+              to={`/${props.user.username}/friends/${friend.username}`}
+              className="nav-links"
+            >
+              Profile
+            </Link>
             <button value={friend.username} onClick={handleRemove}>
               Remove
             </button>
@@ -72,19 +66,10 @@ function FriendList(props) {
 
   return (
     <section className="friends-list-container">
-      {!displayProfile && (
-        <div className="friends-list">
-          <div>Friend List</div>
-          {friends}
-        </div>
-      )}
-      {displayProfile && (
-        <FriendProfile
-          user={props.user}
-          friend={currProfile}
-          close={closeProfile}
-        />
-      )}
+      <div className="friends-list">
+        <div>Friend List</div>
+        {friends}
+      </div>
     </section>
   );
 }

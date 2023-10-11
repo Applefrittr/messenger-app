@@ -3,6 +3,7 @@ import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Chats from "./Chats";
 import Friends from "./Friends";
 import Profile from "./Profile";
+import FriendProfile from "./FriendProfile";
 import { useEffect, useState } from "react";
 
 function Dashboard(props) {
@@ -71,6 +72,10 @@ function Dashboard(props) {
                   updateUser={updateUser}
                 />
               }
+            />
+            <Route
+              path={base + "/friends/:friend"}
+              element={<FriendProfile user={props.user} />}
             />
             <Route
               path={base + "/profile"}

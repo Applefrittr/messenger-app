@@ -1,5 +1,6 @@
 import "../styles/Profile.css";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 function Profile(props) {
   const [avatars, setAvatars] = useState("");
@@ -102,18 +103,21 @@ function Profile(props) {
     getAvatars();
   }, []);
 
+  // construct the friends list as a collection of links of viewable profiles
   const friendsList = [];
-
   props.user.friends.forEach((friend) => {
     friendsList.push(
-      <div className="friend-card">
+      <Link
+        to={`/${props.user.username}/friends/${friend.username}`}
+        className="friend-card"
+      >
         <div className="friend-avatar-small">
           <img src={friend.avatar} alt="avatar" />
         </div>
         <p>
           <i>{friend.username}</i>
         </p>
-      </div>
+      </Link>
     );
   });
 
