@@ -1,4 +1,3 @@
-import "../styles/Profile.css";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -149,12 +148,13 @@ function Profile(props) {
           </div>
         </div>
         <div className="profile-content">
-          <div className="posts-container">
-            <div className="posts-header">Posts</div>
+          <div className="comment-container">
+            <div className="comment-header">Comments</div>
           </div>
           <div className="friends-container">
-            <div className="online-status">ONLINE</div>
-            <div className="friend-list">Friends</div>
+            <div className="friend-list">
+              Friends <i className="big-font">{user.friends.length}</i>
+            </div>
             {friendsList}
           </div>
         </div>

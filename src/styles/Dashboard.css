@@ -27,7 +27,7 @@
 
 .component-container {
   height: 100%;
-  width: 85%;
+  width: 75%;
   background-color: var(--main-theme-color);
   color: white;
   padding: 2rem;

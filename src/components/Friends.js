@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import "../styles/Friends.css";
 import FriendSearch from "./FriendSearch";
 import FriendRequests from "./FriendRequests";
 import FriendList from "./FriendList";

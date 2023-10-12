@@ -1,4 +1,3 @@
-import "../styles/Dashboard.css";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Chats from "./Chats";
 import Friends from "./Friends";

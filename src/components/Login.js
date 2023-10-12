@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Login.css";
 
 function Login(props) {
   const [errors, setErrors] = useState();
@@ -119,6 +118,7 @@ function Login(props) {
           </div>
         </form>
         {errors && <div className="login-msg-container">{errors}</div>}
+        {/* {props.msg && <div className="login-msg-container">{props.msg}</div>} */}
       </div>
     </div>
   );

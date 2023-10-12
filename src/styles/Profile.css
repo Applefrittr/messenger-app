@@ -26,7 +26,7 @@ img {
   gap: 1rem;
 }
 
-.posts-header {
+.comment-header {
   background-color: #464d5a;
 }
 
@@ -35,7 +35,7 @@ img {
 }
 
 .friends-container,
-.posts-container {
+.comment-container {
   padding: 0.5rem 0.5rem;
   background-color: #464d5a;
   display: flex;
