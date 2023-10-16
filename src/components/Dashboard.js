@@ -74,7 +74,7 @@ function Dashboard(props) {
             />
             <Route
               path={base + "/friends/:friend"}
-              element={<FriendProfile user={props.user} />}
+              element={<FriendProfile user={props.user} token={props.token} />}
             />
             <Route
               path={base + "/profile"}

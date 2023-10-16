@@ -45,3 +45,45 @@
 .display {
   display: flex;
 }
+
+.comment-author-info {
+  display: flex;
+  gap: 1rem;
+}
+
+.comment-name-date {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comment-menu-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.menu-dropdown {
+  overflow: hidden;
+  position: absolute;
+  top: 0.5rem;
+  right: 3.5rem;
+  z-index: 1;
+}
+
+.menu-list {
+  background-color: var(--main-theme-color);
+  list-style-type: none;
+  padding: 0;
+  transform: translateY(-105px);
+  transition: transform 0.5s ease-in-out;
+}
+
+.menu-list > li {
+  list-style: none;
+  padding: 0.5rem;
+}
+
+.display-dropdown {
+  transform: translateY(0px);
+}

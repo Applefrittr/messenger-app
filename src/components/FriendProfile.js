@@ -5,14 +5,16 @@ import Comment from "./Comment";
 function FriendProfile(props) {
   const [profile, setProfile] = useState();
   const [friendsList, setFriendsList] = useState();
+  const [commentsList, setCommentsList] = useState([]);
   const formBtns = useRef();
   //UseParams hook to access the URL friend value passed by the <Route path="/friends/:friend" ...> in Dashboard.js
   const { friend } = useParams();
   const navigate = useNavigate();
   const refs = useRef([]); // use a single ref hook to create an array of elements
+  const formRef = useRef();
 
   // pushes elements with the ref tag into the refs array.  Mounting and unmounting pushes the elemnt into the array
-  // muitple times so ensure only a single copy of the elements gets pushed
+  // multiple times so ensure only a single copy of the elements gets pushed
   const pushRef = (element) => {
     if (refs.current.indexOf(element) < 0) refs.current.push(element);
   };
@@ -22,12 +24,53 @@ function FriendProfile(props) {
     navigate(`/${props.user.username}/friends`);
   };
 
-  const toggleButtons = () => {
+  // display and hide functions to enable/disable the new comment widget
+  const displayButtons = () => {
     refs.current.forEach((element) => {
       if (element === null) return;
-      element.classList.toggle("display");
+      element.classList.add("display");
     });
-    // formBtns.current.classList.toggle("display");
+  };
+  const hideButtons = () => {
+    refs.current.forEach((element) => {
+      if (element === null) return;
+      element.classList.remove("display");
+    });
+  };
+
+  // call to the API to POST the new comment to the friend's profile
+  const postComment = async (e) => {
+    e.preventDefault();
+
+    // FormData API to pull info from the form then convert to standard JS object
+    const formData = new FormData(formRef.current);
+    const dataObj = Object.fromEntries(formData.entries());
+
+    const request = await fetch(
+      `http://localhost:5000/users/${props.user.username}/friends/${friend}/comment`,
+      {
+        mode: "cors",
+        method: "POST",
+        body: JSON.stringify(dataObj),
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const response = await request.json();
+
+    console.log(response.message);
+
+    if (response.comment) {
+      const tempList = [...commentsList];
+      tempList.unshift(<Comment comment={response.comment} now={"Now"} />);
+      //commentsList.unshift(<Comment comment={response.comment} />);
+      setCommentsList(tempList);
+    }
+
+    hideButtons();
   };
 
   // fetch the friend's(url param) user profile and construct the friend's list to be rendered.  Called everytime the 'friend' url param changes
@@ -40,6 +83,7 @@ function FriendProfile(props) {
       const response = await request.json();
 
       setProfile(response.user);
+      console.log(response.user);
 
       const friendsList = [];
 
@@ -50,6 +94,7 @@ function FriendProfile(props) {
             <Link
               to={`/${props.user.username}/friends/${friend.username}`}
               className="friend-card"
+              key={friend.username}
             >
               <div className="friend-avatar-small">
                 <img src={friend.avatar} alt="avatar" />
@@ -62,6 +107,13 @@ function FriendProfile(props) {
         }
       });
 
+      // construct the comments list
+      const tempList = [];
+      response.user.comments.forEach((comment) => {
+        tempList.unshift(<Comment comment={comment} />);
+      });
+
+      setCommentsList(tempList);
       setFriendsList(friendsList);
     };
 
@@ -99,7 +151,7 @@ function FriendProfile(props) {
           <div className="profile-content">
             <div className="comment-container">
               <div className="comment-header">Comments</div>
-              <form className="new-comment-form">
+              <form className="new-comment-form" ref={formRef}>
                 <p className="comment-form-title" ref={pushRef}>
                   <i>Commenting as</i>
                 </p>
@@ -115,17 +167,21 @@ function FriendProfile(props) {
                     </p>
                     <input
                       placeholder="Add a comment..."
-                      onClick={toggleButtons}
+                      onClick={displayButtons}
+                      name="text"
                     ></input>
                   </div>
                 </div>
                 <div className="comment-buttons" ref={pushRef}>
-                  <button type="button">Comment</button>
-                  <button type="button" onClick={toggleButtons}>
+                  <button type="button" onClick={postComment}>
+                    Comment
+                  </button>
+                  <button type="button" onClick={hideButtons}>
                     Cancel
                   </button>
                 </div>
               </form>
+              {commentsList}
             </div>
             <div className="friends-container">
               <div className="online-status">ONLINE</div>

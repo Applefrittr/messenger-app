@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Comment from "./Comment";
 
 function Profile(props) {
   const [avatars, setAvatars] = useState("");
@@ -120,6 +121,12 @@ function Profile(props) {
     );
   });
 
+  // construct the comments list
+  const commentsList = [];
+  props.user.comments.forEach((comment) => {
+    commentsList.unshift(<Comment comment={comment} />);
+  });
+
   return (
     <section className="component-view">
       <section className="component-container">
@@ -150,6 +157,7 @@ function Profile(props) {
         <div className="profile-content">
           <div className="comment-container">
             <div className="comment-header">Comments</div>
+            {commentsList}
           </div>
           <div className="friends-container">
             <div className="friend-list">

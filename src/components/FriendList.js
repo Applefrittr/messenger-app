@@ -24,9 +24,7 @@ function FriendList(props) {
     const requestUser = await fetch(
       `http://localhost:5000/users/${props.user.username}/profile`
     );
-
     const responseUser = await requestUser.json();
-
     props.updateUser(responseUser.user);
   };
 
