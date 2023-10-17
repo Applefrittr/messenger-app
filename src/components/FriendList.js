@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 function FriendList(props) {
   const [friends, setFriends] = useState();
 
+  // Remove a friend from the firend'slist.  API call updates both the user and friends' friends list as well as return an
+  // updated user to ensure the UI is updated with the change
   const handleRemove = async (e) => {
     const request = await fetch(
       `http://localhost:5000/users/${props.user.username}/friends/${e.target.value}/remove`,
@@ -19,13 +21,8 @@ function FriendList(props) {
     const response = await request.json();
 
     console.log(response.message);
-
-    // Update the logged in User by calling updateUser from Dashboard.  This will ensure the fiends list will be updated in thie UI
-    const requestUser = await fetch(
-      `http://localhost:5000/users/${props.user.username}/profile`
-    );
-    const responseUser = await requestUser.json();
-    props.updateUser(responseUser.user);
+    // from Dashboard.js, updates the logged in user to reflect changes in UI
+    props.updateUser(response.user);
   };
 
   useEffect(() => {

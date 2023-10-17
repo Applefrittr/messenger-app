@@ -84,6 +84,11 @@
   padding: 0.5rem;
 }
 
+.menu-list > li:hover,
+.comment-menu-btn {
+  cursor: pointer;
+}
+
 .display-dropdown {
   transform: translateY(0px);
 }

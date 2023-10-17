@@ -19,6 +19,27 @@ function Comment(props) {
     dropRef.current.classList.toggle("display-dropdown");
   };
 
+  // DELETE comment call to the API and then use the returned user object to update the logged in user, ensuring UI updates
+  // are reflected
+  const removeComment = async () => {
+    const request = await fetch(
+      `http://localhost:5000/users/${props.user.username}/profile/comment/${props.comment._id}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const response = await request.json();
+    console.log(response.message);
+    // from Dashboard.js, updates the logged in user to reflect changes in UI
+    props.updateUser(response.user);
+  };
+
   return (
     <section className="comment-container">
       <div className="comment-author-info">
@@ -38,8 +59,8 @@ function Comment(props) {
         </div>
         <div className="menu-dropdown">
           <ul className="menu-list" ref={dropRef}>
+            <li onClick={removeComment}>Remove</li>
             <li>Report</li>
-            <li>Remove</li>
             <li>View Profile</li>
           </ul>
         </div>

@@ -5,7 +5,7 @@ function FriendSearch(props) {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const formRef = useRef();
 
-  // Friend request function.  Call to API to add targeted user to the current logged in user's pending friend requests
+  // Friend request function.  Call to API to add targeted user to the current logged in user's pending friend requests and then update UI with returned user
   const sendRequest = async (e) => {
     e.target.classList.add("disabled");
     e.target.innerText = "Pending...";
@@ -25,15 +25,8 @@ function FriendSearch(props) {
     const response = await request.json();
 
     console.log(response.message);
-
-    // Update the logged in User by calling updateUser from Dashboard.  This will ensure logged in User will include the newly submitted friend request
-    const requestUser = await fetch(
-      `http://localhost:5000/users/${props.user.username}/profile`
-    );
-
-    const responseUser = await requestUser.json();
-
-    props.updateUser(responseUser.user);
+    //
+    props.updateUser(response.user);
   };
 
   // On the Search component mount, retrieve all users in the DB and filter out the current logged in User from the result - also filter out friends of current User

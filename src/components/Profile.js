@@ -124,7 +124,14 @@ function Profile(props) {
   // construct the comments list
   const commentsList = [];
   props.user.comments.forEach((comment) => {
-    commentsList.unshift(<Comment comment={comment} />);
+    commentsList.unshift(
+      <Comment
+        comment={comment}
+        user={props.user}
+        token={props.token}
+        updateUser={props.updateUser}
+      />
+    );
   });
 
   return (
@@ -168,7 +175,7 @@ function Profile(props) {
         </div>
       </section>
 
-      <div className="edit-modal" ref={modalRef}>
+      <div className="modal" ref={modalRef}>
         <form className="edit-form" ref={formRef}>
           <div>
             <div className="avatar-container">

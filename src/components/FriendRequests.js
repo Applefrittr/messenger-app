@@ -60,6 +60,7 @@ function FriendRequests(props) {
     renderOutgoing(props.user.requestOut);
   }, []);
 
+  // Accepted friend request call to API.  Returned updated user used to update UI with changes
   const handleAccept = async (e) => {
     const request = await fetch(
       `http://localhost:5000/users/${props.user.username}/request/${e.target.value}/accept`,
@@ -75,20 +76,14 @@ function FriendRequests(props) {
     const response = await request.json();
 
     console.log(response.message);
+    // from Dashboard.js, updates the logged in user to reflect changes in UI
+    props.updateUser(response.user);
 
-    // Update the logged in User by calling updateUser from Dashboard.  This will ensure logged in User will include the newly submitted friend requests
-    const requestUser = await fetch(
-      `http://localhost:5000/users/${props.user.username}/profile`
-    );
-
-    const responseUser = await requestUser.json();
-
-    props.updateUser(responseUser.user);
-
-    renderIncoming(responseUser.user.requestIn);
-    renderOutgoing(responseUser.user.requestOut);
+    renderIncoming(response.user.requestIn);
+    renderOutgoing(response.user.requestOut);
   };
 
+  // Declined friend request call to API.  Returned updated user used to update UI with changes
   const handleDecline = async (e) => {
     const request = await fetch(
       `http://localhost:5000/users/${props.user.username}/request/${e.target.value}/decline`,
@@ -104,18 +99,11 @@ function FriendRequests(props) {
     const response = await request.json();
 
     console.log(response.message);
+    // from Dashboard.js, updates the logged in user to reflect changes in UI
+    props.updateUser(response.user);
 
-    // Update the logged in User by calling updateUser from Dashboard.  This will ensure logged in User will include the newly submitted friend requests
-    const requestUser = await fetch(
-      `http://localhost:5000/users/${props.user.username}/profile`
-    );
-
-    const responseUser = await requestUser.json();
-
-    props.updateUser(responseUser.user);
-
-    renderIncoming(responseUser.user.requestIn);
-    renderOutgoing(responseUser.user.requestOut);
+    renderIncoming(response.user.requestIn);
+    renderOutgoing(response.user.requestOut);
   };
 
   return (
