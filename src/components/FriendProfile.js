@@ -4,8 +4,7 @@ import Comment from "./Comment";
 
 function FriendProfile(props) {
   const [profile, setProfile] = useState();
-  const [friendsList, setFriendsList] = useState();
-  const [commentsList, setCommentsList] = useState([]);
+  const [commentsList, setCommentsList] = useState();
   //UseParams hook to access the URL friend value passed by the <Route path="/friends/:friend" ...> in Dashboard.js
   const { friend } = useParams();
   const navigate = useNavigate();
@@ -37,22 +36,9 @@ function FriendProfile(props) {
     });
   };
 
-  // constructs the Comment component array to be rendered.  Also passed to the Comment itself as a prop function to update the list with any
-  // changes to any (deletions, edits, etc.)
-  const buildComments = (user) => {
-    const tempList = [];
-    user.comments.forEach((comment) => {
-      tempList.unshift(
-        <Comment
-          comment={comment}
-          user={props.user}
-          token={props.token}
-          updateComments={buildComments}
-        />
-      );
-    });
-
-    setCommentsList(tempList);
+  // updateComemnts function to be passed to individual comment components to assist with edits, deletes, etc.
+  const updateComments = (list) => {
+    setCommentsList(list);
   };
 
   // call to the API to POST the new comment to the friend's profile as well as render the new comment to the UI
@@ -80,20 +66,17 @@ function FriendProfile(props) {
 
     console.log(response.message);
 
+    // if API call success, update the commentsList state to reflect new comment
     if (response.comment) {
       const tempList = [...commentsList];
       console.log(tempList);
-      tempList.unshift(
-        <Comment
-          comment={response.comment}
-          now={"Now"}
-          user={props.user}
-          token={props.token}
-          updateComments={buildComments}
-        />
-      );
+      response.comment.now = "Now";
+      console.log(response.comment);
+      tempList.push(response.comment);
+
       setCommentsList(tempList);
     }
+
     formRef.current.reset();
     hideButtons();
   };
@@ -109,30 +92,9 @@ function FriendProfile(props) {
 
       setProfile(response.user);
 
-      const friendsList = [];
+      setCommentsList(response.user.comments);
 
-      // construct the friends list as a collection of links of viewable profiles BUT exclude the currently logged in user
-      response.user.friends.forEach((friend) => {
-        if (props.user.username !== friend.username) {
-          friendsList.push(
-            <Link
-              to={`/${props.user.username}/friends/${friend.username}`}
-              className="friend-card"
-              key={friend.username}
-            >
-              <div className="friend-avatar-small">
-                <img src={friend.avatar} alt="avatar" />
-              </div>
-              <p>
-                <i>{friend.username}</i>
-              </p>
-            </Link>
-          );
-        }
-      });
-
-      buildComments(response.user); // call buildComments to construct comment list
-      setFriendsList(friendsList);
+      // buildComments(response.user); // call buildComments to construct comment list
     };
 
     getProfile();
@@ -199,14 +161,42 @@ function FriendProfile(props) {
                   </button>
                 </div>
               </form>
-              {commentsList}
+              {profile &&
+                commentsList.map((comment) => {
+                  return (
+                    <Comment
+                      comment={comment}
+                      user={props.user}
+                      token={props.token}
+                      updateComments={updateComments}
+                    />
+                  );
+                })}
             </div>
             <div className="friends-container">
               <div className="online-status">ONLINE</div>
               <div className="friend-list">
                 Friends <i className="big-font">{profile.friends.length}</i>
               </div>
-              {friendsList}
+              {profile &&
+                profile.friends.map((friend) => {
+                  if (props.user.username !== friend.username) {
+                    return (
+                      <Link
+                        to={`/${props.user.username}/friends/${friend.username}`}
+                        className="friend-card"
+                        key={friend.username}
+                      >
+                        <div className="friend-avatar-small">
+                          <img src={friend.avatar} alt="avatar" />
+                        </div>
+                        <p>
+                          <i>{friend.username}</i>
+                        </p>
+                      </Link>
+                    );
+                  } else return <></>;
+                })}
             </div>
           </div>
         </section>

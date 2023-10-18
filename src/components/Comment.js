@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 function Comment(props) {
   const dropRef = useRef();
-  const [canRemoveComment, setCanRemoveComment] = useState(false);
-  const [dropDown, setDropDown] = useState([]);
+  const [isRemovable, setIsRemovable] = useState(false);
 
   // time stamp function returns either "today" or "yesterday" if comment was made in the past 2 day,
   // otherswise return the date
@@ -30,7 +29,7 @@ function Comment(props) {
       profile = props.comment.profile;
     else profile = props.user.username;
 
-    console.log(profile);
+    console.log(props.user);
 
     const request = await fetch(
       `http://localhost:5000/users/${profile}/profile/comment/${props.comment._id}`,
@@ -49,44 +48,26 @@ function Comment(props) {
 
     // Determine which profile to update depending on where the comment to be removed was posted: user profile OR the friend's profile
     if (props.user.username === props.comment.author) {
-      console.log("update frined");
-      props.updateComments(response.user);
-    } else props.updateUser(response.user);
+      console.log("before", response.temp);
+      console.log("update", response.user);
+      props.updateComments(response.user.comments); // update friend's comment list
+    } else props.updateUser(response.user); // update the logged in user to reflect comment removal
     displayDropdown();
   };
 
-  // Determine if the comment rendered can be removed by either the author OR the profile owner
-  // Renders the remove button in the dropdown menu tab of the comment
+  // on dependency change, this useEffect hook determines if the logged in user has the ability to remove comment by setting isRemovable state.  isRemovable
+  // is used in conditional rendering of the remove button in the comment menu
   useEffect(() => {
-    // if (
-    //   props.user.username === props.comment.author ||
-    //   props.user.username === props.comment.profile
-    // )
-    //   setCanRemoveComment(true);
-
-    const menu = [];
-    menu.push(<li>Report</li>);
     if (
       props.user.username === props.comment.author ||
       props.user.username === props.comment.profile
     )
-      menu.push(<li onClick={removeComment}>Remove</li>);
-    if (props.user.username !== props.comment.author)
-      menu.push(<li onClick={test}>View Profile</li>);
-
-    setDropDown(menu);
-
-    return () => {
-      setDropDown();
-    };
-  }, []);
-
-  const test = () => {
-    console.log(props.user.username, props.comment.profile);
-  };
+      setIsRemovable(true);
+    else setIsRemovable(false);
+  }, [props.user.username, props.comment.author, props.comment.profile]);
 
   return (
-    <section className="comment-container">
+    <section className="comment-container" key={props.comment._id}>
       <div className="comment-author-info">
         <img
           src={props.comment.avatar}
@@ -104,7 +85,9 @@ function Comment(props) {
         </div>
         <div className="menu-dropdown">
           <ul className="menu-list" ref={dropRef}>
-            {dropDown}
+            {isRemovable && <li onClick={removeComment}>Remove</li>}
+            <li>Report</li>
+            <li>View Profile</li>
           </ul>
         </div>
       </div>
