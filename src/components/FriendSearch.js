@@ -25,7 +25,7 @@ function FriendSearch(props) {
     const response = await request.json();
 
     console.log(response.message);
-    //
+    // from Dashboard.js, updates the logged in user to reflect changes in UI
     props.updateUser(response.user);
   };
 

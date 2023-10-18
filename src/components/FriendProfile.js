@@ -6,7 +6,6 @@ function FriendProfile(props) {
   const [profile, setProfile] = useState();
   const [friendsList, setFriendsList] = useState();
   const [commentsList, setCommentsList] = useState([]);
-  const formBtns = useRef();
   //UseParams hook to access the URL friend value passed by the <Route path="/friends/:friend" ...> in Dashboard.js
   const { friend } = useParams();
   const navigate = useNavigate();
@@ -38,7 +37,25 @@ function FriendProfile(props) {
     });
   };
 
-  // call to the API to POST the new comment to the friend's profile
+  // constructs the Comment component array to be rendered.  Also passed to the Comment itself as a prop function to update the list with any
+  // changes to any (deletions, edits, etc.)
+  const buildComments = (user) => {
+    const tempList = [];
+    user.comments.forEach((comment) => {
+      tempList.unshift(
+        <Comment
+          comment={comment}
+          user={props.user}
+          token={props.token}
+          updateComments={buildComments}
+        />
+      );
+    });
+
+    setCommentsList(tempList);
+  };
+
+  // call to the API to POST the new comment to the friend's profile as well as render the new comment to the UI
   const postComment = async (e) => {
     e.preventDefault();
 
@@ -65,15 +82,23 @@ function FriendProfile(props) {
 
     if (response.comment) {
       const tempList = [...commentsList];
-      tempList.unshift(<Comment comment={response.comment} now={"Now"} />);
-      //commentsList.unshift(<Comment comment={response.comment} />);
+      console.log(tempList);
+      tempList.unshift(
+        <Comment
+          comment={response.comment}
+          now={"Now"}
+          user={props.user}
+          token={props.token}
+          updateComments={buildComments}
+        />
+      );
       setCommentsList(tempList);
     }
-
+    formRef.current.reset();
     hideButtons();
   };
 
-  // fetch the friend's(url param) user profile and construct the friend's list to be rendered.  Called everytime the 'friend' url param changes
+  // fetch the friend's(url param) user profile and construct the friend's list and comments to be rendered.  Called everytime the 'friend' url param changes
   useEffect(() => {
     const getProfile = async () => {
       const request = await fetch(
@@ -83,7 +108,6 @@ function FriendProfile(props) {
       const response = await request.json();
 
       setProfile(response.user);
-      console.log(response.user);
 
       const friendsList = [];
 
@@ -107,13 +131,7 @@ function FriendProfile(props) {
         }
       });
 
-      // construct the comments list
-      const tempList = [];
-      response.user.comments.forEach((comment) => {
-        tempList.unshift(<Comment comment={comment} />);
-      });
-
-      setCommentsList(tempList);
+      buildComments(response.user); // call buildComments to construct comment list
       setFriendsList(friendsList);
     };
 

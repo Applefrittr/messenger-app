@@ -110,6 +110,7 @@ function Profile(props) {
       <Link
         to={`/${props.user.username}/friends/${friend.username}`}
         className="friend-card"
+        key={friend._id}
       >
         <div className="friend-avatar-small">
           <img src={friend.avatar} alt="avatar" />

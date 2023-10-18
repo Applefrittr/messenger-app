@@ -1,7 +1,9 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Comment(props) {
   const dropRef = useRef();
+  const [canRemoveComment, setCanRemoveComment] = useState(false);
+  const [dropDown, setDropDown] = useState([]);
 
   // time stamp function returns either "today" or "yesterday" if comment was made in the past 2 day,
   // otherswise return the date
@@ -22,8 +24,16 @@ function Comment(props) {
   // DELETE comment call to the API and then use the returned user object to update the logged in user, ensuring UI updates
   // are reflected
   const removeComment = async () => {
+    // determine if the comment to be deleted is on the user's profile OR on a friend's profile created by the user
+    let profile;
+    if (props.user.username === props.comment.author)
+      profile = props.comment.profile;
+    else profile = props.user.username;
+
+    console.log(profile);
+
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/profile/comment/${props.comment._id}`,
+      `http://localhost:5000/users/${profile}/profile/comment/${props.comment._id}`,
       {
         mode: "cors",
         method: "DELETE",
@@ -36,8 +46,43 @@ function Comment(props) {
 
     const response = await request.json();
     console.log(response.message);
-    // from Dashboard.js, updates the logged in user to reflect changes in UI
-    props.updateUser(response.user);
+
+    // Determine which profile to update depending on where the comment to be removed was posted: user profile OR the friend's profile
+    if (props.user.username === props.comment.author) {
+      console.log("update frined");
+      props.updateComments(response.user);
+    } else props.updateUser(response.user);
+    displayDropdown();
+  };
+
+  // Determine if the comment rendered can be removed by either the author OR the profile owner
+  // Renders the remove button in the dropdown menu tab of the comment
+  useEffect(() => {
+    // if (
+    //   props.user.username === props.comment.author ||
+    //   props.user.username === props.comment.profile
+    // )
+    //   setCanRemoveComment(true);
+
+    const menu = [];
+    menu.push(<li>Report</li>);
+    if (
+      props.user.username === props.comment.author ||
+      props.user.username === props.comment.profile
+    )
+      menu.push(<li onClick={removeComment}>Remove</li>);
+    if (props.user.username !== props.comment.author)
+      menu.push(<li onClick={test}>View Profile</li>);
+
+    setDropDown(menu);
+
+    return () => {
+      setDropDown();
+    };
+  }, []);
+
+  const test = () => {
+    console.log(props.user.username, props.comment.profile);
   };
 
   return (
@@ -59,9 +104,7 @@ function Comment(props) {
         </div>
         <div className="menu-dropdown">
           <ul className="menu-list" ref={dropRef}>
-            <li onClick={removeComment}>Remove</li>
-            <li>Report</li>
-            <li>View Profile</li>
+            {dropDown}
           </ul>
         </div>
       </div>
