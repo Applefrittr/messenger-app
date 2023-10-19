@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Comment(props) {
   const dropRef = useRef();
   const [isRemovable, setIsRemovable] = useState(false);
+  const navigate = useNavigate();
 
   // time stamp function returns either "today" or "yesterday" if comment was made in the past 2 day,
   // otherswise return the date
   const timeStamped = () => {
-    const today = new Date().getTime();
-    const commentTime = new Date(props.comment.timestamp).getTime();
+    const today = new Date().getDate();
+    const commentTime = new Date(props.comment.timestamp).getDate();
 
-    if (today - commentTime <= 86400000) return "Today";
-    else if (today - commentTime > 172800000)
+    if (today - commentTime <= 0) return "Today";
+    else if (today - commentTime > 2)
       return new Date(props.comment.timestamp).toDateString();
     else return "Yesterday";
   };
@@ -48,11 +50,16 @@ function Comment(props) {
 
     // Determine which profile to update depending on where the comment to be removed was posted: user profile OR the friend's profile
     if (props.user.username === props.comment.author) {
-      console.log("before", response.temp);
-      console.log("update", response.user);
       props.updateComments(response.user.comments); // update friend's comment list
     } else props.updateUser(response.user); // update the logged in user to reflect comment removal
     displayDropdown();
+  };
+
+  // Navigate to comment author's profile page, redirect to own user profile if clicked on own comment
+  const viewProfile = () => {
+    if (props.user.username === props.comment.author)
+      navigate(`/${props.user.username}/profile`);
+    else navigate(`/${props.user.username}/friends/${props.comment.author}`);
   };
 
   // on dependency change, this useEffect hook determines if the logged in user has the ability to remove comment by setting isRemovable state.  isRemovable
@@ -87,7 +94,7 @@ function Comment(props) {
           <ul className="menu-list" ref={dropRef}>
             {isRemovable && <li onClick={removeComment}>Remove</li>}
             <li>Report</li>
-            <li>View Profile</li>
+            <li onClick={viewProfile}>View Profile</li>
           </ul>
         </div>
       </div>

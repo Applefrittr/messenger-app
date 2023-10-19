@@ -109,7 +109,7 @@ function Profile(props) {
     friendsList.push(
       <Link
         to={`/${props.user.username}/friends/${friend.username}`}
-        className="friend-card"
+        className="friend-card-link"
         key={friend._id}
       >
         <div className="friend-avatar-small">
@@ -125,7 +125,7 @@ function Profile(props) {
   // construct the comments list
   const commentsList = [];
   props.user.comments.forEach((comment) => {
-    commentsList.unshift(
+    commentsList.push(
       <Comment
         comment={comment}
         user={props.user}

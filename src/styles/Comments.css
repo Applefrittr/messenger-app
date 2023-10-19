@@ -38,7 +38,14 @@
 
 .comment-buttons {
   display: none;
-  align-self: flex-end;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.comment-buttons > div {
+  display: flex;
   gap: 1rem;
 }
 

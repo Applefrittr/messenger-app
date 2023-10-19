@@ -8,8 +8,10 @@ function FriendProfile(props) {
   //UseParams hook to access the URL friend value passed by the <Route path="/friends/:friend" ...> in Dashboard.js
   const { friend } = useParams();
   const navigate = useNavigate();
-  const refs = useRef([]); // use a single ref hook to create an array of elements
-  const formRef = useRef();
+  const refs = useRef([]); // use a single ref hook to create an array of elements - for comment form buttonsand text
+  const formRef = useRef(); // input field in the comment form
+  const modalRef = useRef(); // modal overlay
+  const modalFormRef = useRef(); // modal window
 
   // pushes elements with the ref tag into the refs array.  Mounting and unmounting pushes the elemnt into the array
   // multiple times so ensure only a single copy of the elements gets pushed
@@ -19,7 +21,7 @@ function FriendProfile(props) {
 
   // navigate back to FriendsList.js
   const back = () => {
-    navigate(`/${props.user.username}/friends`);
+    navigate(-1);
   };
 
   // display and hide functions to enable/disable the new comment widget
@@ -39,6 +41,13 @@ function FriendProfile(props) {
   // updateComemnts function to be passed to individual comment components to assist with edits, deletes, etc.
   const updateComments = (list) => {
     setCommentsList(list);
+  };
+
+  const toggleModal = () => {
+    modalRef.current.classList.toggle("toggle-modal");
+    setTimeout(() => {
+      modalFormRef.current.classList.toggle("toggle-gif-container");
+    }, 100);
   };
 
   // call to the API to POST the new comment to the friend's profile as well as render the new comment to the UI
@@ -72,7 +81,7 @@ function FriendProfile(props) {
       console.log(tempList);
       response.comment.now = "Now";
       console.log(response.comment);
-      tempList.push(response.comment);
+      tempList.unshift(response.comment);
 
       setCommentsList(tempList);
     }
@@ -153,12 +162,17 @@ function FriendProfile(props) {
                   </div>
                 </div>
                 <div className="comment-buttons" ref={pushRef}>
-                  <button type="button" onClick={postComment}>
-                    Comment
+                  <button type="button" onClick={toggleModal}>
+                    Add GiF
                   </button>
-                  <button type="button" onClick={hideButtons}>
-                    Cancel
-                  </button>
+                  <div>
+                    <button type="button" onClick={postComment}>
+                      Comment
+                    </button>
+                    <button type="button" onClick={hideButtons}>
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </form>
               {profile &&
@@ -184,7 +198,7 @@ function FriendProfile(props) {
                     return (
                       <Link
                         to={`/${props.user.username}/friends/${friend.username}`}
-                        className="friend-card"
+                        className="friend-card-link"
                         key={friend.username}
                       >
                         <div className="friend-avatar-small">
@@ -201,6 +215,21 @@ function FriendProfile(props) {
           </div>
         </section>
       )}
+
+      <div className="modal" ref={modalRef}>
+        <div className="gif-search-container" ref={modalFormRef}>
+          <form>
+            <p>Powered by Giphy</p>
+            <input name="gif-search" placeholder="Enter keyword..."></input>
+            <div className="gif-btns">
+              <button type="button">Search</button>
+              <button type="button" onClick={toggleModal}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
   );
 }
