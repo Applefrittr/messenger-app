@@ -98,7 +98,10 @@ function Comment(props) {
           </ul>
         </div>
       </div>
-      <p>"{props.comment.text}"</p>
+      {props.comment.text && <p>"{props.comment.text}"</p>}
+      {props.comment.gif && (
+        <img src={props.comment.gif} alt="GiF" className="comment-gif" />
+      )}
     </section>
   );
 }

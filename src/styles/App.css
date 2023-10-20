@@ -4,6 +4,7 @@
 @import url("./index.css");
 @import url("./Login.css");
 @import url("./Profile.css");
+@import url("./GIFSearch.css");
 
 :root {
   --main-theme-color: #282c34;

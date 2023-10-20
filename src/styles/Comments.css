@@ -99,3 +99,8 @@
 .display-dropdown {
   transform: translateY(0px);
 }
+
+.comment-gif {
+  width: 200px;
+  height: auto;
+}

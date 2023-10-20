@@ -1,0 +1,61 @@
+.gif-search-container {
+  padding: 2rem;
+  background-color: #464d5a;
+  border: solid 1px #464d5a;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0;
+  transition: all ease-in 0.5s;
+  max-width: 725px;
+  position: relative;
+}
+
+.gif-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toggle-gif-container {
+  opacity: 1;
+}
+
+.gif-btns {
+  display: flex;
+  gap: 1rem;
+  width: 400px;
+}
+
+.gif-btns > input {
+  flex: 1;
+}
+
+.gif-container {
+  width: 125px;
+  height: 125px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.gif-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-height: 395px;
+  overflow-y: scroll;
+}
+
+.GIPHY-attrib {
+  width: 125px;
+  height: auto;
+}
+
+.close {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  cursor: pointer;
+}

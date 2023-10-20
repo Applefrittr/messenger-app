@@ -15,18 +15,43 @@
 
 .dashboard-view-container {
   flex: 1;
+  height: 100vh;
+  overflow: scroll;
+}
+
+.disable-scroll {
+  overflow-y: hidden;
 }
 
 .component-view {
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
   position: relative;
   display: flex;
   justify-content: center;
+  position: relative;
+}
+
+.modal {
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.toggle-modal {
+  display: flex;
 }
 
 .component-container {
-  height: 100%;
   width: 75%;
   background-color: var(--main-theme-color);
   color: white;

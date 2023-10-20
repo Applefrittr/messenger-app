@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Comment from "./Comment";
+import GIFSearch from "./GIFSearch";
 
 function FriendProfile(props) {
   const [profile, setProfile] = useState();
   const [commentsList, setCommentsList] = useState();
+  const [renderModal, setRenderModal] = useState(false);
+  const [gif, setGif] = useState();
   //UseParams hook to access the URL friend value passed by the <Route path="/friends/:friend" ...> in Dashboard.js
   const { friend } = useParams();
   const navigate = useNavigate();
   const refs = useRef([]); // use a single ref hook to create an array of elements - for comment form buttonsand text
   const formRef = useRef(); // input field in the comment form
   const modalRef = useRef(); // modal overlay
-  const modalFormRef = useRef(); // modal window
+  const gifUrlRef = useRef(); // ref to hidden <input> which holds the GIF url
 
   // pushes elements with the ref tag into the refs array.  Mounting and unmounting pushes the elemnt into the array
   // multiple times so ensure only a single copy of the elements gets pushed
@@ -36,6 +39,12 @@ function FriendProfile(props) {
       if (element === null) return;
       element.classList.remove("display");
     });
+    setGif(); // Removes the slected gif from the new comment tool
+  };
+
+  // set GIF function which will render GIF in the new comment form if selected in the search tool
+  const renderGif = (url) => {
+    setGif(url);
   };
 
   // updateComemnts function to be passed to individual comment components to assist with edits, deletes, etc.
@@ -45,9 +54,8 @@ function FriendProfile(props) {
 
   const toggleModal = () => {
     modalRef.current.classList.toggle("toggle-modal");
-    setTimeout(() => {
-      modalFormRef.current.classList.toggle("toggle-gif-container");
-    }, 100);
+    setRenderModal(!renderModal);
+    props.toggleScroll();
   };
 
   // call to the API to POST the new comment to the friend's profile as well as render the new comment to the UI
@@ -159,8 +167,21 @@ function FriendProfile(props) {
                       onClick={displayButtons}
                       name="text"
                     ></input>
+                    <input
+                      name="gif"
+                      ref={gifUrlRef}
+                      value={gif}
+                      hidden
+                    ></input>
                   </div>
                 </div>
+                {gif && (
+                  <img
+                    src={gif}
+                    alt="gif placeholder"
+                    className="comment-gif"
+                  />
+                )}
                 <div className="comment-buttons" ref={pushRef}>
                   <button type="button" onClick={toggleModal}>
                     Add GiF
@@ -217,18 +238,13 @@ function FriendProfile(props) {
       )}
 
       <div className="modal" ref={modalRef}>
-        <div className="gif-search-container" ref={modalFormRef}>
-          <form>
-            <p>Powered by Giphy</p>
-            <input name="gif-search" placeholder="Enter keyword..."></input>
-            <div className="gif-btns">
-              <button type="button">Search</button>
-              <button type="button" onClick={toggleModal}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+        {renderModal && (
+          <GIFSearch
+            toggleModal={toggleModal}
+            token={props.token}
+            renderGif={renderGif}
+          />
+        )}
       </div>
     </section>
   );

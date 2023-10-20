@@ -110,25 +110,3 @@
 .big-font {
   font-size: 2rem;
 }
-
-.gif-search-container {
-  padding: 2rem;
-  background-color: #464d5a;
-  border: solid 1px #464d5a;
-  border-radius: 10px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  opacity: 0;
-  transition: all ease-in 0.5s;
-}
-
-.toggle-gif-container {
-  opacity: 1;
-}
-
-.gif-btns {
-  display: flex;
-  gap: 1rem;
-}

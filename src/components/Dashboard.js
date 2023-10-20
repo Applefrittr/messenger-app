@@ -3,11 +3,17 @@ import Chats from "./Chats";
 import Friends from "./Friends";
 import Profile from "./Profile";
 import FriendProfile from "./FriendProfile";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
   const navigate = useNavigate();
+  const viewRef = useRef();
+
+  // CSS toggle class to disable page scrolling when a modal is open
+  const toggleScroll = () => {
+    viewRef.current.classList.toggle("disable-scroll");
+  };
 
   useEffect(() => {
     const getCurrUser = async () => {
@@ -58,7 +64,7 @@ function Dashboard(props) {
         </Link>
         <button onClick={logout}>Logout</button>
       </div>
-      <div className="dashboard-view-container">
+      <div className="dashboard-view-container" ref={viewRef}>
         {currUser && (
           <Routes>
             <Route path={base + "/"} element={<Chats />} />
@@ -79,6 +85,7 @@ function Dashboard(props) {
                   user={props.user}
                   token={props.token}
                   updateUser={updateUser}
+                  toggleScroll={toggleScroll}
                 />
               }
             />
@@ -89,6 +96,7 @@ function Dashboard(props) {
                   user={currUser}
                   token={props.token}
                   updateUser={updateUser}
+                  toggleScroll={toggleScroll}
                 />
               }
             />
