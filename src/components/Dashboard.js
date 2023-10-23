@@ -15,6 +15,7 @@ function Dashboard(props) {
     viewRef.current.classList.toggle("disable-scroll");
   };
 
+  // on Dashbaord mount, retrieve fully popualted User object (token payload is only partial object)
   useEffect(() => {
     const getCurrUser = async () => {
       const request = await fetch(
@@ -53,7 +54,7 @@ function Dashboard(props) {
           <h1>Mylo Messenger</h1>
           {props.user && <p>User: {props.user.username}</p>}
         </div>
-        <Link to={base + "/"} className="nav-links">
+        <Link to={base + "/chats"} className="nav-links">
           Chats
         </Link>
         <Link to={base + "/friends"} className="nav-links">
@@ -67,7 +68,16 @@ function Dashboard(props) {
       <div className="dashboard-view-container" ref={viewRef}>
         {currUser && (
           <Routes>
-            <Route path={base + "/"} element={<Chats />} />
+            <Route
+              path={base + "/chats"}
+              element={
+                <Chats
+                  user={currUser}
+                  token={props.token}
+                  updateUser={updateUser}
+                />
+              }
+            />
             <Route
               path={base + "/friends"}
               element={
@@ -82,7 +92,7 @@ function Dashboard(props) {
               path={base + "/friends/:friend"}
               element={
                 <FriendProfile
-                  user={props.user}
+                  user={currUser}
                   token={props.token}
                   updateUser={updateUser}
                   toggleScroll={toggleScroll}
