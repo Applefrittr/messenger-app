@@ -125,7 +125,6 @@ function FriendSearch(props) {
           onChange={handleSearch}
           placeholder="enter username..."
         ></input>
-        <button className="nav-links">Search</button>
       </form>
       <div className="search-results-container">
         {filteredUsers.length > 0 && filteredUsers}

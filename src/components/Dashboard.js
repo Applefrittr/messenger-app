@@ -1,5 +1,5 @@
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
-import Chats from "./Chats";
+import ChatList from "./ChatList";
 import Friends from "./Friends";
 import Profile from "./Profile";
 import FriendProfile from "./FriendProfile";
@@ -63,7 +63,9 @@ function Dashboard(props) {
         <Link to={base + "/profile"} className="nav-links">
           Profile
         </Link>
-        <button onClick={logout}>Logout</button>
+        <button onClick={logout} className="nav-links">
+          Logout
+        </button>
       </div>
       <div className="dashboard-view-container" ref={viewRef}>
         {currUser && (
@@ -71,7 +73,7 @@ function Dashboard(props) {
             <Route
               path={base + "/chats"}
               element={
-                <Chats
+                <ChatList
                   user={currUser}
                   token={props.token}
                   updateUser={updateUser}
