@@ -159,7 +159,9 @@ function Profile(props) {
                   : "???"}
               </p>
             </div>
-            <button onClick={toggleModal}>Edit Profile</button>
+            <button onClick={toggleModal} className="nav-links">
+              Edit Profile
+            </button>
           </div>
         </div>
         <div className="profile-content">

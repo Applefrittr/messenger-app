@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 function NewChat(props) {
   const [search, setSearch] = useState();
-  const msgFormRef = useRef();
+  const formRef = useRef();
   const searchFieldRef = useRef();
   const sendRef = useRef();
 
@@ -20,23 +20,67 @@ function NewChat(props) {
   const chooseRecipient = (e) => {
     //e.preventDefault();
     if (e.target.value) {
-      console.log(e.target.value);
       searchFieldRef.current.value = e.target.value;
-      searchFieldRef.current.disabled = true;
+      //searchFieldRef.current.disabled = true;
       sendRef.current.disabled = false;
 
       setSearch();
     } else return;
   };
 
+  const sendMsg = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(formRef.current);
+    const dataObj = Object.fromEntries(formData.entries());
+
+    if (!dataObj.users) console.log("Choose recipient");
+    else {
+      // create an array of users to be passed to the API
+      dataObj.users = dataObj.users.split(",");
+
+      const request = await fetch(
+        `http://localhost:5000/users/${props.user.username}/chats`,
+        {
+          mode: "cors",
+          method: "POST",
+          body: JSON.stringify(dataObj),
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const response = await request.json();
+
+      console.log(response.message);
+
+      const requestChats = await fetch(
+        `http://localhost:5000/users/${props.user.username}/chats`,
+        {
+          mode: "cors",
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const responseChats = await requestChats.json();
+      props.updateChats(responseChats.chats);
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
-      msgFormRef.current.classList.add("toggle-msg-form");
+      formRef.current.classList.add("toggle-msg-form");
     }, 0);
   }, []);
 
   return (
-    <form className="new-msg-form" ref={msgFormRef}>
+    <form className="new-msg-form" ref={formRef}>
       <div className="new-msg-header">
         <h2>New Message</h2>
         <p onClick={props.toggleModal} className="form-close">
@@ -47,7 +91,7 @@ function NewChat(props) {
         <div className="search-field">
           <label htmlFor="search">To:</label>
           <input
-            name="search"
+            name="users"
             onChange={handleSearch}
             ref={searchFieldRef}
           ></input>
@@ -79,15 +123,15 @@ function NewChat(props) {
         </div>
         <div className="new-msg-input-container">
           <input
-            name="message"
+            name="text"
             placeholder="New message here..."
             className="msg-input"
           ></input>
           <button
             type="button"
             className="nav-links"
-            disabled="true"
             ref={sendRef}
+            onClick={sendMsg}
           >
             Send
           </button>

@@ -90,11 +90,11 @@ function Login(props) {
           <label htmlFor="password">Password</label>
           <input type="password" name="password" />
           <div className="login-buttons">
-            <button type="submit" onClick={signIn}>
+            <button type="submit" onClick={signIn} className="nav-links">
               Sign in
             </button>
             <p>-OR-</p>
-            <button type="button" onClick={toggleForms}>
+            <button type="button" onClick={toggleForms} className="nav-links">
               Sign Up
             </button>
           </div>
@@ -108,11 +108,11 @@ function Login(props) {
           <label htmlFor="confirm-password">Confirm Password</label>
           <input type="password" name="confirm-password" required />
           <div className="login-buttons">
-            <button type="submit" onClick={signUp}>
+            <button type="submit" onClick={signUp} className="nav-links">
               Sign Up
             </button>
             <p>-OR-</p>
-            <button type="button" onClick={toggleForms}>
+            <button type="button" onClick={toggleForms} className="nav-links">
               Cancel
             </button>
           </div>

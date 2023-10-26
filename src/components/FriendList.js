@@ -48,7 +48,11 @@ function FriendList(props) {
             >
               Profile
             </Link>
-            <button value={friend.username} onClick={handleRemove}>
+            <button
+              className="nav-links"
+              value={friend.username}
+              onClick={handleRemove}
+            >
               Remove
             </button>
           </div>

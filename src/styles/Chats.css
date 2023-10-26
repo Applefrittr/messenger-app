@@ -106,3 +106,17 @@
 .msg-input {
   flex: 1;
 }
+
+.chat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: solid 1px white;
+}
+
+.chat-card-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
