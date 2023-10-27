@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from "react";
+import MessageBubble from "./MessageBubble";
 
 function NewChat(props) {
   const [search, setSearch] = useState();
+  const [displayChat, setDisplayChat] = useState();
   const formRef = useRef();
   const searchFieldRef = useRef();
   const sendRef = useRef();
+  const chatIDRef = useRef();
 
   // When every search field is changed, filter the user's friends list and display the results int he UI
   const handleSearch = (e) => {
-    if (!e.target.value) setSearch();
-    else {
+    if (!e.target.value) {
+      setSearch();
+      setDisplayChat();
+    } else {
       const filtered = props.user.friends.filter((friend) => {
         return friend.username.indexOf(e.target.value) >= 0;
       });
@@ -17,12 +22,37 @@ function NewChat(props) {
     }
   };
 
+  // search bar to choose recipient of new message.  If a chat already exists with selected recipient,
+  // message log will be displayed
   const chooseRecipient = (e) => {
     //e.preventDefault();
     if (e.target.value) {
       searchFieldRef.current.value = e.target.value;
       //searchFieldRef.current.disabled = true;
       sendRef.current.disabled = false;
+
+      console.log(e.target.value);
+
+      // Check to see if there is an existing chat by iterating through user's exisiting chats.  If so, set hidden input value to chat's ._id to be passed to API
+      const chatMembers = e.target.value.split(",");
+      chatMembers.push(props.user.username);
+      console.log(chatMembers);
+
+      console.log(JSON.stringify(chatMembers));
+
+      for (const chat of props.chats) {
+        console.log(chat);
+        if (
+          JSON.stringify(chatMembers.sort()) ===
+          JSON.stringify(chat.usernames.sort())
+        ) {
+          chatIDRef.current.value = chat._id;
+          setDisplayChat(chat.messages);
+          break;
+        } else {
+          setDisplayChat();
+        }
+      }
 
       setSearch();
     } else return;
@@ -119,9 +149,18 @@ function NewChat(props) {
           </div>
         )}
         <div className="chat-view">
-          <p>messages here</p>
+          {displayChat &&
+            displayChat.map((message) => {
+              return <MessageBubble message={message} user={props.user} />;
+            })}
         </div>
         <div className="new-msg-input-container">
+          <input
+            name="chatID"
+            placeholder="chatID here"
+            ref={chatIDRef}
+            hidden
+          ></input>
           <input
             name="text"
             placeholder="New message here..."

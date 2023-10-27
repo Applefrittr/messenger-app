@@ -61,7 +61,7 @@ function ChatList(props) {
                   return { username: user.username, avatar: user.avatar };
                 });
 
-              const latestMsg = chat.messages[0].text;
+              const latestMsg = chat.messages[chat.messages.length - 1].text;
               return (
                 <section className="chat-card" key={chat._id}>
                   {users.map((user) => {
@@ -91,6 +91,7 @@ function ChatList(props) {
               user={props.user}
               token={props.token}
               updateUser={props.updateUser}
+              chats={chats}
               updateChats={updateChats}
             />
           )}
