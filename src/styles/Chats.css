@@ -27,8 +27,8 @@
 
 .new-msg-form {
   padding: 2rem;
-  background-color: #464d5a;
-  border: solid 1px #464d5a;
+  background-color: var(--main-theme-color);
+  border: solid 1px var(--main-theme-color);
   border-radius: 10px;
   color: white;
   display: flex;
@@ -51,10 +51,10 @@
 }
 
 .chat-container {
-  background-color: white;
+  background-color: var(--main-accent-color);
   width: 425px;
   height: 475px;
-  color: black;
+  color: white;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -131,6 +131,7 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   width: fit-content;
+  color: black;
 }
 
 .bubble-user {
@@ -140,4 +141,22 @@
 
 .bubble-other {
   background-color: lightgray;
+}
+
+.chat-view-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-view-messages {
+  background-color: var(--main-accent-color);
+  flex: 1;
+  margin: 0 -2rem -2rem -2rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: scroll;
 }

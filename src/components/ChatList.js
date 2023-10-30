@@ -1,5 +1,6 @@
 import NewChat from "./NewChat";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 function ChatList(props) {
   const [chats, setChats] = useState();
@@ -79,6 +80,12 @@ function ChatList(props) {
                   <p>
                     <i>{latestMsg}</i>
                   </p>
+                  <Link
+                    to={"/" + props.user.username + "/chats/" + chat._id}
+                    className="nav-links"
+                  >
+                    View
+                  </Link>
                 </section>
               );
             })}

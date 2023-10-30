@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 
 function NewChat(props) {
@@ -8,6 +9,7 @@ function NewChat(props) {
   const searchFieldRef = useRef();
   const sendRef = useRef();
   const chatIDRef = useRef();
+  const navigate = useNavigate();
 
   // When every search field is changed, filter the user's friends list and display the results int he UI
   const handleSearch = (e) => {
@@ -100,6 +102,8 @@ function NewChat(props) {
 
       const responseChats = await requestChats.json();
       props.updateChats(responseChats.chats);
+
+      navigate(`/${props.user.username}/chats/${response.id}`);
     }
   };
 

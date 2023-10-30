@@ -1,5 +1,6 @@
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import ChatList from "./ChatList";
+import Chat from "./Chat";
 import Friends from "./Friends";
 import Profile from "./Profile";
 import FriendProfile from "./FriendProfile";
@@ -74,6 +75,16 @@ function Dashboard(props) {
               path={base + "/chats"}
               element={
                 <ChatList
+                  user={currUser}
+                  token={props.token}
+                  updateUser={updateUser}
+                />
+              }
+            />
+            <Route
+              path={base + "/chats/:id"}
+              element={
+                <Chat
                   user={currUser}
                   token={props.token}
                   updateUser={updateUser}
