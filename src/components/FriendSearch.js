@@ -78,7 +78,7 @@ function FriendSearch(props) {
         )
       ) {
         button = (
-          <button disabled className="disabled">
+          <button disabled className="disabled nav-links">
             Pending...
           </button>
         );
@@ -86,13 +86,17 @@ function FriendSearch(props) {
         props.user.friends.some((friend) => friend.username === user.username)
       ) {
         button = (
-          <button disabled className="disabled">
+          <button disabled className="disabled nav-links">
             Friend
           </button>
         );
       } else {
         button = (
-          <button value={user.username} onClick={sendRequest}>
+          <button
+            value={user.username}
+            onClick={sendRequest}
+            className="nav-links"
+          >
             Add friend
           </button>
         );

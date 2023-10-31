@@ -7,6 +7,9 @@ function MessageBubble(props) {
     if (props.user.username === props.message.username) {
       msgRef.current.classList.add("bubble-user");
     } else msgRef.current.classList.add("bubble-other");
+    setTimeout(() => {
+      msgRef.current.classList.add("message-bubble-fadein");
+    }, 0);
   }, []);
 
   return (

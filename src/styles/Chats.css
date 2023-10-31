@@ -132,6 +132,12 @@
   border-radius: 20px;
   width: fit-content;
   color: black;
+  opacity: 0;
+  transition: opacity ease-in 0.5s;
+}
+
+.message-bubble-fadein {
+  opacity: 1;
 }
 
 .bubble-user {
@@ -150,13 +156,30 @@
   justify-content: center;
 }
 
-.chat-view-messages {
-  background-color: var(--main-accent-color);
-  flex: 1;
+.chat-view-container {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
   margin: 0 -2rem -2rem -2rem;
+  background-color: var(--main-accent-color);
+}
+
+.chat-view-messages {
+  flex: 1;
+
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   overflow-y: scroll;
+}
+
+.chat-view-form {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.chat-view-form > input {
+  flex: auto;
 }
