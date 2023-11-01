@@ -183,14 +183,26 @@ function FriendProfile(props) {
                   />
                 )}
                 <div className="comment-buttons" ref={pushRef}>
-                  <button type="button" onClick={toggleModal}>
+                  <button
+                    type="button"
+                    onClick={toggleModal}
+                    className="nav-links"
+                  >
                     Add GiF
                   </button>
                   <div>
-                    <button type="button" onClick={postComment}>
+                    <button
+                      type="button"
+                      onClick={postComment}
+                      className="nav-links"
+                    >
                       Comment
                     </button>
-                    <button type="button" onClick={hideButtons}>
+                    <button
+                      type="button"
+                      onClick={hideButtons}
+                      className="nav-links"
+                    >
                       Cancel
                     </button>
                   </div>

@@ -18,6 +18,21 @@ function ChatList(props) {
     setChats(data);
   };
 
+  // Time stamp function which will take timestamp attribute of a Message object and convert to a user friendly timestamp
+  const timeStamped = (time) => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const messageTime = new Date(time).getDate();
+
+    if (today.getDate() === messageTime)
+      return new Date(time).toLocaleTimeString("en", {
+        timeStyle: "short",
+      });
+    else if (yesterday.getDate() === messageTime) return "Yesterday";
+    else return new Date(time).toLocaleString("en", { dateStyle: "short" });
+  };
+
   // on render and whenever the logged in user is updated, retrieve all active chats
   useEffect(() => {
     const getChats = async () => {
@@ -51,8 +66,7 @@ function ChatList(props) {
             NM
           </p>
         </div>
-        <div className="chats-container">
-          <p>Chats here</p>
+        <div className="chats-list-container">
           {/* MAP out an array of HTML elements based on the chat state data */}
           {chats &&
             chats.map((chat) => {
@@ -62,9 +76,13 @@ function ChatList(props) {
                   return { username: user.username, avatar: user.avatar };
                 });
 
-              const latestMsg = chat.messages[chat.messages.length - 1].text;
+              const latestMsg = chat.messages[chat.messages.length - 1];
               return (
-                <section className="chat-card" key={chat._id}>
+                <Link
+                  to={"/" + props.user.username + "/chats/" + chat._id}
+                  className="chat-card"
+                  key={chat._id}
+                >
                   {users.map((user) => {
                     return (
                       <div className="chat-card-header">
@@ -78,15 +96,18 @@ function ChatList(props) {
                     );
                   })}
                   <p>
-                    <i>{latestMsg}</i>
+                    <i>{latestMsg.text}</i>
                   </p>
-                  <Link
+                  <p className="chat-card-time">
+                    {timeStamped(latestMsg.timestamp)}
+                  </p>
+                  {/* <Link
                     to={"/" + props.user.username + "/chats/" + chat._id}
                     className="nav-links"
                   >
                     View
-                  </Link>
-                </section>
+                  </Link> */}
+                </Link>
               );
             })}
         </div>

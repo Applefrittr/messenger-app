@@ -64,6 +64,10 @@
   gap: 0.5rem;
 }
 
+.comment-timestamp {
+  color: lightgray;
+}
+
 .comment-menu-btn {
   position: absolute;
   top: 0.5rem;

@@ -13,7 +13,7 @@ function MessageBubble(props) {
   }, []);
 
   return (
-    <div className="message-bubble" ref={msgRef}>
+    <div className="message-bubble" ref={msgRef} key={props.message._id}>
       <p>{props.message.text}</p>
     </div>
   );

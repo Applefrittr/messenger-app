@@ -8,14 +8,18 @@ function Comment(props) {
 
   // time stamp function returns either "today" or "yesterday" if comment was made in the past 2 day,
   // otherswise return the date
-  const timeStamped = () => {
-    const today = new Date().getDate();
-    const commentTime = new Date(props.comment.timestamp).getDate();
+  const timeStamped = (time) => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const messageTime = new Date(time).getDate();
 
-    if (today - commentTime <= 0) return "Today";
-    else if (today - commentTime > 2)
-      return new Date(props.comment.timestamp).toDateString();
-    else return "Yesterday";
+    if (today.getDate() === messageTime)
+      return new Date(time).toLocaleTimeString("en", {
+        timeStyle: "short",
+      });
+    else if (yesterday.getDate() === messageTime) return "Yesterday";
+    else return new Date(time).toLocaleString("en", { dateStyle: "short" });
   };
 
   const displayDropdown = () => {
@@ -83,8 +87,10 @@ function Comment(props) {
         />
         <div className="comment-name-date">
           <h3>{props.comment.author}</h3>
-          <p>
-            <i>{props.now ? props.now : timeStamped()}</i>
+          <p className="comment-timestamp">
+            <i>
+              {props.now ? props.now : timeStamped(props.comment.timestamp)}
+            </i>
           </p>
         </div>
         <div className="comment-menu-btn" onClick={displayDropdown}>

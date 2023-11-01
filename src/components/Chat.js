@@ -6,6 +6,7 @@ function Chat(props) {
   const [chat, setChat] = useState();
   const { id } = useParams();
   const formRef = useRef();
+  const chatEndRef = useRef();
 
   // sendMsg POSTs a new message to an exisiting chat then GETs the updated chat from teh DB to be rendered, effectively showing
   // new messages in the UI immediately
@@ -49,6 +50,7 @@ function Chat(props) {
     formRef.current.reset();
   };
 
+  // On component mount, retrieve a specific chat using the ID in the url parameters, set the component state chat to the returned object
   useEffect(() => {
     const getChat = async () => {
       const request = await fetch(
@@ -65,16 +67,21 @@ function Chat(props) {
 
       const response = await request.json();
 
-      console.log(response.chat);
       setChat(response.chat);
     };
 
     getChat();
   }, []);
 
+  // Whenever chat state is set, scroll chat view to dummy div representing the bottom of the scrollable element,
+  // showing most recent messages
+  useEffect(() => {
+    chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [chat]);
+
   return (
     <section className="component-view">
-      <section className="component-container">
+      <section className="component-container chat-component-container">
         <div className="chat-view-header">
           {chat &&
             chat.users
@@ -98,6 +105,7 @@ function Chat(props) {
               chat.messages.map((message) => {
                 return <MessageBubble message={message} user={props.user} />;
               })}
+            <div className="chat-last-el" ref={chatEndRef}></div>
           </div>
           <form className="chat-view-form" ref={formRef}>
             <button type="button" className="nav-links">
