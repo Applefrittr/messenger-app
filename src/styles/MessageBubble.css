@@ -1,0 +1,60 @@
+.message-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-line {
+  text-align: center;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+
+.message-bubble {
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  color: black;
+  opacity: 0;
+  transition: opacity ease-in 0.5s;
+}
+
+.send {
+  background-color: lightblue;
+  align-self: flex-end;
+  border-radius: 20px 20px 0 20px;
+}
+
+.recieve {
+  background-color: lightgray;
+  border-radius: 20px 20px 20px 0;
+}
+
+.message-bubble-timestamp {
+  color: lightgray;
+  font-size: 0.8rem;
+  display: block;
+  white-space: nowrap;
+}
+
+.timestamp-send {
+  text-align: end;
+}
+
+.timestamp-recieve {
+  text-align: start;
+}
+
+.timestamp-hide {
+  display: none;
+}
+
+.message-bubble.recieve::before {
+  left: 0;
+}
+
+.message-bubble.send::before {
+  right: 0;
+}
+
+.message-bubble-fadein {
+  opacity: 1;
+}

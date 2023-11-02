@@ -102,8 +102,14 @@ function Chat(props) {
         <div className="chat-view-container">
           <div className="chat-view-messages">
             {chat &&
-              chat.messages.map((message) => {
-                return <MessageBubble message={message} user={props.user} />;
+              chat.messages.map((message, i, messages) => {
+                return (
+                  <MessageBubble
+                    message={message}
+                    prev={messages[i - 1]}
+                    user={props.user}
+                  />
+                );
               })}
             <div className="chat-last-el" ref={chatEndRef}></div>
           </div>

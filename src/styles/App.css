@@ -6,6 +6,7 @@
 @import url("./Profile.css");
 @import url("./GIFSearch.css");
 @import url("./Chats.css");
+@import url("./MessageBubble.css");
 
 :root {
   --main-theme-color: #282c34;

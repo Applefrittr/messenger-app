@@ -65,7 +65,7 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1px;
   overflow-y: scroll;
 }
 
@@ -138,29 +138,6 @@
   right: 1rem;
 }
 
-.message-bubble {
-  padding: 0.5rem 1rem;
-  width: fit-content;
-  color: black;
-  opacity: 0;
-  transition: opacity ease-in 0.5s;
-}
-
-.message-bubble-fadein {
-  opacity: 1;
-}
-
-.bubble-user {
-  background-color: lightblue;
-  align-self: flex-end;
-  border-radius: 20px 20px 0 20px;
-}
-
-.bubble-other {
-  background-color: lightgray;
-  border-radius: 20px 20px 20px 0;
-}
-
 .chat-view-header {
   display: flex;
   gap: 1rem;
@@ -181,9 +158,9 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   overflow-y: scroll;
   flex: 1;
+  gap: 1px;
 }
 
 .chat-view-form {

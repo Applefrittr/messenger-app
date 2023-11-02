@@ -154,8 +154,14 @@ function NewChat(props) {
         )}
         <div className="chat-view">
           {displayChat &&
-            displayChat.map((message) => {
-              return <MessageBubble message={message} user={props.user} />;
+            displayChat.map((message, i, messages) => {
+              return (
+                <MessageBubble
+                  message={message}
+                  prev={messages[i - 1]}
+                  user={props.user}
+                />
+              );
             })}
         </div>
         <div className="new-msg-input-container">
