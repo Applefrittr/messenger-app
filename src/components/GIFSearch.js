@@ -72,7 +72,7 @@ function GIFSearch(props) {
             placeholder="Search GIPHY..."
             ref={queryRef}
           ></input>
-          <button type="submit" onClick={getGifs}>
+          <button type="submit" onClick={getGifs} className="nav-links">
             Search
           </button>
         </div>

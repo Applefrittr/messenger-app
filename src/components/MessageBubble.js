@@ -59,7 +59,11 @@ function MessageBubble(props) {
           })}
         </i>
       </p>
+
       <div className="message-bubble" ref={msgRef} key={props.message._id}>
+        {props.message.gif && (
+          <img src={props.message.gif} alt="gif" className="chat-view-gif" />
+        )}
         <p>{props.message.text}</p>
       </div>
     </div>
