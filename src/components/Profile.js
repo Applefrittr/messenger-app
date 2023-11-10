@@ -131,6 +131,7 @@ function Profile(props) {
         user={props.user}
         token={props.token}
         updateUser={props.updateUser}
+        key={comment._id}
       />
     );
   });

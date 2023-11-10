@@ -76,7 +76,7 @@ function ChatList(props) {
                   return { username: user.username, avatar: user.avatar };
                 });
 
-              const latestMsg = chat.messages[chat.messages.length - 1];
+              //const latestMsg = chat.messages[0];
               return (
                 <Link
                   to={"/" + props.user.username + "/chats/" + chat._id}
@@ -85,7 +85,7 @@ function ChatList(props) {
                 >
                   {users.map((user) => {
                     return (
-                      <div className="chat-card-header">
+                      <div className="chat-card-header" key={user._id}>
                         <img
                           src={user.avatar}
                           alt="avatar"
@@ -96,10 +96,10 @@ function ChatList(props) {
                     );
                   })}
                   <p>
-                    <i>{latestMsg.text}</i>
+                    <i>{chat.latestMsg.text}</i>
                   </p>
                   <p className="chat-card-time">
-                    {timeStamped(latestMsg.timestamp)}
+                    {timeStamped(chat.latestMsg.timestamp)}
                   </p>
                   {/* <Link
                     to={"/" + props.user.username + "/chats/" + chat._id}

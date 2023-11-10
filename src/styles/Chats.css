@@ -161,6 +161,12 @@
   overflow-y: scroll;
   flex: 1;
   gap: 1px;
+  position: relative;
+}
+
+.top-fetch-trigger {
+  position: absolute;
+  top: 100px;
 }
 
 .chat-view-form {

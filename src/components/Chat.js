@@ -5,14 +5,22 @@ import GIFSearch from "./GIFSearch";
 
 function Chat(props) {
   const [chat, setChat] = useState();
+  const [messages, setMessages] = useState([]);
   const [renderModal, setRenderModal] = useState(false);
   const [gif, setGif] = useState();
-  //const [messages, setMessages] = useState();
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const hasMoreRef = useRef();
+  const pageRef = useRef();
   const { id } = useParams();
   const formRef = useRef();
   const chatEndRef = useRef();
   const modalRef = useRef(); // modal overlay
   const topRef = useRef();
+  const chatViewRef = useRef();
+  const [scrollHeight, setScrollHeight] = useState([0]);
+  pageRef.current = page; // ensure we have reference to page state, so callbacks use current page value
+  hasMoreRef.current = hasMore;
 
   const toggleModal = () => {
     modalRef.current.classList.toggle("toggle-modal");
@@ -26,6 +34,43 @@ function Chat(props) {
 
   const removeGif = () => {
     setGif();
+  };
+
+  const getChatPage = async () => {
+    // console.log(hasMoreRef.current);
+    console.log("cb", chatViewRef.current.scrollHeight);
+    if (!hasMoreRef.current) return;
+    const request = await fetch(
+      `http://localhost:5000/users/${props.user.username}/chats/${id}/${pageRef.current}`,
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const response = await request.json();
+
+    setHasMore(response.hasMore);
+    response.messages.reverse();
+    setMessages((prevMsgs) => [...response.messages, ...prevMsgs]);
+    setScrollHeight((prevHeight) => [
+      ...prevHeight,
+      chatViewRef.current.scrollHeight,
+    ]);
+    //chatViewRef.current.scrollTo(0, scrollPostion);
+  };
+
+  // Callback for intersectionalObserver object linked to the top element in the chat log, fires a fetch request to the API
+  // to retrieve a chunk of messages within the Chat object to be displayed in the UI.  Pagination opposed to retrieving the entire
+  // chat history.
+  const observerCallback = async (entries) => {
+    if (entries[0].intersectionRatio <= 0) return;
+    getChatPage();
+    setPage((prev) => prev + 1);
   };
 
   // sendMsg POSTs a new message to an exisiting chat then GETs the updated chat from teh DB to be rendered, effectively showing
@@ -52,26 +97,13 @@ function Chat(props) {
     const response = await request.json();
     console.log(response.message);
 
-    const requestChat = await fetch(
-      `http://localhost:5000/users/${props.user.username}/chats/${id}`,
-      {
-        mode: "cors",
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    setMessages((prevMsgs) => [...prevMsgs, response.message]);
 
-    const responseChat = await requestChat.json();
-
-    setChat(responseChat.chat);
     formRef.current.reset();
     setGif();
   };
 
-  // On component mount, retrieve a specific chat using the ID in the url parameters, set the component state chat to the returned object
+  // On component mount, initialize the observer and observe the TOP placeholder div in the chat log; firecall back when in view
   useEffect(() => {
     const getChat = async () => {
       const request = await fetch(
@@ -85,31 +117,28 @@ function Chat(props) {
           },
         }
       );
-
       const response = await request.json();
-
       setChat(response.chat);
-      // let test = [...response.chat.messages];
-      // //console.log(test.reverse().splice(0, 10));
-      // setMessages(test.slice(0, 10));
     };
-
     getChat();
 
-    // const observer = new IntersectionObserver(async (entries) => {
-    //   if (entries[0].intersectionRatio <= 0) return;
-
-    //   //console.log("TOP OF THE LIST");
-    // });
-
-    // observer.observe(topRef.current);
+    const observer = new IntersectionObserver(observerCallback);
+    observer.observe(topRef.current);
+    return () => {
+      if (topRef.current) observer.unobserve(topRef.current);
+    };
   }, []);
 
   // Whenever chat state is set, scroll chat view to dummy div representing the bottom of the scrollable element,
   // showing most recent messages
   useEffect(() => {
-    chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [chat]);
+    setTimeout(() => {
+      console.log("ue", scrollHeight);
+      console.log("page", page);
+      console.log("delta", scrollHeight);
+    }, 100);
+    chatViewRef.current.scrollTo({ top: 633, behavior: "instant" });
+  }, [scrollHeight]);
 
   return (
     <section className="component-view">
@@ -132,15 +161,22 @@ function Chat(props) {
               })}
         </div>
         <div className="chat-view-container">
-          <div className="chat-view-messages">
-            <div ref={topRef}>TOP</div>
-            {chat &&
-              chat.messages.map((message, i, messages) => {
+          <div
+            className="chat-view-messages"
+            ref={chatViewRef}
+            onScroll={() => console.log(chatViewRef.current.scrollTop)}
+          >
+            <div ref={topRef} className="top-fetch-trigger">
+              TOP
+            </div>
+            {messages &&
+              messages.map((message, i, messages) => {
                 return (
                   <MessageBubble
                     message={message}
                     prev={messages[i - 1]}
                     user={props.user}
+                    key={message._id}
                   />
                 );
               })}

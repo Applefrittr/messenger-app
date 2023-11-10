@@ -37,7 +37,6 @@ function MessageBubble(props) {
         new Date(props.prev.timestamp).getTime() <=
         120000
     ) {
-      console.log("hide");
       timeRef.current.classList.add("timestamp-hide");
     }
   }, []);
