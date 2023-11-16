@@ -166,7 +166,7 @@
 
 .top-fetch-trigger {
   position: absolute;
-  top: 100px;
+  top: 0;
 }
 
 .chat-view-form {

@@ -1,11 +1,12 @@
 import NewChat from "./NewChat";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function ChatList(props) {
   const [chats, setChats] = useState();
   const [renderModal, setRenderModal] = useState(false);
   const modalRef = useRef();
+  const navigate = useNavigate();
 
   //toggle New Message modal overlay
   const toggleModal = () => {
@@ -36,26 +37,42 @@ function ChatList(props) {
   // on render and whenever the logged in user is updated, retrieve all active chats
   useEffect(() => {
     const getChats = async () => {
-      const request = await fetch(
-        `http://localhost:5000/users/${props.user.username}/chats`,
-        {
-          mode: "cors",
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-            "Content-Type": "application/json",
-          },
+      try {
+        const request = await fetch(
+          `http://localhost:5000/users/${props.user.username}/chats`,
+          {
+            mode: "cors",
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${props.token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const response = await request.json();
+
+        if (response.error) {
+          console.log(response);
+          navigate(`/${props.user.username}/error`);
         }
-      );
 
-      const response = await request.json();
-
-      console.log(response.message);
-      setChats(response.chats);
+        console.log(response);
+        setChats(response.chats);
+      } catch {
+        navigate(`/${props.user.username}/error`);
+      }
     };
 
     getChats();
   }, [props.user]);
+
+  const testError = async () => {
+    const request = await fetch(`http://localhost:5000/users/error`);
+    const response = await request.json();
+
+    console.log(response);
+  };
 
   return (
     <section className="component-view">
@@ -124,6 +141,7 @@ function ChatList(props) {
             />
           )}
         </div>
+        <button onClick={testError}>Error</button>
       </section>
     </section>
   );

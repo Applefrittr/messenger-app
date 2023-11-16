@@ -4,6 +4,7 @@ import Chat from "./Chat";
 import Friends from "./Friends";
 import Profile from "./Profile";
 import FriendProfile from "./FriendProfile";
+import Error from "./Error";
 import { useEffect, useRef, useState } from "react";
 
 function Dashboard(props) {
@@ -123,6 +124,7 @@ function Dashboard(props) {
                 />
               }
             />
+            <Route path={base + "/error"} element={<Error />} />
           </Routes>
         )}
       </div>

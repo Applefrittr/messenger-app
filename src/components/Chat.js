@@ -18,7 +18,7 @@ function Chat(props) {
   const modalRef = useRef(); // modal overlay
   const topRef = useRef();
   const chatViewRef = useRef();
-  const [scrollHeight, setScrollHeight] = useState([0]);
+  const [prevScrollHeight, setPrevScrollHeight] = useState();
   pageRef.current = page; // ensure we have reference to page state, so callbacks use current page value
   hasMoreRef.current = hasMore;
 
@@ -37,8 +37,6 @@ function Chat(props) {
   };
 
   const getChatPage = async () => {
-    // console.log(hasMoreRef.current);
-    console.log("cb", chatViewRef.current.scrollHeight);
     if (!hasMoreRef.current) return;
     const request = await fetch(
       `http://localhost:5000/users/${props.user.username}/chats/${id}/${pageRef.current}`,
@@ -57,11 +55,8 @@ function Chat(props) {
     setHasMore(response.hasMore);
     response.messages.reverse();
     setMessages((prevMsgs) => [...response.messages, ...prevMsgs]);
-    setScrollHeight((prevHeight) => [
-      ...prevHeight,
-      chatViewRef.current.scrollHeight,
-    ]);
-    //chatViewRef.current.scrollTo(0, scrollPostion);
+    setPrevScrollHeight(chatViewRef.current.scrollHeight);
+    setPage((prev) => prev + 1);
   };
 
   // Callback for intersectionalObserver object linked to the top element in the chat log, fires a fetch request to the API
@@ -70,10 +65,9 @@ function Chat(props) {
   const observerCallback = async (entries) => {
     if (entries[0].intersectionRatio <= 0) return;
     getChatPage();
-    setPage((prev) => prev + 1);
   };
 
-  // sendMsg POSTs a new message to an exisiting chat then GETs the updated chat from teh DB to be rendered, effectively showing
+  // sendMsg POSTs a new message to an exisiting chat then GETs the updated chat from the DB to be rendered, effectively showing
   // new messages in the UI immediately
   const sendMsg = async (e) => {
     e.preventDefault();
@@ -103,7 +97,7 @@ function Chat(props) {
     setGif();
   };
 
-  // On component mount, initialize the observer and observe the TOP placeholder div in the chat log; firecall back when in view
+  // On component mount, initialize the observer and observe the TOP placeholder div in the chat log; firecall back when in view.  Also, retrieve chat info
   useEffect(() => {
     const getChat = async () => {
       const request = await fetch(
@@ -129,16 +123,16 @@ function Chat(props) {
     };
   }, []);
 
-  // Whenever chat state is set, scroll chat view to dummy div representing the bottom of the scrollable element,
-  // showing most recent messages
+  // Whenever prevScrollHieght state is set, scroll chat view to maintain the scroll position for user, creating a seemless experience
+  // when new message data is added to inifinte scroll
   useEffect(() => {
     setTimeout(() => {
-      console.log("ue", scrollHeight);
-      console.log("page", page);
-      console.log("delta", scrollHeight);
+      chatViewRef.current.scrollTo({
+        top: chatViewRef.current.scrollHeight - prevScrollHeight,
+        behavior: "instant",
+      });
     }, 100);
-    chatViewRef.current.scrollTo({ top: 633, behavior: "instant" });
-  }, [scrollHeight]);
+  }, [prevScrollHeight]);
 
   return (
     <section className="component-view">
@@ -161,11 +155,7 @@ function Chat(props) {
               })}
         </div>
         <div className="chat-view-container">
-          <div
-            className="chat-view-messages"
-            ref={chatViewRef}
-            onScroll={() => console.log(chatViewRef.current.scrollTop)}
-          >
+          <div className="chat-view-messages" ref={chatViewRef}>
             <div ref={topRef} className="top-fetch-trigger">
               TOP
             </div>
