@@ -54,11 +54,12 @@ function ChatList(props) {
 
         if (response.error) {
           console.log(response);
-          navigate(`/${props.user.username}/error`);
+          props.updateTokenErr(response.error);
+          navigate(`/`);
+        } else {
+          console.log(response);
+          setChats(response.chats);
         }
-
-        console.log(response);
-        setChats(response.chats);
       } catch {
         navigate(`/${props.user.username}/error`);
       }

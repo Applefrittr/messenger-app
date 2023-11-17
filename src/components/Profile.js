@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
 
 function Profile(props) {
@@ -12,6 +12,7 @@ function Profile(props) {
   const formRef = useRef();
   const toolRef = useRef();
   const avatarEdit = useRef();
+  const navigate = useNavigate();
 
   // Toggle display of the edit form
   const toggleModal = () => {
@@ -58,12 +59,19 @@ function Profile(props) {
       }
     );
     const response = await request.json();
-    console.log(response.message);
 
-    props.updateUser({ ...user, avatar: editAvatar }); // Update the Dashboard state user with the edits
-    setUser({ ...user, avatar: editAvatar }); // Update local state user to display current info in the form fields
-    setUserAvatar(editAvatar); // Update profile avatar to match form avatar selection
-    toggleModal();
+    if (response.error) {
+      console.log(response);
+      props.updateTokenErr(response.error);
+      navigate(`/`);
+    } else {
+      console.log(response.message);
+
+      props.updateUser({ ...user, avatar: editAvatar }); // Update the Dashboard state user with the edits
+      setUser({ ...user, avatar: editAvatar }); // Update local state user to display current info in the form fields
+      setUserAvatar(editAvatar); // Update profile avatar to match form avatar selection
+      toggleModal();
+    }
   };
 
   // function will handle changes to form fields "title", "text", or the checkbox. Updates the local state user (handles form manipulation), which is a copy of the App state user
@@ -131,7 +139,7 @@ function Profile(props) {
         user={props.user}
         token={props.token}
         updateUser={props.updateUser}
-        key={comment._id}
+        updateTokenErr={props.updateTokenErr}
       />
     );
   });

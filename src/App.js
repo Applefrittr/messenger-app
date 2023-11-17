@@ -8,8 +8,8 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 // the login page or the dashboard
 function App() {
   const [token, setToken] = useState(localStorage["webToken"]); // set token to locally stored token for logged in persistance
+  const [tokenErr, setTokenErr] = useState();
   const [user, setUser] = useState();
-  const [msg, setMsg] = useState();
   const navigate = useNavigate();
 
   // useEffect is called to set the user state once a token w/ user payload is retrieved from the API.  This user state will be used throughout the app until it's loggedout or
@@ -17,30 +17,31 @@ function App() {
   useEffect(() => {
     // GET call to the back end to have web token decoded and the user payload sent back for use
     const getUser = async () => {
-      const request = await fetch("http://localhost:5000/users/login", {
-        mode: "cors",
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      if (token) {
+        const request = await fetch("http://localhost:5000/users/login", {
+          mode: "cors",
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
-      const response = await request.json();
+        const response = await request.json();
 
-      //console.log(response.payload);
+        //console.log(response.payload);
 
-      // if token expired, navigate to to login page.  Else, navigate to user dashboard
-      if (response.message) {
-        setMsg(response.message);
-        localStorage.clear();
-        navigate("/");
-      } else {
-        console.log("user reset");
-        console.log("user", user);
-        console.log("payload", response.payload);
-        setUser(response.payload);
-        navigate(`/${response.payload.username}/chats`);
+        // if token expired, navigate to to login page.  Else, navigate to user dashboard
+        if (response.error) {
+          localStorage.clear();
+          navigate("/");
+        } else {
+          console.log("user reset");
+          console.log("user", user);
+          console.log("payload", response.payload);
+          setUser(response.payload);
+          navigate(`/${response.payload.username}/chats`);
+        }
       }
     };
 
@@ -55,12 +56,22 @@ function App() {
     setUser(state);
   };
 
+  const updateTokenErr = (state) => {
+    setTokenErr(state);
+  };
+
   return (
     <div>
       <Routes>
         <Route
           path="/"
-          element={<Login updateToken={updateToken} msg={msg} />}
+          element={
+            <Login
+              updateToken={updateToken}
+              tokenErr={tokenErr}
+              updateTokenErr={updateTokenErr}
+            />
+          }
         />
 
         {user && (
@@ -70,6 +81,7 @@ function App() {
               <Dashboard
                 updateToken={updateToken}
                 updateUser={updateUser}
+                updateTokenErr={updateTokenErr}
                 token={token}
                 user={user}
               />

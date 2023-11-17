@@ -216,6 +216,7 @@ function FriendProfile(props) {
                       user={props.user}
                       token={props.token}
                       updateComments={updateComments}
+                      updateTokenErr={props.updateTokenErr}
                     />
                   );
                 })}

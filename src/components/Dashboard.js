@@ -79,6 +79,7 @@ function Dashboard(props) {
                   user={currUser}
                   token={props.token}
                   updateUser={updateUser}
+                  updateTokenErr={props.updateTokenErr}
                 />
               }
             />
@@ -89,6 +90,7 @@ function Dashboard(props) {
                   user={currUser}
                   token={props.token}
                   updateUser={updateUser}
+                  updateTokenErr={props.updateTokenErr}
                 />
               }
             />
@@ -99,6 +101,7 @@ function Dashboard(props) {
                   user={currUser}
                   token={props.token}
                   updateUser={updateUser}
+                  updateTokenErr={props.updateTokenErr}
                 />
               }
             />
@@ -110,6 +113,7 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   toggleScroll={toggleScroll}
+                  updateTokenErr={props.updateTokenErr}
                 />
               }
             />
@@ -121,6 +125,7 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   toggleScroll={toggleScroll}
+                  updateTokenErr={props.updateTokenErr}
                 />
               }
             />

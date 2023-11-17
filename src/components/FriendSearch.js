@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function FriendSearch(props) {
   const [users, setUsers] = useState();
   const [filteredUsers, setFilteredUsers] = useState([]);
   const formRef = useRef();
+  const navigate = useNavigate();
 
   // Friend request function.  Call to API to add targeted user to the current logged in user's pending friend requests and then update UI with returned user
   const sendRequest = async (e) => {
@@ -24,9 +26,15 @@ function FriendSearch(props) {
 
     const response = await request.json();
 
-    console.log(response.message);
-    // from Dashboard.js, updates the logged in user to reflect changes in UI
-    props.updateUser(response.user);
+    if (response.error) {
+      console.log(response);
+      props.updateTokenErr(response.error);
+      navigate(`/`);
+    } else {
+      console.log(response.message);
+      // from Dashboard.js, updates the logged in user to reflect changes in UI
+      props.updateUser(response.user);
+    }
   };
 
   // On the Search component mount, retrieve all users in the DB and filter out the current logged in User from the result - also filter out friends of current User
@@ -36,10 +44,16 @@ function FriendSearch(props) {
 
       const response = await request.json();
 
-      const allUsers = response.users.filter(
-        (user) => user.username !== props.user.username
-      );
-      setUsers(allUsers);
+      if (response.error) {
+        console.log(response);
+        props.updateTokenErr(response.error);
+        navigate(`/`);
+      } else {
+        const allUsers = response.users.filter(
+          (user) => user.username !== props.user.username
+        );
+        setUsers(allUsers);
+      }
     };
 
     getUsers();

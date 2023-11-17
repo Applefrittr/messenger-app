@@ -50,13 +50,20 @@ function Comment(props) {
     );
 
     const response = await request.json();
-    console.log(response.message);
 
-    // Determine which profile to update depending on where the comment to be removed was posted: user profile OR the friend's profile
-    if (props.user.username === props.comment.author) {
-      props.updateComments(response.user.comments); // update friend's comment list
-    } else props.updateUser(response.user); // update the logged in user to reflect comment removal
-    displayDropdown();
+    if (response.error) {
+      console.log(response);
+      props.updateTokenErr(response.error);
+      navigate(`/`);
+    } else {
+      console.log(response.message);
+
+      // Determine which profile to update depending on where the comment to be removed was posted: user profile OR the friend's profile
+      if (props.user.username === props.comment.author) {
+        props.updateComments(response.user.comments); // update friend's comment list
+      } else props.updateUser(response.user); // update the logged in user to reflect comment removal
+      displayDropdown();
+    }
   };
 
   // Navigate to comment author's profile page, redirect to own user profile if clicked on own comment

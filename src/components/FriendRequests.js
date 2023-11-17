@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function FriendRequests(props) {
   const [incoming, setIncoming] = useState();
   const [outgoing, setOutgoing] = useState();
+  const navigate = useNavigate();
 
   const renderIncoming = (userArray) => {
     const requestInArray = [];
@@ -75,12 +77,18 @@ function FriendRequests(props) {
     );
     const response = await request.json();
 
-    console.log(response.message);
-    // from Dashboard.js, updates the logged in user to reflect changes in UI
-    props.updateUser(response.user);
+    if (response.error) {
+      console.log(response);
+      props.updateTokenErr(response.error);
+      navigate(`/`);
+    } else {
+      console.log(response.message);
+      // from Dashboard.js, updates the logged in user to reflect changes in UI
+      props.updateUser(response.user);
 
-    renderIncoming(response.user.requestIn);
-    renderOutgoing(response.user.requestOut);
+      renderIncoming(response.user.requestIn);
+      renderOutgoing(response.user.requestOut);
+    }
   };
 
   // Declined friend request call to API.  Returned updated user used to update UI with changes
@@ -98,12 +106,18 @@ function FriendRequests(props) {
     );
     const response = await request.json();
 
-    console.log(response.message);
-    // from Dashboard.js, updates the logged in user to reflect changes in UI
-    props.updateUser(response.user);
+    if (response.error) {
+      console.log(response);
+      props.updateTokenErr(response.error);
+      navigate(`/`);
+    } else {
+      console.log(response.message);
+      // from Dashboard.js, updates the logged in user to reflect changes in UI
+      props.updateUser(response.user);
 
-    renderIncoming(response.user.requestIn);
-    renderOutgoing(response.user.requestOut);
+      renderIncoming(response.user.requestIn);
+      renderOutgoing(response.user.requestOut);
+    }
   };
 
   return (

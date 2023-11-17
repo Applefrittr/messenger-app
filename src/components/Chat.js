@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 import GIFSearch from "./GIFSearch";
 
@@ -19,6 +19,7 @@ function Chat(props) {
   const topRef = useRef();
   const chatViewRef = useRef();
   const [prevScrollHeight, setPrevScrollHeight] = useState();
+  const navigate = useNavigate();
   pageRef.current = page; // ensure we have reference to page state, so callbacks use current page value
   hasMoreRef.current = hasMore;
 
@@ -52,11 +53,17 @@ function Chat(props) {
 
     const response = await request.json();
 
-    setHasMore(response.hasMore);
-    response.messages.reverse();
-    setMessages((prevMsgs) => [...response.messages, ...prevMsgs]);
-    setPrevScrollHeight(chatViewRef.current.scrollHeight);
-    setPage((prev) => prev + 1);
+    if (response.error) {
+      console.log(response);
+      props.updateTokenErr(response.error);
+      navigate(`/`);
+    } else {
+      setHasMore(response.hasMore);
+      response.messages.reverse();
+      setMessages((prevMsgs) => [...response.messages, ...prevMsgs]);
+      setPrevScrollHeight(chatViewRef.current.scrollHeight);
+      setPage((prev) => prev + 1);
+    }
   };
 
   // Callback for intersectionalObserver object linked to the top element in the chat log, fires a fetch request to the API
@@ -89,12 +96,19 @@ function Chat(props) {
     );
 
     const response = await request.json();
-    console.log(response.message);
 
-    setMessages((prevMsgs) => [...prevMsgs, response.message]);
+    if (response.error) {
+      console.log(response);
+      props.updateTokenErr(response.error);
+      navigate(`/`);
+    } else {
+      console.log(response.message);
 
-    formRef.current.reset();
-    setGif();
+      setMessages((prevMsgs) => [...prevMsgs, response.message]);
+
+      formRef.current.reset();
+      setGif();
+    }
   };
 
   // On component mount, initialize the observer and observe the TOP placeholder div in the chat log; firecall back when in view.  Also, retrieve chat info
@@ -156,9 +170,7 @@ function Chat(props) {
         </div>
         <div className="chat-view-container">
           <div className="chat-view-messages" ref={chatViewRef}>
-            <div ref={topRef} className="top-fetch-trigger">
-              TOP
-            </div>
+            <div ref={topRef} className="top-fetch-trigger"></div>
             {messages &&
               messages.map((message, i, messages) => {
                 return (

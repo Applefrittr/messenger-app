@@ -48,6 +48,7 @@ function Login(props) {
   // Login function sends user credentials to the API for authentication
   const signIn = async (e) => {
     e.preventDefault();
+    props.updateTokenErr();
 
     // FormData API to pull info from the form then convert to standard JS object
     const formData = new FormData(signinRef.current);
@@ -82,6 +83,9 @@ function Login(props) {
 
   return (
     <div className="Login">
+      {props.tokenErr && (
+        <div className="login-msg-container">{props.tokenErr}</div>
+      )}
       <div className="login-container">
         <form className="signin-form" action="" method="POST" ref={signinRef}>
           <h1>Sign In</h1>
@@ -118,7 +122,6 @@ function Login(props) {
           </div>
         </form>
         {errors && <div className="login-msg-container">{errors}</div>}
-        {/* {props.msg && <div className="login-msg-container">{props.msg}</div>} */}
       </div>
     </div>
   );

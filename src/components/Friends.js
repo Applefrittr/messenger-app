@@ -45,6 +45,7 @@ function Friends(props) {
             user={props.user}
             token={props.token}
             updateUser={props.updateUser}
+            updateTokenErr={props.updateTokenErr}
           />
         )}
         {tab === requestsRef && (
@@ -52,6 +53,7 @@ function Friends(props) {
             user={props.user}
             token={props.token}
             updateUser={props.updateUser}
+            updateTokenErr={props.updateTokenErr}
           />
         )}
         {tab === searchRef && (
@@ -59,6 +61,7 @@ function Friends(props) {
             user={props.user}
             token={props.token}
             updateUser={props.updateUser}
+            updateTokenErr={props.updateTokenErr}
           />
         )}
       </div>
