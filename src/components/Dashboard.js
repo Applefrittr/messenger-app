@@ -52,7 +52,7 @@ function Dashboard(props) {
   return (
     <section className="dashboard">
       <div className="nav-bar">
-        <div>
+        <div className="nav-bar-header">
           <h1>Mylo Messenger</h1>
           {props.user && <p>User: {props.user.username}</p>}
         </div>

@@ -1,6 +1,7 @@
 import NewChat from "./NewChat";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import NewIcon from "../assets/newChat.png";
 
 function ChatList(props) {
   const [chats, setChats] = useState();
@@ -68,21 +69,20 @@ function ChatList(props) {
     getChats();
   }, [props.user]);
 
-  const testError = async () => {
-    const request = await fetch(`http://localhost:5000/users/error`);
-    const response = await request.json();
-
-    console.log(response);
-  };
-
   return (
     <section className="component-view">
       <section className="component-container">
         <div className="chats-nav">
           <p className="chats-nav-btn">Messages</p>
-          <p className="new-msg-btn" onClick={toggleModal}>
+          {/* <p className="new-msg-btn" onClick={toggleModal}>
             NM
-          </p>
+          </p> */}
+          <img
+            src={NewIcon}
+            alt="new chat"
+            onClick={toggleModal}
+            className="new-msg-btn"
+          />
         </div>
         <div className="chats-list-container">
           {/* MAP out an array of HTML elements based on the chat state data */}
@@ -142,7 +142,6 @@ function ChatList(props) {
             />
           )}
         </div>
-        <button onClick={testError}>Error</button>
       </section>
     </section>
   );

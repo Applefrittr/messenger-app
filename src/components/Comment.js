@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Menu from "../assets/menu.png";
 
 function Comment(props) {
   const dropRef = useRef();
@@ -100,9 +101,15 @@ function Comment(props) {
             </i>
           </p>
         </div>
-        <div className="comment-menu-btn" onClick={displayDropdown}>
+        {/* <div className="comment-menu-btn" onClick={displayDropdown}>
           menu
-        </div>
+        </div> */}
+        <img
+          onClick={displayDropdown}
+          src={Menu}
+          alt="menu"
+          className="comment-menu-btn"
+        />
         <div className="menu-dropdown">
           <ul className="menu-list" ref={dropRef}>
             {isRemovable && <li onClick={removeComment}>Remove</li>}

@@ -10,15 +10,17 @@ function Chat(props) {
   const [gif, setGif] = useState();
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [prevScrollHeight, setPrevScrollHeight] = useState();
+
+  const { id } = useParams();
+
   const hasMoreRef = useRef();
   const pageRef = useRef();
-  const { id } = useParams();
   const formRef = useRef();
   const chatEndRef = useRef();
   const modalRef = useRef(); // modal overlay
   const topRef = useRef();
   const chatViewRef = useRef();
-  const [prevScrollHeight, setPrevScrollHeight] = useState();
   const navigate = useNavigate();
   pageRef.current = page; // ensure we have reference to page state, so callbacks use current page value
   hasMoreRef.current = hasMore;
@@ -108,6 +110,7 @@ function Chat(props) {
 
       formRef.current.reset();
       setGif();
+      chatEndRef.current.scrollIntoView();
     }
   };
 

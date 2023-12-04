@@ -61,39 +61,33 @@ function App() {
   };
 
   return (
-    <div>
-      <Routes>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Login
+            updateToken={updateToken}
+            tokenErr={tokenErr}
+            updateTokenErr={updateTokenErr}
+          />
+        }
+      />
+
+      {user && (
         <Route
-          path="/"
+          path="/*"
           element={
-            <Login
+            <Dashboard
               updateToken={updateToken}
-              tokenErr={tokenErr}
+              updateUser={updateUser}
               updateTokenErr={updateTokenErr}
+              token={token}
+              user={user}
             />
           }
         />
-
-        {user && (
-          <Route
-            path="/*"
-            element={
-              <Dashboard
-                updateToken={updateToken}
-                updateUser={updateUser}
-                updateTokenErr={updateTokenErr}
-                token={token}
-                user={user}
-              />
-            }
-          />
-        )}
-      </Routes>
-      {/* {user && (
-        <Dashboard updateToken={updateToken} token={token} user={user} />
       )}
-      {!user && <Login updateToken={updateToken} msg={msg} />} */}
-    </div>
+    </Routes>
   );
 }
 

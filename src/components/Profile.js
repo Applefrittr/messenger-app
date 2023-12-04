@@ -156,9 +156,11 @@ function Profile(props) {
               <h2>{props.user.username}</h2>
               <p>country: {props.user.country}</p>
             </div>
-            <p>Personal Bio: {props.user.personal}</p>
+            <p>
+              <i>{props.user.personal}</i>
+            </p>
           </div>
-          <div className="profile-info">
+          <div className="profile-info2">
             <div>
               <h2>joined: {props.user.userSince_string}</h2>
               <p>
@@ -229,10 +231,10 @@ function Profile(props) {
             value={user.personal ? user.personal : ""}
           />
           <div>
-            <button type="submit" onClick={submitEdits}>
+            <button type="submit" onClick={submitEdits} className="nav-links">
               Submit
             </button>
-            <button type="button" onClick={toggleModal}>
+            <button type="button" onClick={toggleModal} className="nav-links">
               Cancel
             </button>
           </div>
