@@ -49,7 +49,7 @@ function NewChat(props) {
           JSON.stringify(chat.usernames.sort())
         ) {
           chatIDRef.current.value = chat._id;
-          setDisplayChat(chat.messages);
+          setDisplayChat(chat.messages.reverse());
           break;
         } else {
           setDisplayChat();

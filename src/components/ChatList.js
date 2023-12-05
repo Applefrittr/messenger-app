@@ -2,6 +2,7 @@ import NewChat from "./NewChat";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NewIcon from "../assets/newChat.png";
+import Arrow from "../assets/forward.png";
 
 function ChatList(props) {
   const [chats, setChats] = useState();
@@ -119,6 +120,7 @@ function ChatList(props) {
                   <p className="chat-card-time">
                     {timeStamped(chat.latestMsg.timestamp)}
                   </p>
+                  <img src={Arrow} alt="Open" className="chat-arrow"></img>
                   {/* <Link
                     to={"/" + props.user.username + "/chats/" + chat._id}
                     className="nav-links"

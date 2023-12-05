@@ -27,7 +27,7 @@
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   font-size: 0.75rem;
-  flex-grow: 0;
+  flex-basis: auto;
 }
 
 .nav-links:hover {

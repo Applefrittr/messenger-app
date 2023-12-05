@@ -22,6 +22,7 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 0;
+  position: relative;
 }
 
 .hide-form {
@@ -39,4 +40,12 @@
   border: 1px solid lightcoral;
   border-radius: 10px;
   color: lightcoral;
+}
+
+.label {
+  position: absolute;
+  bottom: -60px;
+  right: 1px;
+  background-color: var(--main-theme-color);
+  padding: 1rem;
 }

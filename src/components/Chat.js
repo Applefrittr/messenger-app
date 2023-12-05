@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 import GIFSearch from "./GIFSearch";
+import Back from "../assets/back.png";
 
 function Chat(props) {
   const [chat, setChat] = useState();
@@ -37,6 +38,10 @@ function Chat(props) {
 
   const removeGif = () => {
     setGif();
+  };
+
+  const back = () => {
+    navigate(-1);
   };
 
   const getChatPage = async () => {
@@ -110,7 +115,9 @@ function Chat(props) {
 
       formRef.current.reset();
       setGif();
-      chatEndRef.current.scrollIntoView();
+      setTimeout(() => {
+        chatEndRef.current.scrollIntoView();
+      }, 0);
     }
   };
 
@@ -148,13 +155,14 @@ function Chat(props) {
         top: chatViewRef.current.scrollHeight - prevScrollHeight,
         behavior: "instant",
       });
-    }, 100);
+    }, 0);
   }, [prevScrollHeight]);
 
   return (
-    <section className="component-view">
-      <section className="component-container chat-component-container">
+    <section className="chat-component-view">
+      <section className="chat-component-container">
         <div className="chat-view-header">
+          <img src={Back} alt="Back" className="back-btn" onClick={back}></img>
           {chat &&
             chat.users
               .filter((user) => user.username !== props.user.username)

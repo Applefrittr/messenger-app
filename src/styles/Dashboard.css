@@ -68,6 +68,10 @@
   .component-container {
     width: 100%;
   }
+
+  .nav-bar-header > h1 {
+    font-size: 1rem;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -77,6 +81,7 @@
     justify-content: center;
     border-top: solid 1px white;
     border-right: none;
+    gap: 0.9rem;
   }
 
   .nav-bar-header {

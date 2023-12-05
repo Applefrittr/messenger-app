@@ -21,6 +21,10 @@ img {
   gap: 3rem;
 }
 
+.profile-info2 {
+  align-items: center;
+}
+
 .profile-info {
   min-width: 200px;
 }
@@ -127,7 +131,6 @@ img {
 
   .profile-info2 {
     flex-direction: row;
-
     grid-column: 1 / 3;
   }
 
