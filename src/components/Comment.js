@@ -11,15 +11,21 @@ function Comment(props) {
   // otherswise return the date
   const timeStamped = (time) => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const messageTime = new Date(time).getDate();
+    yesterday.setHours(0, 0, 0, 0);
+    const messageTime = new Date(time).getTime();
 
-    if (today.getDate() === messageTime)
+    if (today.getTime() <= messageTime)
       return new Date(time).toLocaleTimeString("en", {
         timeStyle: "short",
       });
-    else if (yesterday.getDate() === messageTime) return "Yesterday";
+    else if (
+      yesterday.getTime() <= messageTime &&
+      today.getTime() > messageTime
+    )
+      return "Yesterday";
     else return new Date(time).toLocaleString("en", { dateStyle: "short" });
   };
 

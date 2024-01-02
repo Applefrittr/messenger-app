@@ -36,6 +36,11 @@ function Friends(props) {
           <p className="friends-nav-btn" ref={requestsRef} onClick={toggleTab}>
             Pending Requests
           </p>
+          {props.user.requestIn.length > 0 && (
+            <span className="request-counter">
+              {props.user.requestIn.length}
+            </span>
+          )}
           <p className="friends-nav-btn" ref={searchRef} onClick={toggleTab}>
             Search
           </p>
