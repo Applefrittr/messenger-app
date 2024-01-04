@@ -102,7 +102,6 @@ function Login(props) {
               Sign Up
             </button>
           </div>
-          <div className="label">Mylo Messenger</div>
         </form>
         <form className="signup-form hide-form" ref={signupRef}>
           <h1>Sign Up</h1>
@@ -121,9 +120,9 @@ function Login(props) {
               Cancel
             </button>
           </div>
-          <div className="label">Mylo Messenger</div>
         </form>
         {errors && <div className="login-msg-container">{errors}</div>}
+        <div className="label">Mylo Messenger</div>
       </div>
     </div>
   );

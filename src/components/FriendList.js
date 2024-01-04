@@ -39,6 +39,11 @@ function FriendList(props) {
             <p>
               <i>{friend.username}</i>
             </p>
+            {friend.online && (
+              <p className="online-status">
+                <i>ONLINE</i>
+              </p>
+            )}
           </div>
           <div className="friend-card-btns">
             {/* <button onClick={viewProfile(friend)}>Profile</button> */}

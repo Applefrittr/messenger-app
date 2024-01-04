@@ -224,7 +224,11 @@ function FriendProfile(props) {
                 })}
             </div>
             <div className="friends-container">
-              <div className="online-status">ONLINE</div>
+              {profile.online && (
+                <p className="online-status">
+                  <i>ONLINE</i>
+                </p>
+              )}
               <div className="friend-list">
                 Friends <i className="big-font">{profile.friends.length}</i>
               </div>

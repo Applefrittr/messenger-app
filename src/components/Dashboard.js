@@ -42,7 +42,16 @@ function Dashboard(props) {
   if (props.user) base = `/${props.user.username}`;
 
   // This clears the local storage of web tokens and navigates to login page, effectively logging out the user
-  const logout = () => {
+  const logout = async () => {
+    await fetch(`http://localhost:5000/users/${props.user.username}/logout`, {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${props.token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
     localStorage.clear();
     props.updateToken();
     props.updateUser();
