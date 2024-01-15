@@ -4,6 +4,10 @@ import MessageBubble from "./MessageBubble";
 import GIFSearch from "./GIFSearch";
 import Back from "../assets/back.png";
 
+// Displays the current chat data to the user.  The functionalty to add new messages to the chat as well as GIFs displayed at the botom of the chat log.
+// IMPORTANT:  The current build of the App uses the HTTP protocol; the client requests something from the API then the API reponds with the data.  For a
+// live chat "feel", a refactoring of the API and App to use websockets for a seemless chat experience would be neccessary.  To simulate that, a setInterval()
+// CAN be used to request the chat data every couple seconds that the component is open **Not currently implemented
 function Chat(props) {
   const [chat, setChat] = useState();
   const [messages, setMessages] = useState([]);

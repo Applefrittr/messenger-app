@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// FriendRequests which display pending incoming and outgoing friend request for the user.  Each request element displays the friend's username and avatar, as well as
+// buttons to either accept or deny (incoming) or cancel (outgoing) the friend request
 function FriendRequests(props) {
   const [incoming, setIncoming] = useState(props.user.requestIn);
   const [outgoing, setOutgoing] = useState(props.user.requestOut);

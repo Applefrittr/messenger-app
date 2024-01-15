@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// FriendSearch component filters through all users in the database by the characters entered into the search field by the user.  results displayed in the UI.
+// IMPORTANT: currently component pulls ENTIRE user list from DB.  THIS DOES NOT scale well has userbase grows, will have to refactor API to return subsets of users based
+// on user's search criteria
 function FriendSearch(props) {
   const [users, setUsers] = useState();
   const [filteredUsers, setFilteredUsers] = useState([]);

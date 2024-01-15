@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
 
+// Profile component.  Renders the user's profile page complete with editable functionality, comments on profile, and friend's list.
 function Profile(props) {
   const [avatars, setAvatars] = useState("");
   const [userAvatar, setUserAvatar] = useState(props.user.avatar);

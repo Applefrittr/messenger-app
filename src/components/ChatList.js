@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import NewIcon from "../assets/newChat.png";
 import Arrow from "../assets/forward.png";
 
+// ChatLists displays a list of chats that the current user is involved in with each chat card displying the other user/users involded, their avatars, and the most recent message and timestamp.  Each card is a link
+// which will route to the Chat.js component with that specific chat's data displayed
+// IMPORTANT:  Group chat origination and functionality currently not implemented
 function ChatList(props) {
   const [chats, setChats] = useState();
   const [renderModal, setRenderModal] = useState(false);

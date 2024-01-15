@@ -3,6 +3,8 @@ import FriendSearch from "./FriendSearch";
 import FriendRequests from "./FriendRequests";
 import FriendList from "./FriendList";
 
+// The Firends component is a navigational component which renders either the FriendList, FriendRequests, or FriendSearch components, depending on which tab is selected
+// by the user
 function Friends(props) {
   const listRef = useRef();
   const searchRef = useRef();

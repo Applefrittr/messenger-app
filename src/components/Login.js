@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Login component will log returning user's into the App or provide the ability for a new user to sign up.  Will also display errors if user fails either login or does not fill out
+// user sign up correctly.  On successful login, a webtoken is passed back to component in which it is saved to localstorage for session persistance and the user is routed to the Dashboard component.
+// IMPORTANT:  Current webtoken expiration set to 24 hours with no refresh token functionality.  SEE API for details
 function Login(props) {
   const [errors, setErrors] = useState();
   const navigate = useNavigate();

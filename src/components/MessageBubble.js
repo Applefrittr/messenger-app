@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
+// Component for the message bubble's used in the Chat.js and NewChat.js components.  Takes 2 consecutive message objects (current and previous) to construct a message bubble with
+// message text, GIF if included, and will determine if a timestamp is also to be displayed.  The timestamp is displayed in the UI if the time between the the current message and previous
+// message exceeds a given threshold
 function MessageBubble(props) {
   const [dateLine, setDateLine] = useState(false);
   const msgRef = useRef();

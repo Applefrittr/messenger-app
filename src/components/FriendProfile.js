@@ -3,6 +3,8 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import Comment from "./Comment";
 import GIFSearch from "./GIFSearch";
 
+// FriendProfile displays the profile of another user other than the currently logged in user.  This displayed user can either be or not be a friend to the currently logged in user.  There is also the functionalty to leave
+// a comment on the currently displayed user's profile by the logged in user.  All comments, friends, and profile details are displayed in the UI
 function FriendProfile(props) {
   const [profile, setProfile] = useState();
   const [commentsList, setCommentsList] = useState();

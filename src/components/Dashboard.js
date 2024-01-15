@@ -1,4 +1,4 @@
-import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import ChatList from "./ChatList";
 import Chat from "./Chat";
 import Friends from "./Friends";
@@ -7,6 +7,9 @@ import FriendProfile from "./FriendProfile";
 import Error from "./Error";
 import { useEffect, useRef, useState } from "react";
 
+// Dashboard component, main navigation for the currently logged in user to navigate the App.  Displayed in the UI as a navigation bar with buttons that route to the other
+// components: Friends.js, ChatList.js, Profile.js.  On component mount, an API call to fetch the FULL user object and stored in state to be used by ALL other component in the App.
+// Also has the logout function which will clear the localstorage of the user's webtoken and route back to the login page
 function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
   const navigate = useNavigate();

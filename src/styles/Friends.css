@@ -134,3 +134,10 @@
 .big-font {
   font-size: 2rem;
 }
+
+@media screen and (max-width: 600px) {
+  .friend-avatar {
+    width: 75px;
+    height: 75px;
+  }
+}

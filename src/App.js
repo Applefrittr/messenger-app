@@ -5,11 +5,11 @@ import "./styles/App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 // Main App.  Uses state to determine if there is a jwt in localStorage which sets the user state to be passed to the rest of the app.  Effectively checks if a user is logged in or not and will render either
-// the login page or the dashboard
+// the login page or the dashboard.  The token payload (user object) is used to to route the user's Dashboard, in which the full user object is then pulled from the API to be used for the rest of the App.
 function App() {
   const [token, setToken] = useState(localStorage["webToken"]); // set token to locally stored token for logged in persistance
   const [tokenErr, setTokenErr] = useState();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(); // JWT payload with user info
   const navigate = useNavigate();
 
   // useEffect is called to set the user state once a token w/ user payload is retrieved from the API.  This user state will be used throughout the app until it's loggedout or

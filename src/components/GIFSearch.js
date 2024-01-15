@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import GIPHY from "../assets/GIPHY.png";
 
+// GIFSearch component uses Giphy.com's API to search for GIFs using a keyword input by the user.  Search results displayed in thumbnail GIFs. Renders component in a modal in either Chat.js, NewChat.js, and FriendProfile.js.
 function GIFSearch(props) {
   const [GIFs, setGIFs] = useState([]);
   const ref = useRef();

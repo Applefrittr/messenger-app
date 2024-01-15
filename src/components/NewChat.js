@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 
+// NewChat component is a modal popup window in the accessible in the ChatsList.js component.  The user can start chats with friends
+// in his friends list or continue an ongoing chat.  The search bar will look for exisiting chats before starting a brand new chat.
+// Once a message is sent, this component then routes to the Chat.js component with the new/exisiting chat data
+// IMPORTANT:  Group chat origination and functionality currently not implemented
 function NewChat(props) {
   const [search, setSearch] = useState();
   const [displayChat, setDisplayChat] = useState();

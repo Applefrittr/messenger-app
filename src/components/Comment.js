@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Menu from "../assets/menu.png";
 
+// Comment component is rendered in iether the Profile or the FriendProfile components.  Displays a dynamic timestamp depending on the current time as well as the commenter's name, avatar and a GIF if included.
+// Also included is a drop down menu which has a few options avaiable to the current logged in user.  Delete funtionality if the current user wrote the comment.
+// IMPORTANT:  The REMOVE button in the dropdown menu currently does nothing, just there as a placeholder
 function Comment(props) {
   const dropRef = useRef();
   const [isRemovable, setIsRemovable] = useState(false);
