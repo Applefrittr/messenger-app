@@ -14,14 +14,17 @@ function GIFSearch(props) {
     const placeholder = GIFs.map((gif) => "");
     setGIFs(placeholder);
 
-    const requestAPI = await fetch("http://localhost:5000/giphyAPI", {
-      mode: "cors",
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${props.token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const requestAPI = await fetch(
+      "https://messenger-api-production-1558.up.railway.app/giphyAPI",
+      {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const responseAPI = await requestAPI.json();
 

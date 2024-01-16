@@ -48,7 +48,7 @@ function Comment(props) {
     console.log(props.user);
 
     const request = await fetch(
-      `http://localhost:5000/users/${profile}/profile/comment/${props.comment._id}`,
+      `https://messenger-api-production-1558.up.railway.app/users/${profile}/profile/comment/${props.comment._id}`,
       {
         mode: "cors",
         method: "DELETE",

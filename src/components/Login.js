@@ -25,14 +25,17 @@ function Login(props) {
     const formData = new FormData(signupRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const submit = await fetch(`http://localhost:5000/users/create`, {
-      mode: "cors",
-      method: "Post",
-      body: JSON.stringify(dataObj),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const submit = await fetch(
+      `https://messenger-api-production-1558.up.railway.app/users/create`,
+      {
+        mode: "cors",
+        method: "Post",
+        body: JSON.stringify(dataObj),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const response = await submit.json();
     if (response.errors) {
@@ -57,14 +60,17 @@ function Login(props) {
     const formData = new FormData(signinRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const request = await fetch(`http://localhost:5000/users/login`, {
-      mode: "cors",
-      method: "Post",
-      body: JSON.stringify(dataObj),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const request = await fetch(
+      `https://messenger-api-production-1558.up.railway.app/users/login`,
+      {
+        mode: "cors",
+        method: "Post",
+        body: JSON.stringify(dataObj),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const response = await request.json();
     if (response.errors) {

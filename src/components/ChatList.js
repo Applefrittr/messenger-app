@@ -44,7 +44,7 @@ function ChatList(props) {
     const getChats = async () => {
       try {
         const request = await fetch(
-          `http://localhost:5000/users/${props.user.username}/chats`,
+          `https://messenger-api-production-1558.up.railway.app/users/${props.user.username}/chats`,
           {
             mode: "cors",
             method: "GET",

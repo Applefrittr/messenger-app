@@ -69,7 +69,7 @@ function FriendProfile(props) {
     const dataObj = Object.fromEntries(formData.entries());
 
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/friends/${friend}/comment`,
+      `https://messenger-api-production-1558.up.railway.app/users/${props.user.username}/friends/${friend}/comment`,
       {
         mode: "cors",
         method: "POST",
@@ -104,7 +104,7 @@ function FriendProfile(props) {
   useEffect(() => {
     const getProfile = async () => {
       const request = await fetch(
-        `http://localhost:5000/users/${friend}/profile`
+        `https://messenger-api-production-1558.up.railway.app/users/${friend}/profile`
       );
 
       const response = await request.json();
