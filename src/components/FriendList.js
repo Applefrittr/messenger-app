@@ -10,7 +10,7 @@ function FriendList(props) {
   // updated user to ensure the UI is updated with the change
   const handleRemove = async (e) => {
     const request = await fetch(
-      `https://localhost:5000/users/${props.user.username}/friends/${e.target.value}/remove`,
+      `http://localhost:5000/users/${props.user.username}/friends/${e.target.value}/remove`,
       {
         mode: "cors",
         method: "POST",

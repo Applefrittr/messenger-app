@@ -14,7 +14,7 @@ function GIFSearch(props) {
     const placeholder = GIFs.map((gif) => "");
     setGIFs(placeholder);
 
-    const requestAPI = await fetch("https://localhost:5000/giphyAPI", {
+    const requestAPI = await fetch("http://localhost:5000/giphyAPI", {
       mode: "cors",
       method: "GET",
       headers: {

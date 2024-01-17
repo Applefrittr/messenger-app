@@ -18,7 +18,7 @@ function App() {
     // GET call to the back end to have web token decoded and the user payload sent back for use
     const getUser = async () => {
       if (token) {
-        const request = await fetch("https://localhost:5000/users/login", {
+        const request = await fetch("http://localhost:5000/users/login", {
           mode: "cors",
           method: "GET",
           headers: {

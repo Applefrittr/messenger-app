@@ -76,7 +76,7 @@ function NewChat(props) {
       dataObj.users = dataObj.users.split(",");
 
       const request = await fetch(
-        `https://localhost:5000/users/${props.user.username}/chats`,
+        `http://localhost:5000/users/${props.user.username}/chats`,
         {
           mode: "cors",
           method: "POST",
@@ -93,7 +93,7 @@ function NewChat(props) {
       console.log(response.message);
 
       const requestChats = await fetch(
-        `https://localhost:5000/users/${props.user.username}/chats`,
+        `http://localhost:5000/users/${props.user.username}/chats`,
         {
           mode: "cors",
           method: "GET",

@@ -16,7 +16,7 @@ function FriendSearch(props) {
     e.target.innerText = "Pending...";
 
     const request = await fetch(
-      `https://localhost:5000/users/${props.user.username}/request/${e.target.value}`,
+      `http://localhost:5000/users/${props.user.username}/request/${e.target.value}`,
       {
         mode: "cors",
         method: "POST",
@@ -43,7 +43,7 @@ function FriendSearch(props) {
   // On the Search component mount, retrieve all users in the DB and filter out the current logged in User from the result - also filter out friends of current User
   useEffect(() => {
     const getUsers = async () => {
-      const request = await fetch("https://localhost:5000/users");
+      const request = await fetch("http://localhost:5000/users");
 
       const response = await request.json();
 

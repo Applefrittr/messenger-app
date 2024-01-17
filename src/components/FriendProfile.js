@@ -69,7 +69,7 @@ function FriendProfile(props) {
     const dataObj = Object.fromEntries(formData.entries());
 
     const request = await fetch(
-      `https://localhost:5000/users/${props.user.username}/friends/${friend}/comment`,
+      `http://localhost:5000/users/${props.user.username}/friends/${friend}/comment`,
       {
         mode: "cors",
         method: "POST",
@@ -104,7 +104,7 @@ function FriendProfile(props) {
   useEffect(() => {
     const getProfile = async () => {
       const request = await fetch(
-        `https://localhost:5000/users/${friend}/profile`
+        `http://localhost:5000/users/${friend}/profile`
       );
 
       const response = await request.json();

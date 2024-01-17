@@ -24,7 +24,7 @@ function Dashboard(props) {
   useEffect(() => {
     const getCurrUser = async () => {
       const request = await fetch(
-        `https://localhost:5000/users/${props.user.username}/profile`
+        `http://localhost:5000/users/${props.user.username}/profile`
       );
 
       const response = await request.json();
@@ -46,7 +46,7 @@ function Dashboard(props) {
 
   // This clears the local storage of web tokens and navigates to login page, effectively logging out the user
   const logout = async () => {
-    await fetch(`https://localhost:5000/users/${props.user.username}/logout`, {
+    await fetch(`http://localhost:5000/users/${props.user.username}/logout`, {
       mode: "cors",
       method: "POST",
       headers: {

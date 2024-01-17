@@ -11,7 +11,7 @@ function FriendRequests(props) {
   // Accepted friend request call to API.  Returned updated user used to update UI with changes
   const handleAccept = async (e) => {
     const request = await fetch(
-      `https://localhost:5000/users/${props.user.username}/request/${e.target.value}/accept`,
+      `http://localhost:5000/users/${props.user.username}/request/${e.target.value}/accept`,
       {
         mode: "cors",
         method: "POST",
@@ -40,7 +40,7 @@ function FriendRequests(props) {
   // Declined friend request call to API.  Returned updated user used to update UI with changes
   const handleDecline = async (e) => {
     const request = await fetch(
-      `https://localhost:5000/users/${props.user.username}/request/${e.target.value}/decline`,
+      `http://localhost:5000/users/${props.user.username}/request/${e.target.value}/decline`,
       {
         mode: "cors",
         method: "POST",

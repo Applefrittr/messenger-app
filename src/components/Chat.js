@@ -51,7 +51,7 @@ function Chat(props) {
   const getChatPage = async () => {
     if (!hasMoreRef.current) return;
     const request = await fetch(
-      `https://localhost:5000/users/${props.user.username}/chats/${id}/${pageRef.current}`,
+      `http://localhost:5000/users/${props.user.username}/chats/${id}/${pageRef.current}`,
       {
         mode: "cors",
         method: "GET",
@@ -94,7 +94,7 @@ function Chat(props) {
     const dataObj = Object.fromEntries(formData.entries());
 
     const request = await fetch(
-      `https://localhost:5000/users/${props.user.username}/chats/${id}`,
+      `http://localhost:5000/users/${props.user.username}/chats/${id}`,
       {
         mode: "cors",
         method: "POST",
@@ -129,7 +129,7 @@ function Chat(props) {
   useEffect(() => {
     const getChat = async () => {
       const request = await fetch(
-        `https://localhost:5000/users/${props.user.username}/chats/${id}`,
+        `http://localhost:5000/users/${props.user.username}/chats/${id}`,
         {
           mode: "cors",
           method: "GET",

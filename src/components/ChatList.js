@@ -44,7 +44,7 @@ function ChatList(props) {
     const getChats = async () => {
       try {
         const request = await fetch(
-          `https://localhost:5000/users/${props.user.username}/chats`,
+          `http://localhost:5000/users/${props.user.username}/chats`,
           {
             mode: "cors",
             method: "GET",
