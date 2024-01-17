@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 // IMPORTANT:  Current webtoken expiration set to 24 hours with no refresh token functionality.  SEE API for details
 function Login(props) {
   const [errors, setErrors] = useState();
+  const [newUserMsg, setNewUserMsg] = useState(false);
   const navigate = useNavigate();
 
   const signinRef = useRef();
@@ -44,6 +45,7 @@ function Login(props) {
       setErrors(errorArray);
     } else {
       console.log(response.message);
+      setNewUserMsg(true);
       toggleForms();
     }
   };
@@ -90,6 +92,9 @@ function Login(props) {
         <div className="login-msg-container">{props.tokenErr}</div>
       )}
       <div className="login-container">
+        {newUserMsg && (
+          <div className="new-user-msg">New user created. Please log in.</div>
+        )}
         <form className="signin-form" action="" method="POST" ref={signinRef}>
           <h1>Sign In</h1>
           <label htmlFor="username">Username</label>

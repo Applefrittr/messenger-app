@@ -1,16 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 // Displays a list of the logged in user's friends.  Each friend has a card element which displays their avatar and username, as well as the abilty to view profile and remove the from
 // the logged in user's firend's list
 function FriendList(props) {
   const [friends, setFriends] = useState();
+  const [removeFriend, setRemoveFriend] = useState();
+  const modalRef = useRef();
+  const confirmRef = useRef();
+
+  // Toggle display of the edit form
+  const toggleModal = () => {
+    modalRef.current.classList.toggle("toggle-modal");
+    setTimeout(() => {
+      confirmRef.current.classList.toggle("toggle-form");
+    }, 100);
+  };
+
+  const updateRemoveFriend = (e) => {
+    setRemoveFriend(e.target.value);
+    toggleModal();
+  };
 
   // Remove a friend from the firend'slist.  API call updates both the user and friends' friends list as well as return an
   // updated user to ensure the UI is updated with the change
   const handleRemove = async (e) => {
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/friends/${e.target.value}/remove`,
+      `http://localhost:5000/users/${props.user.username}/friends/${removeFriend}/remove`,
       {
         mode: "cors",
         method: "POST",
@@ -25,6 +41,7 @@ function FriendList(props) {
     console.log(response.message);
     // from Dashboard.js, updates the logged in user to reflect changes in UI
     props.updateUser(response.user);
+    toggleModal();
   };
 
   useEffect(() => {
@@ -58,7 +75,7 @@ function FriendList(props) {
             <button
               className="nav-links"
               value={friend.username}
-              onClick={handleRemove}
+              onClick={updateRemoveFriend}
             >
               Remove
             </button>
@@ -75,6 +92,22 @@ function FriendList(props) {
       <div className="friends-list">
         <div>Friend List</div>
         {friends}
+      </div>
+
+      <div className="modal" ref={modalRef}>
+        <div className="remove-friend-confirm" ref={confirmRef}>
+          <p>
+            Confirm removing <i>{removeFriend}</i> from friends list?
+          </p>
+          <div>
+            <button onClick={handleRemove} className="nav-links nav-links-red">
+              Confirm
+            </button>
+            <button onClick={toggleModal} className="nav-links">
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

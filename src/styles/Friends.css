@@ -135,6 +135,24 @@
   font-size: 2rem;
 }
 
+.remove-friend-confirm {
+  padding: 2rem;
+  background-color: #464d5a;
+  border: solid 1px #464d5a;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0;
+  transition: all ease-in 0.5s;
+}
+
+.remove-friend-confirm > div {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media screen and (max-width: 600px) {
   .friend-avatar {
     width: 75px;

@@ -21,13 +21,19 @@
   color: #00b7ff;
   text-decoration: none;
   padding: 0.5rem 2rem;
-  border: 1px solid rgb(0, 183, 255);
-  border-radius: 15px;
+  border: none;
+  outline: 2px solid #00b7ff;
+  border-radius: 10px;
   background-color: whitesmoke;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   font-size: 0.75rem;
   flex-basis: auto;
+}
+
+.nav-links-red {
+  color: lightcoral;
+  outline: 2px solid lightcoral;
 }
 
 .nav-links:hover {
