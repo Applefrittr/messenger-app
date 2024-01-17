@@ -45,13 +45,15 @@
 .friends-list-container {
   display: flex;
   justify-content: center;
+  flex: 1;
+  overflow-y: scroll;
 }
 
 .friends-list {
   flex: auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .friends-list > p {
@@ -79,9 +81,9 @@
   color: white;
 }
 
-.friend-card-link:hover {
+/* .friend-card-link:hover {
   scale: 1.05;
-}
+} */
 
 .friend-card-info {
   display: flex;
@@ -155,7 +157,16 @@
 
 @media screen and (max-width: 600px) {
   .friend-avatar {
-    width: 75px;
-    height: 75px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .friend-card-btns {
+    flex-direction: column;
+  }
+
+  .friend-card,
+  .friend-card-link {
+    padding-right: 0;
   }
 }

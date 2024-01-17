@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 import GIFSearch from "./GIFSearch";
 import Back from "../assets/back.png";
@@ -172,14 +172,17 @@ function Chat(props) {
               .filter((user) => user.username !== props.user.username)
               .map((user) => {
                 return (
-                  <>
+                  <Link
+                    to={`/${props.user.username}/friends/${user.username}`}
+                    className="friend-card-link"
+                  >
                     <img
                       src={user.avatar}
                       alt="avatar"
                       className="friend-avatar-smaller"
                     />
                     <b>{user.username}</b>
-                  </>
+                  </Link>
                 );
               })}
         </div>

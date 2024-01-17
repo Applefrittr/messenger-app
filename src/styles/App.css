@@ -22,7 +22,7 @@
   text-decoration: none;
   padding: 0.5rem 2rem;
   border: none;
-  outline: 2px solid #00b7ff;
+  border: 2px solid #00b7ff;
   border-radius: 10px;
   background-color: whitesmoke;
   font-family: Arial, Helvetica, sans-serif;
@@ -33,7 +33,7 @@
 
 .nav-links-red {
   color: lightcoral;
-  outline: 2px solid lightcoral;
+  border: 2px solid lightcoral;
 }
 
 .nav-links:hover {

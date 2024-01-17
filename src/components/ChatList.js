@@ -124,12 +124,6 @@ function ChatList(props) {
                     {timeStamped(chat.latestMsg.timestamp)}
                   </p>
                   <img src={Arrow} alt="Open" className="chat-arrow"></img>
-                  {/* <Link
-                    to={"/" + props.user.username + "/chats/" + chat._id}
-                    className="nav-links"
-                  >
-                    View
-                  </Link> */}
                 </Link>
               );
             })}

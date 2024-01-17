@@ -97,7 +97,11 @@ function FriendList(props) {
       <div className="modal" ref={modalRef}>
         <div className="remove-friend-confirm" ref={confirmRef}>
           <p>
-            Confirm removing <i>{removeFriend}</i> from friends list?
+            Confirm removing{" "}
+            <i>
+              <b>{removeFriend}</b>
+            </i>{" "}
+            from friends list?
           </p>
           <div>
             <button onClick={handleRemove} className="nav-links nav-links-red">
