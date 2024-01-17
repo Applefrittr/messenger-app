@@ -18,17 +18,14 @@ function App() {
     // GET call to the back end to have web token decoded and the user payload sent back for use
     const getUser = async () => {
       if (token) {
-        const request = await fetch(
-          "https://messenger-api-production-1558.up.railway.app/users/login",
-          {
-            mode: "cors",
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const request = await fetch("https://localhost:5000/users/login", {
+          mode: "cors",
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         const response = await request.json();
 

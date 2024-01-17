@@ -48,7 +48,7 @@ function Profile(props) {
     dataObj.avatar = editAvatar;
 
     const request = await fetch(
-      `https://messenger-api-production-1558.up.railway.app/users/${user.username}/profile`,
+      `https://localhost:5000/users/${user.username}/profile`,
       {
         mode: "cors",
         method: "POST",
@@ -91,9 +91,7 @@ function Profile(props) {
   // on component mount, retrieve the avatars from the API
   useEffect(() => {
     const getAvatars = async () => {
-      const request = await fetch(
-        "https://messenger-api-production-1558.up.railway.app/json/avatars.json"
-      );
+      const request = await fetch("https://localhost:5000/json/avatars.json");
 
       const response = await request.json();
 

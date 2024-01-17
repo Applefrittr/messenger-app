@@ -11,7 +11,7 @@ function FriendRequests(props) {
   // Accepted friend request call to API.  Returned updated user used to update UI with changes
   const handleAccept = async (e) => {
     const request = await fetch(
-      `https://messenger-api-production-1558.up.railway.app/users/${props.user.username}/request/${e.target.value}/accept`,
+      `https://localhost:5000/users/${props.user.username}/request/${e.target.value}/accept`,
       {
         mode: "cors",
         method: "POST",
@@ -40,7 +40,7 @@ function FriendRequests(props) {
   // Declined friend request call to API.  Returned updated user used to update UI with changes
   const handleDecline = async (e) => {
     const request = await fetch(
-      `https://messenger-api-production-1558.up.railway.app/users/${props.user.username}/request/${e.target.value}/decline`,
+      `https://localhost:5000/users/${props.user.username}/request/${e.target.value}/decline`,
       {
         mode: "cors",
         method: "POST",

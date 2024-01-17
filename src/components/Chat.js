@@ -51,7 +51,7 @@ function Chat(props) {
   const getChatPage = async () => {
     if (!hasMoreRef.current) return;
     const request = await fetch(
-      `https://messenger-api-production-1558.up.railway.app/users/${props.user.username}/chats/${id}/${pageRef.current}`,
+      `https://localhost:5000/users/${props.user.username}/chats/${id}/${pageRef.current}`,
       {
         mode: "cors",
         method: "GET",
@@ -94,7 +94,7 @@ function Chat(props) {
     const dataObj = Object.fromEntries(formData.entries());
 
     const request = await fetch(
-      `https://messenger-api-production-1558.up.railway.app/users/${props.user.username}/chats/${id}`,
+      `https://localhost:5000/users/${props.user.username}/chats/${id}`,
       {
         mode: "cors",
         method: "POST",
@@ -129,7 +129,7 @@ function Chat(props) {
   useEffect(() => {
     const getChat = async () => {
       const request = await fetch(
-        `https://messenger-api-production-1558.up.railway.app/users/${props.user.username}/chats/${id}`,
+        `https://localhost:5000/users/${props.user.username}/chats/${id}`,
         {
           mode: "cors",
           method: "GET",
