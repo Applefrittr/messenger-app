@@ -6,6 +6,7 @@ import Profile from "./Profile";
 import FriendProfile from "./FriendProfile";
 import Error from "./Error";
 import { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 
 // Dashboard component, main navigation for the currently logged in user to navigate the App.  Displayed in the UI as a navigation bar with buttons that route to the other
 // components: Friends.js, ChatList.js, Profile.js.  On component mount, an API call to fetch the FULL user object and stored in state to be used by ALL other component in the App.
@@ -14,6 +15,7 @@ function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
   const navigate = useNavigate();
   const viewRef = useRef();
+  const socket = io("http://localhost:5000");
 
   // CSS toggle class to disable page scrolling when a modal is open
   const toggleScroll = () => {
@@ -34,6 +36,12 @@ function Dashboard(props) {
     };
 
     getCurrUser();
+
+    socket.on("connect", () => {
+      console.log("websocket");
+    });
+
+    socket.emit("hello", props.user.username);
   }, []);
 
   const updateUser = (state) => {
