@@ -67,6 +67,7 @@ function Dashboard(props) {
     props.updateToken();
     props.updateUser();
     navigate("/");
+    socket.disconnect();
   };
 
   return (
@@ -100,6 +101,7 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   updateTokenErr={props.updateTokenErr}
+                  socket={socket}
                 />
               }
             />

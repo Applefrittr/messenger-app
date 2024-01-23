@@ -41,36 +41,38 @@ function ChatList(props) {
 
   // on render and whenever the logged in user is updated, retrieve all active chats
   useEffect(() => {
-    const getChats = async () => {
-      try {
-        const request = await fetch(
-          `http://localhost:5000/users/${props.user.username}/chats`,
-          {
-            mode: "cors",
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${props.token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+    props.socket.emit("get all chats", props.user.username, (response) => {
+      setChats(response.chats);
+      console.log(response.chats);
+    });
 
-        const response = await request.json();
-
-        if (response.error) {
-          console.log(response);
-          props.updateTokenErr(response.error);
-          navigate(`/`);
-        } else {
-          console.log(response);
-          setChats(response.chats);
-        }
-      } catch {
-        navigate(`/${props.user.username}/error`);
-      }
-    };
-
-    getChats();
+    // const getChats = async () => {
+    //   try {
+    //     const request = await fetch(
+    //       `http://localhost:5000/users/${props.user.username}/chats`,
+    //       {
+    //         mode: "cors",
+    //         method: "GET",
+    //         headers: {
+    //           Authorization: `Bearer ${props.token}`,
+    //           "Content-Type": "application/json",
+    //         },
+    //       }
+    //     );
+    //     const response = await request.json();
+    //     if (response.error) {
+    //       console.log(response);
+    //       props.updateTokenErr(response.error);
+    //       navigate(`/`);
+    //     } else {
+    //       console.log(response);
+    //       setChats(response.chats);
+    //     }
+    //   } catch {
+    //     navigate(`/${props.user.username}/error`);
+    //   }
+    // };
+    // getChats();
   }, [props.user]);
 
   return (
