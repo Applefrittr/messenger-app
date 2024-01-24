@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import URL from "../API/apiURL.js";
 
 // FriendRequests which display pending incoming and outgoing friend request for the user.  Each request element displays the friend's username and avatar, as well as
 // buttons to either accept or deny (incoming) or cancel (outgoing) the friend request
@@ -11,7 +12,7 @@ function FriendRequests(props) {
   // Accepted friend request call to API.  Returned updated user used to update UI with changes
   const handleAccept = async (e) => {
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/request/${e.target.value}/accept`,
+      `${URL}/users/${props.user.username}/request/${e.target.value}/accept`,
       {
         mode: "cors",
         method: "POST",
@@ -40,7 +41,7 @@ function FriendRequests(props) {
   // Declined friend request call to API.  Returned updated user used to update UI with changes
   const handleDecline = async (e) => {
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/request/${e.target.value}/decline`,
+      `${URL}/users/${props.user.username}/request/${e.target.value}/decline`,
       {
         mode: "cors",
         method: "POST",

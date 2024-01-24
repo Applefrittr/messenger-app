@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import URL from "../API/apiURL.js";
 
 // FriendSearch component filters through all users in the database by the characters entered into the search field by the user.  results displayed in the UI.
 // IMPORTANT: currently component pulls ENTIRE user list from DB.  THIS DOES NOT scale well has userbase grows, will have to refactor API to return subsets of users based
@@ -16,7 +17,7 @@ function FriendSearch(props) {
     e.target.innerText = "Pending...";
 
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/request/${e.target.value}`,
+      `${URL}/users/${props.user.username}/request/${e.target.value}`,
       {
         mode: "cors",
         method: "POST",
@@ -43,7 +44,7 @@ function FriendSearch(props) {
   // On the Search component mount, retrieve all users in the DB and filter out the current logged in User from the result - also filter out friends of current User
   useEffect(() => {
     const getUsers = async () => {
-      const request = await fetch("http://localhost:5000/users");
+      const request = await fetch(`${URL}/users`);
 
       const response = await request.json();
 

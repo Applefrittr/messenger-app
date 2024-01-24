@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import URL from "../API/apiURL.js";
 
 // Displays a list of the logged in user's friends.  Each friend has a card element which displays their avatar and username, as well as the abilty to view profile and remove the from
 // the logged in user's firend's list
@@ -26,7 +27,7 @@ function FriendList(props) {
   // updated user to ensure the UI is updated with the change
   const handleRemove = async (e) => {
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/friends/${removeFriend}/remove`,
+      `${URL}/users/${props.user.username}/friends/${removeFriend}/remove`,
       {
         mode: "cors",
         method: "POST",

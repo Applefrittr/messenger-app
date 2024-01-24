@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NewIcon from "../assets/newChat.png";
 import Arrow from "../assets/forward.png";
+import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // ChatLists displays a list of chats that the current user is involved in with each chat card displying the other user/users involded, their avatars, and the most recent message and timestamp.  Each card is a link
 // which will route to the Chat.js component with that specific chat's data displayed
@@ -41,15 +43,14 @@ function ChatList(props) {
 
   // on render and whenever the logged in user is updated, retrieve all active chats
   useEffect(() => {
-    props.socket.emit("get all chats", props.user.username, (response) => {
+    SOCKET.emit("get all chats", props.user.username, (response) => {
       setChats(response.chats);
-      console.log(response.chats);
     });
 
     // const getChats = async () => {
     //   try {
     //     const request = await fetch(
-    //       `http://localhost:5000/users/${props.user.username}/chats`,
+    //       `${URL}/users/${props.user.username}/chats`,
     //       {
     //         mode: "cors",
     //         method: "GET",

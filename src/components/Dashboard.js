@@ -6,7 +6,8 @@ import Profile from "./Profile";
 import FriendProfile from "./FriendProfile";
 import Error from "./Error";
 import { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
+import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // Dashboard component, main navigation for the currently logged in user to navigate the App.  Displayed in the UI as a navigation bar with buttons that route to the other
 // components: Friends.js, ChatList.js, Profile.js.  On component mount, an API call to fetch the FULL user object and stored in state to be used by ALL other component in the App.
@@ -15,7 +16,7 @@ function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
   const navigate = useNavigate();
   const viewRef = useRef();
-  const socket = io("http://localhost:5000");
+  //const socket = io(`${URL}`);
 
   // CSS toggle class to disable page scrolling when a modal is open
   const toggleScroll = () => {
@@ -26,7 +27,7 @@ function Dashboard(props) {
   useEffect(() => {
     const getCurrUser = async () => {
       const request = await fetch(
-        `http://localhost:5000/users/${props.user.username}/profile`
+        `${URL}/users/${props.user.username}/profile`
       );
 
       const response = await request.json();
@@ -37,11 +38,17 @@ function Dashboard(props) {
 
     getCurrUser();
 
-    socket.on("connect", () => {
+    SOCKET.connect();
+    SOCKET.on("connect", () => {
       console.log("websocket");
     });
 
-    socket.emit("hello", props.user.username);
+    SOCKET.emit("hello", props.user.username);
+
+    return () => {
+      SOCKET.off("connect");
+      SOCKET.disconnect();
+    };
   }, []);
 
   const updateUser = (state) => {
@@ -54,7 +61,7 @@ function Dashboard(props) {
 
   // This clears the local storage of web tokens and navigates to login page, effectively logging out the user
   const logout = async () => {
-    await fetch(`http://localhost:5000/users/${props.user.username}/logout`, {
+    await fetch(`${URL}/users/${props.user.username}/logout`, {
       mode: "cors",
       method: "POST",
       headers: {
@@ -67,7 +74,6 @@ function Dashboard(props) {
     props.updateToken();
     props.updateUser();
     navigate("/");
-    socket.disconnect();
   };
 
   return (
@@ -101,7 +107,6 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   updateTokenErr={props.updateTokenErr}
-                  socket={socket}
                 />
               }
             />

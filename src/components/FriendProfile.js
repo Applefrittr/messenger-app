@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Comment from "./Comment";
 import GIFSearch from "./GIFSearch";
+import URL from "../API/apiURL.js";
 
 // FriendProfile displays the profile of another user other than the currently logged in user.  This displayed user can either be or not be a friend to the currently logged in user.  There is also the functionalty to leave
 // a comment on the currently displayed user's profile by the logged in user.  All comments, friends, and profile details are displayed in the UI
@@ -69,7 +70,7 @@ function FriendProfile(props) {
     const dataObj = Object.fromEntries(formData.entries());
 
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/friends/${friend}/comment`,
+      `${URL}/users/${props.user.username}/friends/${friend}/comment`,
       {
         mode: "cors",
         method: "POST",
@@ -103,9 +104,7 @@ function FriendProfile(props) {
   // fetch the friend's(url param) user profile and construct the friend's list and comments to be rendered.  Called everytime the 'friend' url param changes
   useEffect(() => {
     const getProfile = async () => {
-      const request = await fetch(
-        `http://localhost:5000/users/${friend}/profile`
-      );
+      const request = await fetch(`${URL}/users/${friend}/profile`);
 
       const response = await request.json();
 

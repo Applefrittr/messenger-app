@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
+import URL from "../API/apiURL.js";
 
 // Profile component.  Renders the user's profile page complete with editable functionality, comments on profile, and friend's list.
 function Profile(props) {
@@ -47,18 +48,15 @@ function Profile(props) {
 
     dataObj.avatar = editAvatar;
 
-    const request = await fetch(
-      `http://localhost:5000/users/${user.username}/profile`,
-      {
-        mode: "cors",
-        method: "POST",
-        body: JSON.stringify(dataObj),
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const request = await fetch(`${URL}/users/${user.username}/profile`, {
+      mode: "cors",
+      method: "POST",
+      body: JSON.stringify(dataObj),
+      headers: {
+        Authorization: `Bearer ${props.token}`,
+        "Content-Type": "application/json",
+      },
+    });
     const response = await request.json();
 
     if (response.error) {
@@ -91,7 +89,7 @@ function Profile(props) {
   // on component mount, retrieve the avatars from the API
   useEffect(() => {
     const getAvatars = async () => {
-      const request = await fetch("http://localhost:5000/json/avatars.json");
+      const request = await fetch(`${URL}/json/avatars.json`);
 
       const response = await request.json();
 

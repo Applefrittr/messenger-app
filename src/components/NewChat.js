@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
+import URL from "../API/apiURL.js";
 
 // NewChat component is a modal popup window in the accessible in the ChatsList.js component.  The user can start chats with friends
 // in his friends list or continue an ongoing chat.  The search bar will look for exisiting chats before starting a brand new chat.
@@ -75,25 +76,22 @@ function NewChat(props) {
       // create an array of users to be passed to the API
       dataObj.users = dataObj.users.split(",");
 
-      const request = await fetch(
-        `http://localhost:5000/users/${props.user.username}/chats`,
-        {
-          mode: "cors",
-          method: "POST",
-          body: JSON.stringify(dataObj),
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const request = await fetch(`${URL}/users/${props.user.username}/chats`, {
+        mode: "cors",
+        method: "POST",
+        body: JSON.stringify(dataObj),
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       const response = await request.json();
 
       console.log(response.message);
 
       const requestChats = await fetch(
-        `http://localhost:5000/users/${props.user.username}/chats`,
+        `${URL}/users/${props.user.username}/chats`,
         {
           mode: "cors",
           method: "GET",

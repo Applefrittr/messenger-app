@@ -3,6 +3,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 import GIFSearch from "./GIFSearch";
 import Back from "../assets/back.png";
+import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket.js";
+import socket from "../API/websocket.js";
 
 // Displays the current chat data to the user.  The functionalty to add new messages to the chat as well as GIFs displayed at the botom of the chat log.
 // IMPORTANT:  The current build of the App uses the HTTP protocol; the client requests something from the API then the API reponds with the data.  For a
@@ -51,7 +54,7 @@ function Chat(props) {
   const getChatPage = async () => {
     if (!hasMoreRef.current) return;
     const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/chats/${id}/${pageRef.current}`,
+      `${URL}/users/${props.user.username}/chats/${id}/${pageRef.current}`,
       {
         mode: "cors",
         method: "GET",
@@ -93,43 +96,53 @@ function Chat(props) {
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const request = await fetch(
-      `http://localhost:5000/users/${props.user.username}/chats/${id}`,
-      {
-        mode: "cors",
-        method: "POST",
-        body: JSON.stringify(dataObj),
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const response = await request.json();
-
-    if (response.error) {
-      console.log(response);
-      props.updateTokenErr(response.error);
-      navigate(`/`);
-    } else {
+    console.log(dataObj);
+    console.log(JSON.stringify(dataObj));
+    SOCKET.emit("send msg", props.user.username, id, dataObj, (response) => {
       console.log(response.message);
-
       setMessages((prevMsgs) => [...prevMsgs, response.message]);
-
-      formRef.current.reset();
-      setGif();
       setTimeout(() => {
         chatEndRef.current.scrollIntoView();
       }, 0);
-    }
+    });
+
+    // const request = await fetch(
+    //   `${URL}/users/${props.user.username}/chats/${id}`,
+    //   {
+    //     mode: "cors",
+    //     method: "POST",
+    //     body: JSON.stringify(dataObj),
+    //     headers: {
+    //       Authorization: `Bearer ${props.token}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
+
+    // const response = await request.json();
+
+    // if (response.error) {
+    //   console.log(response);
+    //   props.updateTokenErr(response.error);
+    //   navigate(`/`);
+    // } else {
+    //   console.log(response.message);
+
+    //   setMessages((prevMsgs) => [...prevMsgs, response.message]);
+
+    //   formRef.current.reset();
+    //   setGif();
+    //   setTimeout(() => {
+    //     chatEndRef.current.scrollIntoView();
+    //   }, 0);
+    // }
   };
 
   // On component mount, initialize the observer and observe the TOP placeholder div in the chat log; firecall back when in view.  Also, retrieve chat info
   useEffect(() => {
     const getChat = async () => {
       const request = await fetch(
-        `http://localhost:5000/users/${props.user.username}/chats/${id}`,
+        `${URL}/users/${props.user.username}/chats/${id}`,
         {
           mode: "cors",
           method: "GET",
@@ -146,8 +159,18 @@ function Chat(props) {
 
     const observer = new IntersectionObserver(observerCallback);
     observer.observe(topRef.current);
+
+    // Socket event listener for new messages recieved from the API
+    SOCKET.on("new msg", (message) => {
+      setMessages((prevMsgs) => [...prevMsgs, message]);
+      setTimeout(() => {
+        chatEndRef.current.scrollIntoView();
+      }, 0);
+    });
+
     return () => {
       if (topRef.current) observer.unobserve(topRef.current);
+      SOCKET.off("new msg");
     };
   }, []);
 

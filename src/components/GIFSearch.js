@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import GIPHY from "../assets/GIPHY.png";
+import URL from "../API/apiURL.js";
 
 // GIFSearch component uses Giphy.com's API to search for GIFs using a keyword input by the user.  Search results displayed in thumbnail GIFs. Renders component in a modal in either Chat.js, NewChat.js, and FriendProfile.js.
 function GIFSearch(props) {
@@ -14,7 +15,7 @@ function GIFSearch(props) {
     const placeholder = GIFs.map((gif) => "");
     setGIFs(placeholder);
 
-    const requestAPI = await fetch("http://localhost:5000/giphyAPI", {
+    const requestAPI = await fetch(`${URL}/giphyAPI`, {
       mode: "cors",
       method: "GET",
       headers: {

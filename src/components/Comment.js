@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Menu from "../assets/menu.png";
+import URL from "../API/apiURL.js";
 
 // Comment component is rendered in iether the Profile or the FriendProfile components.  Displays a dynamic timestamp depending on the current time as well as the commenter's name, avatar and a GIF if included.
 // Also included is a drop down menu which has a few options avaiable to the current logged in user.  Delete funtionality if the current user wrote the comment.
@@ -48,7 +49,7 @@ function Comment(props) {
     console.log(props.user);
 
     const request = await fetch(
-      `http://localhost:5000/users/${profile}/profile/comment/${props.comment._id}`,
+      `${URL}/users/${profile}/profile/comment/${props.comment._id}`,
       {
         mode: "cors",
         method: "DELETE",

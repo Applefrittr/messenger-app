@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import URL from "../API/apiURL.js";
 
 // Login component will log returning user's into the App or provide the ability for a new user to sign up.  Will also display errors if user fails either login or does not fill out
 // user sign up correctly.  On successful login, a webtoken is passed back to component in which it is saved to localstorage for session persistance and the user is routed to the Dashboard component.
@@ -26,7 +27,7 @@ function Login(props) {
     const formData = new FormData(signupRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const submit = await fetch(`http://localhost:5000/users/create`, {
+    const submit = await fetch(`${URL}/users/create`, {
       mode: "cors",
       method: "Post",
       body: JSON.stringify(dataObj),
@@ -59,7 +60,7 @@ function Login(props) {
     const formData = new FormData(signinRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const request = await fetch(`http://localhost:5000/users/login`, {
+    const request = await fetch(`${URL}/users/login`, {
       mode: "cors",
       method: "Post",
       body: JSON.stringify(dataObj),
@@ -78,8 +79,8 @@ function Login(props) {
       setErrors(errorArray);
     } else {
       if (response.accessToken) {
-        localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
-        props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
+        //localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
+        props.updateToken(response.accessToken); // Call updateToken to update token state in App.js
         setErrors();
         navigate(`/${dataObj.username}/`); // navigate to the Dashboard component with the current username as the URL base
       }
