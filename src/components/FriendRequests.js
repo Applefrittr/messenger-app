@@ -1,77 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // FriendRequests which display pending incoming and outgoing friend request for the user.  Each request element displays the friend's username and avatar, as well as
 // buttons to either accept or deny (incoming) or cancel (outgoing) the friend request
 function FriendRequests(props) {
-  const [incoming, setIncoming] = useState(props.user.requestIn);
-  const [outgoing, setOutgoing] = useState(props.user.requestOut);
   const navigate = useNavigate();
 
   // Accepted friend request call to API.  Returned updated user used to update UI with changes
   const handleAccept = async (e) => {
-    const request = await fetch(
-      `${URL}/users/${props.user.username}/request/${e.target.value}/accept`,
-      {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
+    SOCKET.emit(
+      "accept request",
+      props.user.username,
+      e.target.value,
+      (response) => {
+        props.updateIncoming(response.incoming);
+        props.updateFriends(response.friends);
       }
     );
-    const response = await request.json();
-
-    if (response.error) {
-      console.log(response);
-      props.updateTokenErr(response.error);
-      navigate(`/`);
-    } else {
-      console.log(response.message);
-      // from Dashboard.js, updates the logged in user to reflect changes in UI
-      props.updateUser(response.user);
-
-      setIncoming(response.user.requestIn);
-      setOutgoing(response.user.requestOut);
-    }
   };
 
   // Declined friend request call to API.  Returned updated user used to update UI with changes
   const handleDecline = async (e) => {
-    const request = await fetch(
-      `${URL}/users/${props.user.username}/request/${e.target.value}/decline`,
-      {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
+    SOCKET.emit(
+      "remove request",
+      props.user.username,
+      e.target.value,
+      (response) => {
+        props.updateIncoming(response.incoming);
+        props.updateOutgoing(response.outgoing);
       }
     );
-    const response = await request.json();
-
-    if (response.error) {
-      console.log(response);
-      props.updateTokenErr(response.error);
-      navigate(`/`);
-    } else {
-      console.log(response.message);
-      // from Dashboard.js, updates the logged in user to reflect changes in UI
-      props.updateUser(response.user);
-
-      setIncoming(response.user.requestIn);
-      setOutgoing(response.user.requestOut);
-    }
   };
 
   return (
     <section>
       <div className="friends-list">
         <h2>Incoming Requests</h2>
-        {incoming.map((request) => {
+        {props.incoming.map((request) => {
           return (
             <div className="friend-card" key={request.username}>
               <div className="friend-card-info">
@@ -101,7 +67,7 @@ function FriendRequests(props) {
             </div>
           );
         })}
-        {incoming.length === 0 && (
+        {props.incoming.length === 0 && (
           <p>
             <i>No Incoming Reqeusts</i>
           </p>
@@ -109,7 +75,7 @@ function FriendRequests(props) {
       </div>
       <div className="friends-list">
         <h2>Outgoing Requests</h2>
-        {outgoing.map((request) => {
+        {props.outgoing.map((request) => {
           return (
             <div className="friend-card" key={request.username}>
               <div className="friend-card-info">
@@ -132,7 +98,7 @@ function FriendRequests(props) {
             </div>
           );
         })}
-        {outgoing.length === 0 && (
+        {props.outgoing.length === 0 && (
           <p>
             <i>No Outgoing Reqeusts</i>
           </p>

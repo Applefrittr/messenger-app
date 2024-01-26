@@ -1,11 +1,15 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FriendSearch from "./FriendSearch";
 import FriendRequests from "./FriendRequests";
 import FriendList from "./FriendList";
+import SOCKET from "../API/websocket";
 
 // The Firends component is a navigational component which renders either the FriendList, FriendRequests, or FriendSearch components, depending on which tab is selected
 // by the user
 function Friends(props) {
+  const [friends, setFriends] = useState();
+  const [incoming, setIncoming] = useState();
+  const [outgoing, setOutgoing] = useState();
   const listRef = useRef();
   const searchRef = useRef();
   const requestsRef = useRef();
@@ -23,6 +27,56 @@ function Friends(props) {
       });
     }
   };
+
+  const updateOutgoing = (data) => {
+    setOutgoing(data);
+  };
+
+  const updateIncoming = (data) => {
+    setIncoming(data);
+  };
+
+  const updateFriends = (data) => {
+    setFriends(data);
+  };
+
+  // Set up socket listeners for changes to both incoming and outgoing friend requests as well as any changes to the firends list (removals).
+  // Get all current requests as well as the friends list on component mount.  Clean up listeners when unmounted
+  useEffect(() => {
+    SOCKET.on("incoming request", (requests) => {
+      setIncoming(requests);
+    });
+
+    SOCKET.on("remove request", (incoming, outgoing) => {
+      setIncoming(incoming);
+      setOutgoing(outgoing);
+    });
+
+    SOCKET.on("accept request", (outgoing, friends) => {
+      setOutgoing(outgoing);
+      setFriends(friends);
+    });
+
+    SOCKET.on("remove friend", (friends) => {
+      updateFriends(friends);
+    });
+
+    SOCKET.emit("get requests", props.user.username, (response) => {
+      setIncoming(response.incoming);
+      setOutgoing(response.outgoing);
+    });
+
+    SOCKET.emit("get friends", props.user.username, (response) => {
+      setFriends(response.friends);
+    });
+
+    return () => {
+      SOCKET.off("incoming request");
+      SOCKET.off("remove request");
+      SOCKET.off("remove friend");
+      SOCKET.off("accept request");
+    };
+  }, []);
 
   return (
     <section className="component-view">
@@ -53,6 +107,8 @@ function Friends(props) {
             token={props.token}
             updateUser={props.updateUser}
             updateTokenErr={props.updateTokenErr}
+            friends={friends}
+            updateFriends={updateFriends}
           />
         )}
         {tab === requestsRef && (
@@ -60,7 +116,12 @@ function Friends(props) {
             user={props.user}
             token={props.token}
             updateUser={props.updateUser}
+            incoming={incoming}
+            outgoing={outgoing}
             updateTokenErr={props.updateTokenErr}
+            updateIncoming={updateIncoming}
+            updateOutgoing={updateOutgoing}
+            updateFriends={updateFriends}
           />
         )}
         {tab === searchRef && (
@@ -69,6 +130,7 @@ function Friends(props) {
             token={props.token}
             updateUser={props.updateUser}
             updateTokenErr={props.updateTokenErr}
+            updateOutgoing={updateOutgoing}
           />
         )}
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // FriendSearch component filters through all users in the database by the characters entered into the search field by the user.  results displayed in the UI.
 // IMPORTANT: currently component pulls ENTIRE user list from DB.  THIS DOES NOT scale well has userbase grows, will have to refactor API to return subsets of users based
@@ -16,29 +17,14 @@ function FriendSearch(props) {
     e.target.classList.add("disabled");
     e.target.innerText = "Pending...";
 
-    const request = await fetch(
-      `${URL}/users/${props.user.username}/request/${e.target.value}`,
-      {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
+    SOCKET.emit(
+      "new request",
+      props.user.username,
+      e.target.value,
+      (response) => {
+        props.updateOutgoing(response.requests);
       }
     );
-
-    const response = await request.json();
-
-    if (response.error) {
-      console.log(response);
-      props.updateTokenErr(response.error);
-      navigate(`/`);
-    } else {
-      console.log(response.message);
-      // from Dashboard.js, updates the logged in user to reflect changes in UI
-      props.updateUser(response.user);
-    }
   };
 
   // On the Search component mount, retrieve all users in the DB and filter out the current logged in User from the result - also filter out friends of current User

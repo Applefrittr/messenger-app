@@ -180,12 +180,17 @@
 
 .chat-view-messages {
   padding: 1rem;
+  padding-bottom: 0;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
   flex: 1;
   gap: 1px;
   position: relative;
+}
+
+.chat-last-el {
+  padding: 0.5rem;
 }
 
 .top-fetch-trigger {
