@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
 import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // Profile component.  Renders the user's profile page complete with editable functionality, comments on profile, and friend's list.
 function Profile(props) {
@@ -9,6 +10,7 @@ function Profile(props) {
   const [userAvatar, setUserAvatar] = useState(props.user.avatar);
   const [editAvatar, setEditAvatar] = useState(props.user.avatar);
   const [user, setUser] = useState(props.user);
+  const [comments, setComments] = useState(props.user.comments);
 
   const modalRef = useRef();
   const formRef = useRef();
@@ -86,62 +88,25 @@ function Profile(props) {
     setUser(updatedUser);
   };
 
-  // on component mount, retrieve the avatars from the API
+  // on component mount, retrieve the avatars from the API and set up listener to retrieve new comments
   useEffect(() => {
     const getAvatars = async () => {
       const request = await fetch(`${URL}/json/avatars.json`);
-
       const response = await request.json();
 
-      const linkArray = Object.values(response);
-      let avatarArray = [];
-
-      linkArray.forEach((link) => {
-        avatarArray.push(
-          <div className="avatar-thumbnail" key={link}>
-            <img src={link} alt="avatar" onClick={pickAvatar}></img>
-          </div>
-        );
-      });
-
-      setAvatars(avatarArray);
+      setAvatars(Object.values(response));
     };
 
     getAvatars();
+
+    SOCKET.on("new comment", (comment) => {
+      setComments((prevComments) => [comment, ...prevComments]);
+    });
+
+    return () => {
+      SOCKET.off("new comment");
+    };
   }, []);
-
-  // construct the friends list as a collection of links of viewable profiles
-  const friendsList = [];
-  props.user.friends.forEach((friend) => {
-    friendsList.push(
-      <Link
-        to={`/${props.user.username}/friends/${friend.username}`}
-        className="friend-card-link"
-        key={friend._id}
-      >
-        <div className="friend-avatar-small">
-          <img src={friend.avatar} alt="avatar" />
-        </div>
-        <p>
-          <i>{friend.username}</i>
-        </p>
-      </Link>
-    );
-  });
-
-  // construct the comments list
-  const commentsList = [];
-  props.user.comments.forEach((comment) => {
-    commentsList.push(
-      <Comment
-        comment={comment}
-        user={props.user}
-        token={props.token}
-        updateUser={props.updateUser}
-        updateTokenErr={props.updateTokenErr}
-      />
-    );
-  });
 
   return (
     <section className="component-view">
@@ -179,13 +144,40 @@ function Profile(props) {
         <div className="profile-content">
           <div className="comment-container">
             <div className="comment-header">Comments</div>
-            {commentsList}
+            {comments &&
+              comments.map((comment) => {
+                return (
+                  <Comment
+                    comment={comment}
+                    user={props.user}
+                    token={props.token}
+                    updateUser={props.updateUser}
+                    updateTokenErr={props.updateTokenErr}
+                  />
+                );
+              })}
           </div>
           <div className="friends-container">
             <div className="friend-list">
               Friends <i className="big-font">{user.friends.length}</i>
             </div>
-            {friendsList}
+            {props.friends &&
+              props.friends.map((friend) => {
+                return (
+                  <Link
+                    to={`/${props.user.username}/friends/${friend.username}`}
+                    className="friend-card-link"
+                    key={friend._id}
+                  >
+                    <div className="friend-avatar-small">
+                      <img src={friend.avatar} alt="avatar" />
+                    </div>
+                    <p>
+                      <i>{friend.username}</i>
+                    </p>
+                  </Link>
+                );
+              })}
           </div>
         </div>
       </section>
@@ -203,7 +195,14 @@ function Profile(props) {
                 name="avatar"
               ></img>
               <div className="avatar-selection-tool" ref={toolRef}>
-                {avatars}
+                {avatars &&
+                  avatars.map((link) => {
+                    return (
+                      <div className="avatar-thumbnail" key={link}>
+                        <img src={link} alt="avatar" onClick={pickAvatar}></img>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
             <div className="edit-form-field">

@@ -7,7 +7,7 @@ import SOCKET from "../API/websocket";
 // The Firends component is a navigational component which renders either the FriendList, FriendRequests, or FriendSearch components, depending on which tab is selected
 // by the user
 function Friends(props) {
-  const [friends, setFriends] = useState();
+  // const [friends, setFriends] = useState();
   const [incoming, setIncoming] = useState();
   const [outgoing, setOutgoing] = useState();
   const listRef = useRef();
@@ -36,9 +36,9 @@ function Friends(props) {
     setIncoming(data);
   };
 
-  const updateFriends = (data) => {
-    setFriends(data);
-  };
+  // const updateFriends = (data) => {
+  //   setFriends(data);
+  // };
 
   // Set up socket listeners for changes to both incoming and outgoing friend requests as well as any changes to the firends list (removals).
   // Get all current requests as well as the friends list on component mount.  Clean up listeners when unmounted
@@ -54,11 +54,11 @@ function Friends(props) {
 
     SOCKET.on("accept request", (outgoing, friends) => {
       setOutgoing(outgoing);
-      setFriends(friends);
+      props.updateFriends(friends);
     });
 
     SOCKET.on("remove friend", (friends) => {
-      updateFriends(friends);
+      props.updateFriends(friends);
     });
 
     SOCKET.emit("get requests", props.user.username, (response) => {
@@ -67,7 +67,7 @@ function Friends(props) {
     });
 
     SOCKET.emit("get friends", props.user.username, (response) => {
-      setFriends(response.friends);
+      props.updateFriends(response.friends);
     });
 
     return () => {
@@ -106,8 +106,8 @@ function Friends(props) {
             user={props.user}
             token={props.token}
             updateTokenErr={props.updateTokenErr}
-            friends={friends}
-            updateFriends={updateFriends}
+            friends={props.friends}
+            updateFriends={props.updateFriends}
           />
         )}
         {tab === requestsRef && (
@@ -119,7 +119,7 @@ function Friends(props) {
             updateTokenErr={props.updateTokenErr}
             updateIncoming={updateIncoming}
             updateOutgoing={updateOutgoing}
-            updateFriends={updateFriends}
+            updateFriends={props.updateFriends}
           />
         )}
         {tab === searchRef && (
@@ -128,7 +128,7 @@ function Friends(props) {
             token={props.token}
             updateTokenErr={props.updateTokenErr}
             updateOutgoing={updateOutgoing}
-            currFriends={friends}
+            currFriends={props.friends}
             incoming={incoming}
             outgoing={outgoing}
           />

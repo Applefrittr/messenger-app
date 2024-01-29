@@ -14,6 +14,7 @@ import SOCKET from "../API/websocket";
 // Also has the logout function which will clear the localstorage of the user's webtoken and route back to the login page
 function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
+  const [friends, setFriends] = useState();
   const navigate = useNavigate();
   const viewRef = useRef();
   //const socket = io(`${URL}`);
@@ -23,33 +24,9 @@ function Dashboard(props) {
     viewRef.current.classList.toggle("disable-scroll");
   };
 
-  // on Dashbaord mount, retrieve fully popualted User object (token payload is only partial object)
-  useEffect(() => {
-    const getCurrUser = async () => {
-      const request = await fetch(
-        `${URL}/users/${props.user.username}/profile`
-      );
-
-      const response = await request.json();
-
-      console.log("dashboard user", response.user);
-      setCurrUser(response.user);
-    };
-
-    getCurrUser();
-
-    SOCKET.connect();
-    SOCKET.on("connect", () => {
-      console.log("websocket");
-    });
-
-    SOCKET.emit("hello", props.user.username);
-
-    return () => {
-      SOCKET.off("connect");
-      SOCKET.disconnect();
-    };
-  }, []);
+  const updateFriends = (data) => {
+    setFriends(data);
+  };
 
   const updateUser = (state) => {
     console.log("state", state);
@@ -75,6 +52,35 @@ function Dashboard(props) {
     props.updateUser();
     navigate("/");
   };
+
+  // on Dashbaord mount, retrieve fully popualted User object (token payload is only partial object)
+  useEffect(() => {
+    const getCurrUser = async () => {
+      const request = await fetch(
+        `${URL}/users/${props.user.username}/profile`
+      );
+
+      const response = await request.json();
+
+      console.log("dashboard user", response.user);
+      setCurrUser(response.user);
+      setFriends(response.user.friends);
+    };
+
+    getCurrUser();
+
+    SOCKET.connect();
+    SOCKET.on("connect", () => {
+      console.log("websocket");
+    });
+
+    SOCKET.emit("hello", props.user.username);
+
+    return () => {
+      SOCKET.off("connect");
+      SOCKET.disconnect();
+    };
+  }, []);
 
   return (
     <section className="dashboard">
@@ -129,6 +135,8 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   updateTokenErr={props.updateTokenErr}
+                  friends={friends}
+                  updateFriends={updateFriends}
                 />
               }
             />
@@ -149,6 +157,7 @@ function Dashboard(props) {
               element={
                 <Profile
                   user={currUser}
+                  friends={friends}
                   token={props.token}
                   updateUser={updateUser}
                   toggleScroll={toggleScroll}

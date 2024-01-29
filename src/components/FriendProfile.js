@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import Comment from "./Comment";
 import GIFSearch from "./GIFSearch";
 import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // FriendProfile displays the profile of another user other than the currently logged in user.  This displayed user can either be or not be a friend to the currently logged in user.  There is also the functionalty to leave
 // a comment on the currently displayed user's profile by the logged in user.  All comments, friends, and profile details are displayed in the UI
@@ -69,33 +70,43 @@ function FriendProfile(props) {
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const request = await fetch(
-      `${URL}/users/${props.user.username}/friends/${friend}/comment`,
-      {
-        mode: "cors",
-        method: "POST",
-        body: JSON.stringify(dataObj),
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
+    // const request = await fetch(
+    //   `${URL}/users/${props.user.username}/friends/${friend}/comment`,
+    //   {
+    //     mode: "cors",
+    //     method: "POST",
+    //     body: JSON.stringify(dataObj),
+    //     headers: {
+    //       Authorization: `Bearer ${props.token}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
+
+    // const response = await request.json();
+
+    SOCKET.emit(
+      "post comment",
+      props.user.username,
+      friend,
+      dataObj,
+      (response) => {
+        const tempList = [...commentsList];
+        console.log(tempList);
+        response.comment.now = "Now";
+        console.log(response.comment);
+        tempList.unshift(response.comment);
+
+        setCommentsList(tempList);
       }
     );
 
-    const response = await request.json();
+    //console.log(response.message);
 
-    console.log(response.message);
+    // // if API call success, update the commentsList state to reflect new comment
+    // if (response.comment) {
 
-    // if API call success, update the commentsList state to reflect new comment
-    if (response.comment) {
-      const tempList = [...commentsList];
-      console.log(tempList);
-      response.comment.now = "Now";
-      console.log(response.comment);
-      tempList.unshift(response.comment);
-
-      setCommentsList(tempList);
-    }
+    // }
 
     formRef.current.reset();
     hideButtons();
@@ -103,19 +114,11 @@ function FriendProfile(props) {
 
   // fetch the friend's(url param) user profile and construct the friend's list and comments to be rendered.  Called everytime the 'friend' url param changes
   useEffect(() => {
-    const getProfile = async () => {
-      const request = await fetch(`${URL}/users/${friend}/profile`);
-
-      const response = await request.json();
-
+    SOCKET.emit("get profile", friend, (response) => {
       setProfile(response.user);
 
       setCommentsList(response.user.comments);
-
-      // buildComments(response.user); // call buildComments to construct comment list
-    };
-
-    getProfile();
+    });
   }, [friend]);
 
   return (
