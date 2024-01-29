@@ -29,24 +29,12 @@ function FriendSearch(props) {
 
   // On the Search component mount, retrieve all users in the DB and filter out the current logged in User from the result - also filter out friends of current User
   useEffect(() => {
-    const getUsers = async () => {
-      const request = await fetch(`${URL}/users`);
-
-      const response = await request.json();
-
-      if (response.error) {
-        console.log(response);
-        props.updateTokenErr(response.error);
-        navigate(`/`);
-      } else {
-        const allUsers = response.users.filter(
-          (user) => user.username !== props.user.username
-        );
-        setUsers(allUsers);
-      }
-    };
-
-    getUsers();
+    SOCKET.emit("get users", (response) => {
+      const allUsers = response.users.filter(
+        (user) => user.username !== props.user.username
+      );
+      setUsers(allUsers);
+    });
   }, []);
 
   // handleSearch is fired everythime there is a change to the search input.  Will filter the Users state varible by the current input value and then create DOM elements based on the results.
@@ -68,60 +56,7 @@ function FriendSearch(props) {
       return user.username.indexOf(dataObj.search) >= 0;
     });
 
-    const searchResults = [];
-
-    filteredObjs.forEach((user) => {
-      let button;
-
-      if (
-        props.user.requestIn.some(
-          (friend) => friend.username === user.username
-        ) ||
-        props.user.requestOut.some(
-          (friend) => friend.username === user.username
-        )
-      ) {
-        button = (
-          <button disabled className="disabled nav-links">
-            Pending...
-          </button>
-        );
-      } else if (
-        props.user.friends.some((friend) => friend.username === user.username)
-      ) {
-        button = (
-          <button disabled className="disabled nav-links">
-            Friend
-          </button>
-        );
-      } else {
-        button = (
-          <button
-            value={user.username}
-            onClick={sendRequest}
-            className="nav-links"
-          >
-            Add friend
-          </button>
-        );
-      }
-
-      searchResults.push(
-        <div className="friend-card" key={user.username}>
-          <div className="friend-card-info">
-            <div className="friend-avatar">
-              <img src={user.avatar} alt="avatar" />
-            </div>
-            <h1>
-              <i>{user.username}</i>
-            </h1>
-          </div>
-          <div className="friend-card-btns">{button}</div>
-        </div>
-      );
-    });
-
-    setFilteredUsers(searchResults);
+    setFilteredUsers(filteredObjs);
   };
 
   return (
@@ -135,7 +70,55 @@ function FriendSearch(props) {
         ></input>
       </form>
       <div className="search-results-container">
-        {filteredUsers.length > 0 && filteredUsers}
+        {filteredUsers.length > 0 &&
+          filteredUsers.map((user) => {
+            let button;
+            if (
+              props.incoming.some(
+                (friend) => friend.username === user.username
+              ) ||
+              props.outgoing.some((friend) => friend.username === user.username)
+            ) {
+              button = (
+                <button disabled className="disabled nav-links">
+                  Pending...
+                </button>
+              );
+            } else if (
+              props.currFriends.some(
+                (friend) => friend.username === user.username
+              )
+            ) {
+              button = (
+                <button disabled className="disabled nav-links">
+                  Friend
+                </button>
+              );
+            } else {
+              button = (
+                <button
+                  value={user.username}
+                  onClick={sendRequest}
+                  className="nav-links"
+                >
+                  Add friend
+                </button>
+              );
+            }
+            return (
+              <div className="friend-card" key={user.username}>
+                <div className="friend-card-info">
+                  <div className="friend-avatar">
+                    <img src={user.avatar} alt="avatar" />
+                  </div>
+                  <h1>
+                    <i>{user.username}</i>
+                  </h1>
+                </div>
+                <div className="friend-card-btns">{button}</div>
+              </div>
+            );
+          })}
         {filteredUsers.length === 0 && (
           <p>
             <i>No Results...</i>

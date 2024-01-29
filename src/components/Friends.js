@@ -105,7 +105,6 @@ function Friends(props) {
           <FriendList
             user={props.user}
             token={props.token}
-            updateUser={props.updateUser}
             updateTokenErr={props.updateTokenErr}
             friends={friends}
             updateFriends={updateFriends}
@@ -115,7 +114,6 @@ function Friends(props) {
           <FriendRequests
             user={props.user}
             token={props.token}
-            updateUser={props.updateUser}
             incoming={incoming}
             outgoing={outgoing}
             updateTokenErr={props.updateTokenErr}
@@ -128,9 +126,11 @@ function Friends(props) {
           <FriendSearch
             user={props.user}
             token={props.token}
-            updateUser={props.updateUser}
             updateTokenErr={props.updateTokenErr}
             updateOutgoing={updateOutgoing}
+            currFriends={friends}
+            incoming={incoming}
+            outgoing={outgoing}
           />
         )}
       </div>
