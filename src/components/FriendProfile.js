@@ -70,21 +70,6 @@ function FriendProfile(props) {
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    // const request = await fetch(
-    //   `${URL}/users/${props.user.username}/friends/${friend}/comment`,
-    //   {
-    //     mode: "cors",
-    //     method: "POST",
-    //     body: JSON.stringify(dataObj),
-    //     headers: {
-    //       Authorization: `Bearer ${props.token}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // );
-
-    // const response = await request.json();
-
     SOCKET.emit(
       "post comment",
       props.user.username,
@@ -101,13 +86,6 @@ function FriendProfile(props) {
       }
     );
 
-    //console.log(response.message);
-
-    // // if API call success, update the commentsList state to reflect new comment
-    // if (response.comment) {
-
-    // }
-
     formRef.current.reset();
     hideButtons();
   };
@@ -120,6 +98,15 @@ function FriendProfile(props) {
       setCommentsList(response.user.comments);
     });
   }, [friend]);
+
+  useEffect(() => {
+    SOCKET.on("update comments", (comments) => {
+      setCommentsList(comments);
+    });
+    return () => {
+      SOCKET.off("update comments");
+    };
+  }, []);
 
   return (
     <section className="component-view">

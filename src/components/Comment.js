@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Menu from "../assets/menu.png";
 import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // Comment component is rendered in iether the Profile or the FriendProfile components.  Displays a dynamic timestamp depending on the current time as well as the commenter's name, avatar and a GIF if included.
 // Also included is a drop down menu which has a few options avaiable to the current logged in user.  Delete funtionality if the current user wrote the comment.
@@ -46,35 +47,10 @@ function Comment(props) {
       profile = props.comment.profile;
     else profile = props.user.username;
 
-    console.log(props.user);
-
-    const request = await fetch(
-      `${URL}/users/${profile}/profile/comment/${props.comment._id}`,
-      {
-        mode: "cors",
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const response = await request.json();
-
-    if (response.error) {
-      console.log(response);
-      props.updateTokenErr(response.error);
-      navigate(`/`);
-    } else {
-      console.log(response.message);
-
-      // Determine which profile to update depending on where the comment to be removed was posted: user profile OR the friend's profile
-      if (props.user.username === props.comment.author) {
-        props.updateComments(response.user.comments); // update friend's comment list
-      } else props.updateUser(response.user); // update the logged in user to reflect comment removal
+    SOCKET.emit("remove comment", profile, props.comment._id, (response) => {
+      props.updateComments(response.comments); // update friend's comment list
       displayDropdown();
-    }
+    });
   };
 
   // Navigate to comment author's profile page, redirect to own user profile if clicked on own comment

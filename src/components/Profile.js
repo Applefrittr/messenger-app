@@ -40,6 +40,10 @@ function Profile(props) {
     setEditAvatar(e.target.src);
   };
 
+  const updateComments = (data) => {
+    setComments(data);
+  };
+
   // submit the edits to be saved to the DB.  Update the states of Dashboard as well as Profile to reflect the changes as well
   const submitEdits = async (e) => {
     e.preventDefault();
@@ -103,8 +107,12 @@ function Profile(props) {
       setComments((prevComments) => [comment, ...prevComments]);
     });
 
+    SOCKET.on("update comments", (comments) => {
+      setComments(comments);
+    });
     return () => {
       SOCKET.off("new comment");
+      SOCKET.off("update comments");
     };
   }, []);
 
@@ -153,6 +161,7 @@ function Profile(props) {
                     token={props.token}
                     updateUser={props.updateUser}
                     updateTokenErr={props.updateTokenErr}
+                    updateComments={updateComments}
                   />
                 );
               })}
