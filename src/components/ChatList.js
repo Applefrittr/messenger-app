@@ -15,6 +15,9 @@ function ChatList(props) {
   const modalRef = useRef();
   const navigate = useNavigate();
 
+  const chatsRef = useRef();
+  chatsRef.current = chats;
+
   //toggle New Message modal overlay
   const toggleModal = () => {
     modalRef.current.classList.toggle("toggle-modal");
@@ -47,6 +50,13 @@ function ChatList(props) {
       setChats(response.chats);
     });
 
+    SOCKET.on("update chat list", (chat) => {
+      const updatedList = [...chatsRef.current].filter(
+        (chatObj) => chatObj._id !== chat._id
+      );
+      updatedList.unshift(chat);
+      setChats(updatedList);
+    });
     // const getChats = async () => {
     //   try {
     //     const request = await fetch(
@@ -74,7 +84,10 @@ function ChatList(props) {
     //   }
     // };
     // getChats();
-  }, [props.user]);
+    return () => {
+      SOCKET.off("update chat list");
+    };
+  }, []);
 
   return (
     <section className="component-view">
@@ -141,6 +154,7 @@ function ChatList(props) {
               updateUser={props.updateUser}
               chats={chats}
               updateChats={updateChats}
+              friends={props.friends}
             />
           )}
         </div>

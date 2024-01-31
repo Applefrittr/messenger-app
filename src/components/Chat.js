@@ -90,20 +90,25 @@ function Chat(props) {
       setChat(response.chat);
     });
 
+    props.updateCurrChat(id);
+
     const observer = new IntersectionObserver(observerCallback);
     observer.observe(topRef.current);
 
     // Socket event listener for new messages recieved from the API
-    SOCKET.on("new msg", (message) => {
-      setMessages((prevMsgs) => [...prevMsgs, message]);
-      setTimeout(() => {
-        chatEndRef.current.scrollIntoView(false);
-      }, 0);
+    SOCKET.on("new msg", (message, chatID) => {
+      if (chatID === id) {
+        setMessages((prevMsgs) => [...prevMsgs, message]);
+        setTimeout(() => {
+          chatEndRef.current.scrollIntoView(false);
+        }, 0);
+      }
     });
 
     return () => {
       if (topRef.current) observer.unobserve(topRef.current);
       SOCKET.off("new msg");
+      props.updateCurrChat();
     };
   }, []);
 

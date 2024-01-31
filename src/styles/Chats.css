@@ -253,11 +253,13 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
   .chat-component-container {
     width: 100%;
   }
+}
 
+@media screen and (max-width: 600px) {
   .new-msg-form {
     width: 90%;
   }

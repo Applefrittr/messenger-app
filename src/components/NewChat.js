@@ -22,7 +22,7 @@ function NewChat(props) {
       setSearch();
       setDisplayChat();
     } else {
-      const filtered = props.user.friends.filter((friend) => {
+      const filtered = props.friends.filter((friend) => {
         return friend.username.indexOf(e.target.value) >= 0;
       });
       setSearch(filtered);

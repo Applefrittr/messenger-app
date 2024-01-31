@@ -8,6 +8,7 @@ import Error from "./Error";
 import { useEffect, useRef, useState } from "react";
 import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
+import MsgIcon from "../assets/chat.png";
 
 // Dashboard component, main navigation for the currently logged in user to navigate the App.  Displayed in the UI as a navigation bar with buttons that route to the other
 // components: Friends.js, ChatList.js, Profile.js.  On component mount, an API call to fetch the FULL user object and stored in state to be used by ALL other component in the App.
@@ -15,9 +16,12 @@ import SOCKET from "../API/websocket";
 function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
   const [friends, setFriends] = useState();
+  const [notification, setNotification] = useState();
+  //const [currChat, setCurrChat] = useState();
   const navigate = useNavigate();
   const viewRef = useRef();
-  //const socket = io(`${URL}`);
+  const chatIDRef = useRef();
+  const notificationRef = useRef();
 
   // CSS toggle class to disable page scrolling when a modal is open
   const toggleScroll = () => {
@@ -31,6 +35,10 @@ function Dashboard(props) {
   const updateUser = (state) => {
     console.log("state", state);
     setCurrUser(state);
+  };
+
+  const updateCurrChat = (id) => {
+    chatIDRef.current = id;
   };
 
   let base; // the base to our URL paths is the current logged in user
@@ -51,6 +59,13 @@ function Dashboard(props) {
     props.updateToken();
     props.updateUser();
     navigate("/");
+  };
+
+  const closeNotification = () => {
+    notificationRef.current.classList.remove("notification-animate");
+    setTimeout(() => {
+      setNotification();
+    }, 500);
   };
 
   // on Dashbaord mount, retrieve fully popualted User object (token payload is only partial object)
@@ -74,10 +89,24 @@ function Dashboard(props) {
       console.log("websocket");
     });
 
+    SOCKET.on("notification", (msg, id) => {
+      if (chatIDRef.current !== id) {
+        notificationRef.current.classList.add("notification-animate");
+        setNotification(msg);
+        setTimeout(() => {
+          notificationRef.current.classList.remove("notification-animate");
+          setTimeout(() => {
+            setNotification();
+          }, 500);
+        }, 5000);
+      }
+    });
+
     SOCKET.emit("hello", props.user.username);
 
     return () => {
       SOCKET.off("connect");
+      SOCKET.off("notification");
       SOCKET.disconnect();
     };
   }, []);
@@ -103,6 +132,18 @@ function Dashboard(props) {
         </button>
       </div>
       <div className="dashboard-view-container" ref={viewRef}>
+        <div className="notification-container" ref={notificationRef}>
+          {notification && (
+            <div className="notification-bubble">
+              <p onClick={closeNotification} className="close">
+                x
+              </p>
+              <img src={MsgIcon} />
+              <span>{notification}</span>
+            </div>
+          )}
+        </div>
+
         {currUser && (
           <Routes>
             <Route
@@ -113,6 +154,7 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   updateTokenErr={props.updateTokenErr}
+                  friends={friends}
                 />
               }
             />
@@ -124,6 +166,7 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   updateTokenErr={props.updateTokenErr}
+                  updateCurrChat={updateCurrChat}
                 />
               }
             />
