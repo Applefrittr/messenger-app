@@ -8,7 +8,9 @@ import Error from "./Error";
 import { useEffect, useRef, useState } from "react";
 import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
-import MsgIcon from "../assets/chat.png";
+import CommentIcon from "../assets/comment.png";
+import MsgIcon from "../assets/message.png";
+import RequestIcon from "../assets/request.png";
 
 // Dashboard component, main navigation for the currently logged in user to navigate the App.  Displayed in the UI as a navigation bar with buttons that route to the other
 // components: Friends.js, ChatList.js, Profile.js.  On component mount, an API call to fetch the FULL user object and stored in state to be used by ALL other component in the App.
@@ -138,8 +140,10 @@ function Dashboard(props) {
               <p onClick={closeNotification} className="close">
                 x
               </p>
-              <img src={MsgIcon} />
-              <span>{notification}</span>
+              {notification.type === "message" && <img src={MsgIcon} />}
+              {notification.type === "comment" && <img src={CommentIcon} />}
+              {notification.type === "request" && <img src={RequestIcon} />}
+              <span>{notification.msg}</span>
             </div>
           )}
         </div>

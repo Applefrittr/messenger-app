@@ -121,7 +121,9 @@ function FriendProfile(props) {
                 <h2>{profile.username}</h2>
                 <p>country: {profile.country}</p>
               </div>
-              <p>Personal Bio: {profile.personal}</p>
+              <p>
+                <i>{profile.personal}</i>
+              </p>
             </div>
             <div className="profile-info">
               <button onClick={back} className="nav-links">
