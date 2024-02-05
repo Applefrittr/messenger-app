@@ -86,7 +86,9 @@ function Dashboard(props) {
 
     getCurrUser();
 
+    SOCKET.auth.token = props.token;
     SOCKET.connect();
+
     SOCKET.on("connect", () => {
       console.log("websocket");
     });
@@ -104,11 +106,17 @@ function Dashboard(props) {
       }
     });
 
+    SOCKET.on("connect_error", (err) => {
+      props.updateTokenErr(err.message);
+      navigate("/");
+    });
+
     SOCKET.emit("hello", props.user.username);
 
     return () => {
       SOCKET.off("connect");
       SOCKET.off("notification");
+      SOCKET.off("connect_error");
       SOCKET.disconnect();
     };
   }, []);

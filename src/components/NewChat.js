@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 import URL from "../API/apiURL.js";
+import SOCKET from "../API/websocket";
 
 // NewChat component is a modal popup window in the accessible in the ChatsList.js component.  The user can start chats with friends
 // in his friends list or continue an ongoing chat.  The search bar will look for exisiting chats before starting a brand new chat.
@@ -76,36 +77,14 @@ function NewChat(props) {
       // create an array of users to be passed to the API
       dataObj.users = dataObj.users.split(",");
 
-      const request = await fetch(`${URL}/users/${props.user.username}/chats`, {
-        mode: "cors",
-        method: "POST",
-        body: JSON.stringify(dataObj),
-        headers: {
-          Authorization: `Bearer ${props.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const response = await request.json();
-
-      console.log(response.message);
-
-      const requestChats = await fetch(
-        `${URL}/users/${props.user.username}/chats`,
-        {
-          mode: "cors",
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${props.token}`,
-            "Content-Type": "application/json",
-          },
+      SOCKET.emit(
+        "send new message",
+        props.user.username,
+        dataObj,
+        (response) => {
+          navigate(`/${props.user.username}/chats/${response.id}`);
         }
       );
-
-      const responseChats = await requestChats.json();
-      props.updateChats(responseChats.chats);
-
-      navigate(`/${props.user.username}/chats/${response.id}`);
     }
   };
 
