@@ -196,7 +196,25 @@
 }
 
 .chat-last-el {
-  padding: 0.5rem;
+  padding: 0.85rem 0;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.chat-last-el > i {
+  position: absolute;
+  left: 0px;
+  top: 1px;
+  animation: typing 1s ease-in-out infinite alternate;
+}
+
+@keyframes typing {
+  from {
+    color: white;
+  }
+  to {
+    color: lightblue;
+  }
 }
 
 .top-fetch-trigger {

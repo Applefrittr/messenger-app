@@ -50,12 +50,10 @@ function ChatList(props) {
       setChats(response.chats);
     });
 
-    SOCKET.on("update chat list", (chat) => {
-      const updatedList = [...chatsRef.current].filter(
-        (chatObj) => chatObj._id !== chat._id
-      );
-      updatedList.unshift(chat);
-      setChats(updatedList);
+    SOCKET.on("update chat list", () => {
+      SOCKET.emit("get all chats", props.user.username, (response) => {
+        setChats(response.chats);
+      });
     });
     // const getChats = async () => {
     //   try {

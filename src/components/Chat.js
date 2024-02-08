@@ -15,6 +15,7 @@ function Chat(props) {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [prevScrollHeight, setPrevScrollHeight] = useState();
+  const [typingUser, setTypingUser] = useState();
 
   const { id } = useParams();
 
@@ -44,6 +45,13 @@ function Chat(props) {
 
   const back = () => {
     navigate(-1);
+  };
+
+  ///////////////////////
+  const isTyping = (e) => {
+    console.log(e.target.value);
+    if (e.target.value.length > 0)
+      SOCKET.emit("user typing", props.user.username, id);
   };
 
   // Emitter event to retrieve a new page of messages from the back end, fired when user scrolls to the top of the message log
@@ -99,15 +107,38 @@ function Chat(props) {
     SOCKET.on("new msg", (message, chatID) => {
       if (chatID === id) {
         setMessages((prevMsgs) => [...prevMsgs, message]);
+        setTypingUser();
         setTimeout(() => {
           chatEndRef.current.scrollIntoView(false);
         }, 0);
       }
     });
 
+    let timeout,
+      typing = false;
+
+    SOCKET.on("user typing", (username) => {
+      //console.log(`${username} is typing...`);
+      if (!typing) {
+        typing = true;
+        setTypingUser(username);
+        timeout = setTimeout(() => {
+          typing = false;
+          setTypingUser();
+        }, 5000);
+      } else {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          typing = false;
+          setTypingUser();
+        }, 5000);
+      }
+    });
+
     return () => {
       if (topRef.current) observer.unobserve(topRef.current);
       SOCKET.off("new msg");
+      SOCKET.off("user typing");
       props.updateCurrChat();
     };
   }, []);
@@ -120,7 +151,7 @@ function Chat(props) {
         top: chatViewRef.current.scrollHeight - prevScrollHeight,
         behavior: "instant",
       });
-    }, 0);
+    }, 100);
   }, [prevScrollHeight]);
 
   return (
@@ -161,7 +192,9 @@ function Chat(props) {
                   />
                 );
               })}
-            <div className="chat-last-el" ref={chatEndRef}></div>
+            <div className="chat-last-el" ref={chatEndRef}>
+              {typingUser && <i>{typingUser} is typing...</i>}
+            </div>
           </div>
           <form className="chat-view-form" ref={formRef}>
             {gif && (
@@ -176,7 +209,11 @@ function Chat(props) {
               <button type="button" className="nav-links" onClick={toggleModal}>
                 GIF
               </button>
-              <input name="text" placeholder="New Message here..."></input>
+              <input
+                name="text"
+                placeholder="New Message here..."
+                onChange={isTyping}
+              ></input>
               <input name="gif" hidden value={gif}></input>
               <button type="button" className="nav-links" onClick={sendMsg}>
                 Send
