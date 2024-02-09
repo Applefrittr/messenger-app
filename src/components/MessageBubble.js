@@ -7,6 +7,14 @@ function MessageBubble(props) {
   const [dateLine, setDateLine] = useState(false);
   const msgRef = useRef();
   const timeRef = useRef();
+  const imgRef = useRef();
+
+  // resize the img to ensure it's aspect ratio is preserved
+  const imgResize = () => {
+    console.log(imgRef.current);
+    imgRef.current.style.width = 200;
+    imgRef.current.style.height = "auto";
+  };
 
   // on render, CSS classes are added to component elements to identify sender and reciever, as well as render
   // date's between messages as well as timestamps
@@ -64,7 +72,13 @@ function MessageBubble(props) {
 
       <div className="message-bubble" ref={msgRef} key={props.message._id}>
         {props.message.gif && (
-          <img src={props.message.gif} alt="gif" className="chat-view-gif" />
+          <img
+            src={props.message.gif}
+            alt="gif"
+            className="chat-view-gif"
+            onLoad={imgResize}
+            ref={imgRef}
+          />
         )}
         <p>{props.message.text}</p>
       </div>
