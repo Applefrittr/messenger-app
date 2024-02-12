@@ -47,9 +47,7 @@ function Chat(props) {
     navigate(-1);
   };
 
-  ///////////////////////
   const isTyping = (e) => {
-    console.log(e.target.value);
     if (e.target.value.length > 0)
       SOCKET.emit("user typing", props.user.username, id);
   };

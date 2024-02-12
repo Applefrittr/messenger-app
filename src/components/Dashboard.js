@@ -90,7 +90,12 @@ function Dashboard(props) {
     SOCKET.connect();
 
     SOCKET.on("connect", () => {
-      console.log("websocket");
+      if (SOCKET.recovered) {
+        console.log("connection re-established");
+      } else {
+        console.log("new connection established", SOCKET.recovered);
+        SOCKET.emit("hello", props.user.username);
+      }
     });
 
     SOCKET.on("notification", (msg, id) => {
@@ -110,8 +115,6 @@ function Dashboard(props) {
       props.updateTokenErr(err.message);
       navigate("/");
     });
-
-    SOCKET.emit("hello", props.user.username);
 
     return () => {
       SOCKET.off("connect");
