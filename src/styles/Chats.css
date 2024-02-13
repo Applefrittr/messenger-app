@@ -277,6 +277,17 @@
   cursor: pointer;
 }
 
+.unread-marker {
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: red;
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+}
+
 @media screen and (max-width: 1000px) {
   .chat-component-container {
     width: 100%;

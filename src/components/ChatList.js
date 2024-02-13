@@ -29,6 +29,10 @@ function ChatList(props) {
     setChats(data);
   };
 
+  const readMessages = (chatID, username) => {
+    SOCKET.emit("read messages", chatID, username);
+  };
+
   // Time stamp function which will take timestamp attribute of a Message object and convert to a user friendly timestamp
   const timeStamped = (time) => {
     const today = new Date();
@@ -55,37 +59,27 @@ function ChatList(props) {
         setChats(response.chats);
       });
     });
-    // const getChats = async () => {
-    //   try {
-    //     const request = await fetch(
-    //       `${URL}/users/${props.user.username}/chats`,
-    //       {
-    //         mode: "cors",
-    //         method: "GET",
-    //         headers: {
-    //           Authorization: `Bearer ${props.token}`,
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     );
-    //     const response = await request.json();
-    //     if (response.error) {
-    //       console.log(response);
-    //       props.updateTokenErr(response.error);
-    //       navigate(`/`);
-    //     } else {
-    //       console.log(response);
-    //       setChats(response.chats);
-    //     }
-    //   } catch {
-    //     navigate(`/${props.user.username}/error`);
-    //   }
-    // };
-    // getChats();
     return () => {
       SOCKET.off("update chat list");
     };
   }, []);
+
+  useEffect(() => {
+    if (chats) {
+      let unreadCount = 0;
+
+      chats.forEach((chat) => {
+        if (chat.newMsgCounter) {
+          const unreadObj = chat.newMsgCounter.find(
+            (obj) => obj.user === props.user.username
+          );
+          if (unreadObj) unreadCount += unreadObj.unread;
+        }
+      });
+
+      props.updateChatCount(unreadCount);
+    }
+  }, [chats]);
 
   return (
     <section className="component-view">
@@ -113,12 +107,22 @@ function ChatList(props) {
                 });
 
               //const latestMsg = chat.messages[0];
+              let unreadMsgs;
+              if (chat.newMsgCounter) {
+                const unreadObj = chat.newMsgCounter.find(
+                  (obj) => obj.user === props.user.username
+                );
+                if (unreadObj) unreadMsgs = unreadObj.unread;
+              }
+
               return (
                 <Link
                   to={"/" + props.user.username + "/chats/" + chat._id}
                   className="chat-card"
                   key={chat._id}
+                  onClick={() => readMessages(chat._id, props.user.username)}
                 >
+                  {unreadMsgs > 0 && <div className="unread-marker" />}
                   {users.map((user) => {
                     return (
                       <div className="chat-card-header" key={user._id}>

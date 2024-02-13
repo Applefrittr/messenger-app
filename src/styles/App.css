@@ -29,6 +29,7 @@
   text-align: center;
   font-size: 0.75rem;
   flex-basis: auto;
+  position: relative;
 }
 
 .nav-links-red {

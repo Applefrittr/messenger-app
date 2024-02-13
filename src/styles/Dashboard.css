@@ -108,6 +108,20 @@
   cursor: pointer;
 }
 
+.new-counter {
+  color: white;
+  width: 25px;
+  height: 25px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 10px;
+  top: 15px;
+}
+
 @media screen and (max-width: 1000px) {
   .component-container {
     width: 100%;

@@ -19,6 +19,7 @@ function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
   const [friends, setFriends] = useState();
   const [notification, setNotification] = useState();
+  const [chatCount, setChatCount] = useState(0);
   //const [currChat, setCurrChat] = useState();
   const navigate = useNavigate();
   const viewRef = useRef();
@@ -41,6 +42,10 @@ function Dashboard(props) {
 
   const updateCurrChat = (id) => {
     chatIDRef.current = id;
+  };
+
+  const updateChatCount = (count) => {
+    setChatCount(count);
   };
 
   let base; // the base to our URL paths is the current logged in user
@@ -108,7 +113,10 @@ function Dashboard(props) {
             setNotification();
           }, 500);
         }, 5000);
+      } else {
+        setChatCount((prev) => prev - 1);
       }
+      if ((msg.type = "message")) setChatCount((prev) => prev + 1);
     });
 
     SOCKET.on("connect_error", (err) => {
@@ -133,6 +141,11 @@ function Dashboard(props) {
         </div>
         <Link to={base + "/chats"} className="nav-links">
           Chats
+          {chatCount > 0 && (
+            <div className="new-counter">
+              <p>{chatCount}</p>
+            </div>
+          )}
         </Link>
         <Link to={base + "/friends"} className="nav-links">
           Friends
@@ -169,6 +182,7 @@ function Dashboard(props) {
                   token={props.token}
                   updateUser={updateUser}
                   updateTokenErr={props.updateTokenErr}
+                  updateChatCount={updateChatCount}
                   friends={friends}
                 />
               }

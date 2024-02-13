@@ -17,7 +17,7 @@ function Chat(props) {
   const [prevScrollHeight, setPrevScrollHeight] = useState();
   const [typingUser, setTypingUser] = useState();
 
-  const { id } = useParams();
+  const { id } = useParams(); // chat ID assigned via Mongo DB, in the URL
 
   const hasMoreRef = useRef();
   const pageRef = useRef();
@@ -43,7 +43,9 @@ function Chat(props) {
     setGif();
   };
 
+  // navigate to previous page and emit "read messages" to reset unread counter back to 0
   const back = () => {
+    SOCKET.emit("read messages", id, props.user.username);
     navigate(-1);
   };
 
