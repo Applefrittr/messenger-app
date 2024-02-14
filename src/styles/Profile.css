@@ -40,6 +40,13 @@ img {
   background-color: #464d5a;
 }
 
+.online-status-icon {
+  color: lightgreen;
+  padding: 0.35rem;
+  background-color: lightgreen;
+  border-radius: 50%;
+}
+
 .online-status {
   color: lightgreen;
 }

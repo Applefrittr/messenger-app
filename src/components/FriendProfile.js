@@ -125,10 +125,7 @@ function FriendProfile(props) {
                 <i>{profile.personal}</i>
               </p>
             </div>
-            <div className="profile-info">
-              <button onClick={back} className="nav-links">
-                Back
-              </button>
+            <div className="profile-info2">
               <div>
                 <h2>joined: {profile.userSince_string}</h2>
                 <p>
@@ -138,6 +135,9 @@ function FriendProfile(props) {
                     : "???"}
                 </p>
               </div>
+              <button onClick={back} className="nav-links">
+                Back
+              </button>
             </div>
           </div>
           <div className="profile-content">

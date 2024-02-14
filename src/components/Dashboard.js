@@ -11,6 +11,7 @@ import SOCKET from "../API/websocket";
 import CommentIcon from "../assets/comment.png";
 import MsgIcon from "../assets/message.png";
 import RequestIcon from "../assets/request.png";
+import Menu from "../assets/menu.png";
 
 // Dashboard component, main navigation for the currently logged in user to navigate the App.  Displayed in the UI as a navigation bar with buttons that route to the other
 // components: Friends.js, ChatList.js, Profile.js.  On component mount, an API call to fetch the FULL user object and stored in state to be used by ALL other component in the App.
@@ -25,10 +26,17 @@ function Dashboard(props) {
   const viewRef = useRef();
   const chatIDRef = useRef();
   const notificationRef = useRef();
+  const navbarRef = useRef();
+  const friendsRef = useRef();
+  friendsRef.current = friends;
 
   // CSS toggle class to disable page scrolling when a modal is open
   const toggleScroll = () => {
     viewRef.current.classList.toggle("disable-scroll");
+  };
+
+  const slideNavbar = () => {
+    navbarRef.current.classList.toggle("nav-bar-slide");
   };
 
   const updateFriends = (data) => {
@@ -51,17 +59,11 @@ function Dashboard(props) {
   let base; // the base to our URL paths is the current logged in user
   if (props.user) base = `/${props.user.username}`;
 
-  // This clears the local storage of web tokens and navigates to login page, effectively logging out the user
+  // This clears the local storage of web tokens and navigates to login page, effectively logging out the user.
+  // Also emits to the server that the user has logged out, whihc will inturn update DB and broadcast
+  // th logout to other users
   const logout = async () => {
-    await fetch(`${URL}/users/${props.user.username}/logout`, {
-      mode: "cors",
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${props.token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
+    SOCKET.emit("user logout", props.user.username);
     localStorage.clear();
     props.updateToken();
     props.updateUser();
@@ -119,27 +121,53 @@ function Dashboard(props) {
       if ((msg.type = "message")) setChatCount((prev) => prev + 1);
     });
 
+    SOCKET.on("friend login", (friendname) => {
+      if (friendsRef.current.find((friend) => friend.username === friendname)) {
+        SOCKET.emit("get friends", props.user.username, (response) => {
+          updateFriends(response.friends);
+        });
+      }
+    });
+
+    SOCKET.on("friend logout", (friendname) => {
+      if (friendsRef.current.find((friend) => friend.username === friendname)) {
+        SOCKET.emit("get friends", props.user.username, (response) => {
+          updateFriends(response.friends);
+        });
+      }
+    });
+
     SOCKET.on("connect_error", (err) => {
       props.updateTokenErr(err.message);
       navigate("/");
     });
 
+    window.addEventListener("unload", logout);
+
     return () => {
+      window.removeEventListener("unload", logout);
       SOCKET.off("connect");
       SOCKET.off("notification");
       SOCKET.off("connect_error");
+      SOCKET.off("friend login");
+      SOCKET.off("friend logout");
       SOCKET.disconnect();
     };
   }, []);
 
   return (
     <section className="dashboard">
-      <div className="nav-bar">
+      <div className="nav-bar" ref={navbarRef}>
         <div className="nav-bar-header">
           <h1>Mylo Messenger</h1>
-          {props.user && <p>User: {props.user.username}</p>}
+          {props.user && (
+            <div className="nav-bar-user">
+              <img src={props.user.avatar} className="friend-avatar-smaller" />
+              <p>{props.user.username}</p>
+            </div>
+          )}
         </div>
-        <Link to={base + "/chats"} className="nav-links">
+        <Link to={base + "/chats"} className="nav-links" onClick={slideNavbar}>
           Chats
           {chatCount > 0 && (
             <div className="new-counter">
@@ -147,10 +175,18 @@ function Dashboard(props) {
             </div>
           )}
         </Link>
-        <Link to={base + "/friends"} className="nav-links">
+        <Link
+          to={base + "/friends"}
+          className="nav-links"
+          onClick={slideNavbar}
+        >
           Friends
         </Link>
-        <Link to={base + "/profile"} className="nav-links">
+        <Link
+          to={base + "/profile"}
+          className="nav-links"
+          onClick={slideNavbar}
+        >
           Profile
         </Link>
         <button onClick={logout} className="nav-links">
@@ -158,6 +194,12 @@ function Dashboard(props) {
         </button>
       </div>
       <div className="dashboard-view-container" ref={viewRef}>
+        <img
+          src={Menu}
+          alt="Navbar"
+          className="nav-bar-toggle-btn"
+          onClick={slideNavbar}
+        ></img>
         <div className="notification-container" ref={notificationRef}>
           {notification && (
             <div className="notification-bubble">

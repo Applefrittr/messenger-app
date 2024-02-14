@@ -9,15 +9,31 @@
   border-right: 1px solid white;
 }
 
+.nav-bar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nav-bar-user {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
 .dashboard {
   display: flex;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
 .dashboard-view-container {
   flex: 1;
   height: 100vh;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -122,6 +138,20 @@
   top: 15px;
 }
 
+.nav-bar-toggle-btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 35px;
+  height: auto;
+  z-index: 5;
+  display: none;
+}
+
+.nav-bar-toggle-btn:hover {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 1000px) {
   .component-container {
     width: 100%;
@@ -133,25 +163,41 @@
 }
 
 @media screen and (max-width: 600px) {
-  .nav-bar {
+  /* .nav-bar {
     flex-direction: row;
     width: 100%;
     justify-content: center;
     border-top: solid 1px white;
     border-right: none;
     gap: 0.9rem;
+  } */
+
+  .nav-bar {
+    position: absolute;
+    height: 100%;
+    z-index: 5;
+    transform: translateX(-100%);
+    transition: all 0.5s ease-in-out;
   }
 
-  .nav-bar-header {
+  .nav-bar-slide {
+    transform: translateX(0);
+  }
+
+  /* .nav-bar-header {
     display: none;
-  }
+  } */
 
-  .dashboard {
+  /* .dashboard {
     flex-direction: column-reverse;
     height: 100vh;
-  }
+  } */
 
   .notification-bubble {
     padding: 1rem 2rem;
+  }
+
+  .nav-bar-toggle-btn {
+    display: block;
   }
 }

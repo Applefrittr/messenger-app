@@ -53,11 +53,7 @@ function FriendList(props) {
                   <p>
                     <i>{friend.username}</i>
                   </p>
-                  {friend.online && (
-                    <p className="online-status">
-                      <i>ONLINE</i>
-                    </p>
-                  )}
+                  {friend.online && <div className="online-status-icon" />}
                 </div>
                 <div className="friend-card-btns">
                   <Link

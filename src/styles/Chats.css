@@ -22,7 +22,7 @@
 
 .new-msg-btn {
   position: absolute;
-  right: 1rem;
+  left: 1rem;
   top: 1rem;
   cursor: pointer;
   width: 25px;

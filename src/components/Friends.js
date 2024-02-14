@@ -66,10 +66,6 @@ function Friends(props) {
       setOutgoing(response.outgoing);
     });
 
-    SOCKET.emit("get friends", props.user.username, (response) => {
-      props.updateFriends(response.friends);
-    });
-
     return () => {
       SOCKET.off("incoming request");
       SOCKET.off("remove request");
