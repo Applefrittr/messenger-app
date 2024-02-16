@@ -82,14 +82,21 @@ function Chat(props) {
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    SOCKET.emit("send msg", props.user.username, id, dataObj, (response) => {
-      setMessages((prevMsgs) => [...prevMsgs, response.message]);
-      formRef.current.reset();
-      setGif();
-      setTimeout(() => {
-        chatEndRef.current.scrollIntoView(false);
-      }, 0);
-    });
+    SOCKET.emit(
+      "send msg",
+      props.user.username,
+      id,
+      dataObj,
+      props.user.avatar,
+      (response) => {
+        setMessages((prevMsgs) => [...prevMsgs, response.message]);
+        formRef.current.reset();
+        setGif();
+        setTimeout(() => {
+          chatEndRef.current.scrollIntoView(false);
+        }, 0);
+      }
+    );
   };
 
   // On component mount, initialize the observer and observe the TOP placeholder div in the chat log; firecall back when in view.  Also, retrieve chat info

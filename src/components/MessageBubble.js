@@ -8,6 +8,7 @@ function MessageBubble(props) {
   const msgRef = useRef();
   const timeRef = useRef();
   const imgRef = useRef();
+  const containerRef = useRef();
 
   // resize the img to ensure it's aspect ratio is preserved
   const imgResize = () => {
@@ -23,9 +24,11 @@ function MessageBubble(props) {
     if (props.user.username === props.message.username) {
       msgRef.current.classList.add("send");
       timeRef.current.classList.add("timestamp-send");
+      containerRef.current.classList.add("left");
     } else {
       msgRef.current.classList.add("recieve");
       timeRef.current.classList.add("timestamp-recieve");
+      containerRef.current.classList.add("right");
     }
     setTimeout(() => {
       msgRef.current.classList.add("message-bubble-fadein");
@@ -70,17 +73,30 @@ function MessageBubble(props) {
         </i>
       </p>
 
-      <div className="message-bubble" ref={msgRef} key={props.message._id}>
-        {props.message.gif && (
-          <img
-            src={props.message.gif}
-            alt="gif"
-            className="chat-view-gif"
-            onLoad={imgResize}
-            ref={imgRef}
-          />
-        )}
-        <p>{props.message.text}</p>
+      <div className="avatar-bubble-container" ref={containerRef}>
+        {props.message.groupChat &&
+          props.message.avatar &&
+          props.user.username !== props.message.username && (
+            <img src={props.message.avatar} className="chat-avatar" />
+          )}
+        <div className="message-bubble" key={props.message._id} ref={msgRef}>
+          {props.message.groupChat &&
+            props.user.username !== props.message.username && (
+              <i className="bubble-username-label">
+                {props.message.username} says...
+              </i>
+            )}
+          {props.message.gif && (
+            <img
+              src={props.message.gif}
+              alt="gif"
+              className="chat-view-gif"
+              onLoad={imgResize}
+              ref={imgRef}
+            />
+          )}
+          <p>{props.message.text}</p>
+        </div>
       </div>
     </div>
   );

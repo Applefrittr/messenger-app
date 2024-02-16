@@ -11,7 +11,6 @@
 
 .message-bubble {
   padding: 0.5rem 1rem;
-  width: fit-content;
   color: black;
   opacity: 0;
   transition: opacity ease-in 0.5s;
@@ -50,14 +49,31 @@
   display: none;
 }
 
-.message-bubble.recieve::before {
-  left: 0;
-}
-
-.message-bubble.send::before {
-  right: 0;
-}
-
 .message-bubble-fadein {
   opacity: 1;
+}
+
+.bubble-username-label {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.75);
+  margin-bottom: -0.5rem;
+}
+
+.avatar-bubble-container {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.chat-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.left {
+  justify-content: flex-end;
+}
+
+.right {
+  justify-content: flex-start;
 }

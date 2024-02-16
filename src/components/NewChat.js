@@ -11,6 +11,8 @@ import SOCKET from "../API/websocket";
 function NewChat(props) {
   const [search, setSearch] = useState();
   const [displayChat, setDisplayChat] = useState();
+  const [recipients, setRecipients] = useState([]);
+  const [eligibleRecipients, setEligibleRecipients] = useState(props.friends);
   const formRef = useRef();
   const searchFieldRef = useRef();
   const sendRef = useRef();
@@ -23,15 +25,15 @@ function NewChat(props) {
       setSearch();
       setDisplayChat();
     } else {
-      const filtered = props.friends.filter((friend) => {
+      const filtered = eligibleRecipients.filter((friend) => {
         return friend.username.indexOf(e.target.value) >= 0;
       });
       setSearch(filtered);
     }
   };
 
-  // search bar to choose recipient of new message.  If a chat already exists with selected recipient,
-  // message log will be displayed
+  // search bar to choose recipient of new message.  If a chat already exists with selected recipient(s),
+  // message log will be displayed.  Will remove the selected target from eligible recipeint list
   const chooseRecipient = (e) => {
     //e.preventDefault();
     if (e.target.value) {
@@ -42,14 +44,13 @@ function NewChat(props) {
       console.log(e.target.value);
 
       // Check to see if there is an existing chat by iterating through user's exisiting chats.  If so, set hidden input value to chat's ._id to be passed to API
-      const chatMembers = e.target.value.split(",");
-      chatMembers.push(props.user.username);
-      console.log(chatMembers);
+      const chatMembers = [props.user.username, e.target.value, ...recipients];
+      //console.log(chatMembers);
 
-      console.log(JSON.stringify(chatMembers));
+      //console.log(JSON.stringify(chatMembers));
 
       for (const chat of props.chats) {
-        console.log(chat);
+        //console.log(chat);
         if (
           JSON.stringify(chatMembers.sort()) ===
           JSON.stringify(chat.usernames.sort())
@@ -58,12 +59,46 @@ function NewChat(props) {
           setDisplayChat(chat.messages.reverse());
           break;
         } else {
+          chatIDRef.current.value = null;
           setDisplayChat();
         }
       }
-
+      searchFieldRef.current.value = "";
+      setRecipients((prev) => [e.target.value, ...prev]);
+      setEligibleRecipients(
+        eligibleRecipients.filter(
+          (recipient) => !chatMembers.includes(recipient.username)
+        )
+      );
       setSearch();
     } else return;
+  };
+
+  // onCLick function to remove target from recipeint list and add it back to the eligible recipient list
+  const removeRecipient = (target) => {
+    const chatMembers = recipients.filter((recipient) => recipient !== target);
+    setRecipients(chatMembers);
+    const recipient = props.friends.find(
+      (friend) => friend.username === target
+    );
+    setEligibleRecipients((prev) => [recipient, ...prev]);
+
+    const chatGroup = [props.user.username, ...chatMembers];
+
+    for (const chat of props.chats) {
+      //console.log(chat);
+      if (
+        JSON.stringify(chatGroup.sort()) ===
+        JSON.stringify(chat.usernames.sort())
+      ) {
+        chatIDRef.current.value = chat._id;
+        setDisplayChat(chat.messages.reverse());
+        break;
+      } else {
+        chatIDRef.current.value = null;
+        setDisplayChat();
+      }
+    }
   };
 
   const sendMsg = async (e) => {
@@ -72,20 +107,23 @@ function NewChat(props) {
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    if (!dataObj.users) console.log("Choose recipient");
-    else {
-      // create an array of users to be passed to the API
-      dataObj.users = dataObj.users.split(",");
+    // if (!dataObj.users) console.log("Choose recipient");
+    // else {
+    // create an array of users to be passed to the API
+    dataObj.users = recipients;
 
-      SOCKET.emit(
-        "send new message",
-        props.user.username,
-        dataObj,
-        (response) => {
-          navigate(`/${props.user.username}/chats/${response.id}`);
-        }
-      );
-    }
+    // console.log(dataObj.users);
+    // console.log(recipients);
+
+    SOCKET.emit(
+      "send new message",
+      props.user.username,
+      dataObj,
+      (response) => {
+        navigate(`/${props.user.username}/chats/${response.id}`);
+      }
+    );
+    //}
   };
 
   useEffect(() => {
@@ -103,6 +141,18 @@ function NewChat(props) {
         </p>
       </div>
       <div className="chat-container">
+        <div className="recipients-container">
+          {recipients &&
+            recipients.map((recipient) => {
+              return (
+                <div className="recipient-name">
+                  <i>{recipient}</i>
+                  <p onClick={() => removeRecipient(recipient)}>x</p>
+                </div>
+              );
+            })}
+        </div>
+
         <div className="search-field">
           <label htmlFor="search">To:</label>
           <input
@@ -111,29 +161,30 @@ function NewChat(props) {
             ref={searchFieldRef}
           ></input>
         </div>
-        {search && (
-          <div className="search-results">
-            {search.map((friend) => {
-              return (
-                <button
-                  className="result-card"
-                  key={friend.username}
-                  onClick={chooseRecipient}
-                  type="button"
-                  value={friend.username}
-                >
-                  <img
-                    src={friend.avatar}
-                    alt="avatar"
-                    className="friend-avatar-small"
-                  />
-                  {friend.username}
-                </button>
-              );
-            })}
-          </div>
-        )}
+
         <div className="chat-view">
+          {search && (
+            <div className="search-results">
+              {search.map((friend) => {
+                return (
+                  <button
+                    className="result-card"
+                    key={friend.username}
+                    onClick={chooseRecipient}
+                    type="button"
+                    value={friend.username}
+                  >
+                    <img
+                      src={friend.avatar}
+                      alt="avatar"
+                      className="friend-avatar-small"
+                    />
+                    {friend.username}
+                  </button>
+                );
+              })}
+            </div>
+          )}
           {displayChat &&
             displayChat.map((message, i, messages) => {
               return (

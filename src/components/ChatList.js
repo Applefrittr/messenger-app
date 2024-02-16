@@ -123,18 +123,20 @@ function ChatList(props) {
                   onClick={() => readMessages(chat._id, props.user.username)}
                 >
                   {unreadMsgs > 0 && <div className="unread-marker" />}
-                  {users.map((user) => {
-                    return (
-                      <div className="chat-card-header" key={user._id}>
-                        <img
-                          src={user.avatar}
-                          alt="avatar"
-                          className="friend-avatar-smaller"
-                        />
-                        <h3>{user.username}</h3>
-                      </div>
-                    );
-                  })}
+                  <div className="chat-card-users">
+                    {users.map((user) => {
+                      return (
+                        <div className="chat-card-header" key={user._id}>
+                          <img
+                            src={user.avatar}
+                            alt="avatar"
+                            className="friend-avatar-smaller"
+                          />
+                          <h3>{user.username}</h3>
+                        </div>
+                      );
+                    })}
+                  </div>
                   <p>
                     <i>{chat.latestMsg.text}</i>
                   </p>
