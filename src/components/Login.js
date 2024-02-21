@@ -12,6 +12,7 @@ function Login(props) {
 
   const signinRef = useRef();
   const signupRef = useRef();
+  const testForm = useRef();
 
   const toggleForms = () => {
     signinRef.current.classList.toggle("hide-form");
@@ -87,8 +88,35 @@ function Login(props) {
     }
   };
 
+  const sendUrl = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(testForm.current);
+    const dataObj = Object.fromEntries(formData.entries());
+
+    const request = await fetch(`${URL}/users/fetchURL`, {
+      mode: "cors",
+      method: "Post",
+      body: JSON.stringify(dataObj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const response = await request.json();
+
+    console.log(response.title);
+  };
+
   return (
     <div className="Login">
+      <form ref={testForm}>
+        <input type="text" name="url"></input>
+        <button type="button" onClick={sendUrl}>
+          Send URL
+        </button>
+      </form>
+
       {props.tokenErr && (
         <div className="login-msg-container">{props.tokenErr}</div>
       )}
