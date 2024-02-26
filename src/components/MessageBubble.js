@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Linkify from "linkify-react";
+import useLinkify from "../hooks/useLinkify";
 
 // Component for the message bubble's used in the Chat.js and NewChat.js components.  Takes 2 consecutive message objects (current and previous) to construct a message bubble with
 // message text, GIF if included, and will determine if a timestamp is also to be displayed.  The timestamp is displayed in the UI if the time between the the current message and previous
 // message exceeds a given threshold
 function MessageBubble(props) {
+  const parsedText = useLinkify(props.message.text);
   const [dateLine, setDateLine] = useState(false);
   const msgRef = useRef();
   const timeRef = useRef();
@@ -100,9 +102,7 @@ function MessageBubble(props) {
               ref={imgRef}
             />
           )}
-          <Linkify as="p" options={linkOptions} className="linkify-text">
-            {props.message.text}
-          </Linkify>
+          {parsedText}
         </div>
       </div>
     </div>

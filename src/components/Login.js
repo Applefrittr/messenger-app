@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import URL from "../API/apiURL.js";
+import useLinkify from "../hooks/useLinkify";
 
 // Login component will log returning user's into the App or provide the ability for a new user to sign up.  Will also display errors if user fails either login or does not fill out
 // user sign up correctly.  On successful login, a webtoken is passed back to component in which it is saved to localstorage for session persistance and the user is routed to the Dashboard component.
@@ -94,7 +95,13 @@ function Login(props) {
     const formData = new FormData(testForm.current);
     const dataObj = Object.fromEntries(formData.entries());
 
-    const request = await fetch(`${URL}/users/fetchURL`, {
+    //console.log(dataObj.url);
+
+    //const output = useLinkify(dataObj.url);
+
+    //console.log("output:", output);
+
+    const request = await fetch(`${URL}/fetchURL`, {
       mode: "cors",
       method: "Post",
       body: JSON.stringify(dataObj),
@@ -102,10 +109,8 @@ function Login(props) {
         "Content-Type": "application/json",
       },
     });
-
     const response = await request.json();
-
-    console.log(response.title);
+    console.log(response.message);
   };
 
   return (
