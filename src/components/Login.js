@@ -110,7 +110,7 @@ function Login(props) {
       },
     });
     const response = await request.json();
-    console.log(response.message);
+    console.log(response.metaData);
   };
 
   return (

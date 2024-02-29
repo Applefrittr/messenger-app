@@ -113,6 +113,7 @@ function Chat(props) {
     // Socket event listener for new messages recieved from the API
     SOCKET.on("new msg", (message, chatID) => {
       if (chatID === id) {
+        console.log(message);
         setMessages((prevMsgs) => [...prevMsgs, message]);
         setTypingUser();
         setTimeout(() => {

@@ -6,7 +6,7 @@ import useLinkify from "../hooks/useLinkify";
 // message text, GIF if included, and will determine if a timestamp is also to be displayed.  The timestamp is displayed in the UI if the time between the the current message and previous
 // message exceeds a given threshold
 function MessageBubble(props) {
-  const parsedText = useLinkify(props.message.text);
+  //const parsedText = useLinkify(props.message.text);
   const [dateLine, setDateLine] = useState(false);
   const msgRef = useRef();
   const timeRef = useRef();
@@ -102,7 +102,9 @@ function MessageBubble(props) {
               ref={imgRef}
             />
           )}
-          {parsedText}
+          <Linkify>
+            <i className="linkify-text">{props.message.text}</i>
+          </Linkify>
         </div>
       </div>
     </div>
