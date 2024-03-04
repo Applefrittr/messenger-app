@@ -103,8 +103,31 @@ function MessageBubble(props) {
             />
           )}
           <Linkify>
-            <i className="linkify-text">{props.message.text}</i>
+            <p className="linkify-text">{props.message.text}</p>
           </Linkify>
+          {props.message.urlMetaData && (
+            <div className="md-card">
+              <div className="md-image">
+                <img src={props.message.urlMetaData["og:image"]} />
+              </div>
+              <div className="md-text-block">
+                <b>{props.message.urlMetaData["og:title"]}</b>
+                {props.message.urlMetaData["og:description"] && (
+                  <p className="md-descrip">
+                    {props.message.urlMetaData["og:description"].length > 100
+                      ? props.message.urlMetaData["og:description"].substring(
+                          0,
+                          100
+                        ) + "..."
+                      : props.message.urlMetaData["og:description"]}
+                  </p>
+                )}
+                <i className="md-site-name">
+                  {props.message.urlMetaData["og:site_name"]}
+                </i>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

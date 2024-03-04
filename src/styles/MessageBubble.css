@@ -81,3 +81,25 @@
 .linkify-text > a {
   color: darkblue;
 }
+
+.md-card {
+  padding: 0.5rem;
+  border-left: solid 2px darkblue;
+  border-radius: 5px;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.md-text-block {
+}
+
+.md-descrip {
+  font-size: 0.85rem;
+  max-width: 50ch;
+}
+
+.md-site-name {
+  color: darkslategrey;
+}
