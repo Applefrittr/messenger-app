@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import URL from "../API/apiURL.js";
-import useLinkify from "../hooks/useLinkify";
 
 // Login component will log returning user's into the App or provide the ability for a new user to sign up.  Will also display errors if user fails either login or does not fill out
 // user sign up correctly.  On successful login, a webtoken is passed back to component in which it is saved to localstorage for session persistance and the user is routed to the Dashboard component.

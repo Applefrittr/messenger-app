@@ -166,7 +166,9 @@ function Chat(props) {
     <section className="chat-component-view">
       <section className="chat-component-container">
         <div className="chat-view-header">
-          <img src={Back} alt="Back" className="back-btn" onClick={back}></img>
+          <button className="back-btn">
+            <img src={Back} alt="Back" onClick={back}></img>
+          </button>
           {chat &&
             chat.users
               .filter((user) => user.username !== props.user.username)

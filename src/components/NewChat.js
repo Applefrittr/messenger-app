@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
-import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
 
 // NewChat component is a modal popup window in the accessible in the ChatsList.js component.  The user can start chats with friends

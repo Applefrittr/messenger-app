@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import Linkify from "linkify-react";
-import useLinkify from "../hooks/useLinkify";
 
 // Component for the message bubble's used in the Chat.js and NewChat.js components.  Takes 2 consecutive message objects (current and previous) to construct a message bubble with
 // message text, GIF if included, and will determine if a timestamp is also to be displayed.  The timestamp is displayed in the UI if the time between the the current message and previous
@@ -12,6 +11,7 @@ function MessageBubble(props) {
   const timeRef = useRef();
   const imgRef = useRef();
   const containerRef = useRef();
+  const metaDataRef = useRef();
 
   // resize the img to ensure it's aspect ratio is preserved
   const imgResize = () => {
@@ -28,10 +28,12 @@ function MessageBubble(props) {
       msgRef.current.classList.add("send");
       timeRef.current.classList.add("timestamp-send");
       containerRef.current.classList.add("left");
+      if (metaDataRef.current) metaDataRef.current.classList.add("send");
     } else {
       msgRef.current.classList.add("recieve");
       timeRef.current.classList.add("timestamp-recieve");
       containerRef.current.classList.add("right");
+      if (metaDataRef.current) metaDataRef.current.classList.add("recieve");
     }
     setTimeout(() => {
       msgRef.current.classList.add("message-bubble-fadein");
@@ -86,48 +88,66 @@ function MessageBubble(props) {
           props.user.username !== props.message.username && (
             <img src={props.message.avatar} className="chat-avatar" />
           )}
-        <div className="message-bubble" key={props.message._id} ref={msgRef}>
-          {props.message.groupChat &&
-            props.user.username !== props.message.username && (
-              <i className="bubble-username-label">
-                {props.message.username} says...
-              </i>
+        <div className="bubble-md-container">
+          <div className="message-bubble" key={props.message._id} ref={msgRef}>
+            {props.message.groupChat &&
+              props.user.username !== props.message.username && (
+                <i className="bubble-username-label">
+                  {props.message.username} says...
+                </i>
+              )}
+            {props.message.gif && (
+              <img
+                src={props.message.gif}
+                alt="gif"
+                className="chat-view-gif"
+                onLoad={imgResize}
+                ref={imgRef}
+              />
             )}
-          {props.message.gif && (
-            <img
-              src={props.message.gif}
-              alt="gif"
-              className="chat-view-gif"
-              onLoad={imgResize}
-              ref={imgRef}
-            />
-          )}
-          <Linkify>
-            <p className="linkify-text">{props.message.text}</p>
-          </Linkify>
-          {props.message.urlMetaData && (
-            <div className="md-card">
-              <div className="md-image">
-                <img src={props.message.urlMetaData["og:image"]} />
-              </div>
-              <div className="md-text-block">
-                <b>{props.message.urlMetaData["og:title"]}</b>
-                {props.message.urlMetaData["og:description"] && (
-                  <p className="md-descrip">
-                    {props.message.urlMetaData["og:description"].length > 100
-                      ? props.message.urlMetaData["og:description"].substring(
+            <Linkify options={{ truncate: 55 }}>
+              <p className="linkify-text">{props.message.text}</p>
+            </Linkify>
+          </div>
+          {props.message.urlMetaData &&
+            props.message.urlMetaData["og:title"] && (
+              <a
+                className="md-card"
+                ref={metaDataRef}
+                href={props.message.urlMetaData["og:url"]}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {props.message.urlMetaData["og:image"] && (
+                  <div className="md-image">
+                    <img src={props.message.urlMetaData["og:image"]} />
+                  </div>
+                )}
+                <div className="md-text-block">
+                  <b>
+                    {props.message.urlMetaData["og:title"].length > 100
+                      ? props.message.urlMetaData["og:title"].substring(
                           0,
                           100
                         ) + "..."
-                      : props.message.urlMetaData["og:description"]}
-                  </p>
-                )}
-                <i className="md-site-name">
-                  {props.message.urlMetaData["og:site_name"]}
-                </i>
-              </div>
-            </div>
-          )}
+                      : props.message.urlMetaData["og:title"]}
+                  </b>
+                  {props.message.urlMetaData["og:description"] && (
+                    <p className="md-descrip">
+                      {props.message.urlMetaData["og:description"].length > 100
+                        ? props.message.urlMetaData["og:description"].substring(
+                            0,
+                            100
+                          ) + "..."
+                        : props.message.urlMetaData["og:description"]}
+                    </p>
+                  )}
+                  <i className="md-site-name">
+                    {props.message.urlMetaData["og:site_name"]}
+                  </i>
+                </div>
+              </a>
+            )}
         </div>
       </div>
     </div>

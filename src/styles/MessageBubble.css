@@ -70,6 +70,12 @@
   border-radius: 50%;
 }
 
+.bubble-md-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
 .left {
   justify-content: flex-end;
 }
@@ -78,21 +84,30 @@
   justify-content: flex-start;
 }
 
+.align-left {
+  align-self: flex-start;
+}
+
+.align-right {
+  align-self: flex-end;
+}
+
 .linkify-text > a {
   color: darkblue;
+  text-wrap: wrap;
 }
 
 .md-card {
-  padding: 0.5rem;
-  border-left: solid 2px darkblue;
-  border-radius: 5px;
-  max-width: 250px;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border-left: solid 5px darkblue;
+  max-width: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.md-text-block {
+  gap: 0.25rem;
+  color: black;
+  text-decoration: none;
 }
 
 .md-descrip {

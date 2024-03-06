@@ -137,12 +137,20 @@ function ChatList(props) {
                       );
                     })}
                   </div>
-                  <p>
-                    <i>{chat.latestMsg.text}</i>
-                  </p>
-                  <p className="chat-card-time">
-                    {timeStamped(chat.latestMsg.timestamp)}
-                  </p>
+                  {chat.latestMsg && (
+                    <p>
+                      <i>
+                        {chat.latestMsg.text.length > 50
+                          ? chat.latestMsg.text.substring(0, 50) + "..."
+                          : chat.latestMsg.text}
+                      </i>
+                    </p>
+                  )}
+                  {chat.latestMsg && (
+                    <p className="chat-card-time">
+                      {timeStamped(chat.latestMsg.timestamp)}
+                    </p>
+                  )}
                   <img src={Arrow} alt="Open" className="chat-arrow"></img>
                 </Link>
               );

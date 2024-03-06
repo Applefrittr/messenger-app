@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Menu from "../assets/menu.png";
-import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
+import Linkify from "linkify-react";
 
 // Comment component is rendered in iether the Profile or the FriendProfile components.  Displays a dynamic timestamp depending on the current time as well as the commenter's name, avatar and a GIF if included.
 // Also included is a drop down menu which has a few options avaiable to the current logged in user.  Delete funtionality if the current user wrote the comment.
@@ -104,9 +104,49 @@ function Comment(props) {
           </ul>
         </div>
       </div>
-      {props.comment.text && <p>"{props.comment.text}"</p>}
+      {props.comment.text && (
+        <Linkify>
+          <p className="comment-linkify-text">"{props.comment.text}"</p>
+        </Linkify>
+      )}
       {props.comment.gif && (
         <img src={props.comment.gif} alt="GiF" className="comment-gif" />
+      )}
+
+      {props.comment.urlMetaData && props.comment.urlMetaData["og:title"] && (
+        <a
+          className="comment-md-card"
+          href={props.comment.urlMetaData["og:url"]}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {props.comment.urlMetaData["og:image"] && (
+            <div className="md-image">
+              <img src={props.comment.urlMetaData["og:image"]} />
+            </div>
+          )}
+          <div className="md-text-block">
+            <b>
+              {props.comment.urlMetaData["og:title"].length > 100
+                ? props.comment.urlMetaData["og:title"].substring(0, 100) +
+                  "..."
+                : props.comment.urlMetaData["og:title"]}
+            </b>
+            {props.comment.urlMetaData["og:description"] && (
+              <p className="md-descrip">
+                {props.comment.urlMetaData["og:description"].length > 100
+                  ? props.comment.urlMetaData["og:description"].substring(
+                      0,
+                      100
+                    ) + "..."
+                  : props.comment.urlMetaData["og:description"]}
+              </p>
+            )}
+            <i className="comment-md-site-name">
+              {props.comment.urlMetaData["og:site_name"]}
+            </i>
+          </div>
+        </a>
       )}
     </section>
   );

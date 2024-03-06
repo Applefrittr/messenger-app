@@ -28,6 +28,7 @@ function Dashboard(props) {
   const notificationRef = useRef();
   const navbarRef = useRef();
   const friendsRef = useRef();
+  const menuRef = useRef();
   friendsRef.current = friends;
 
   // CSS toggle class to disable page scrolling when a modal is open
@@ -37,6 +38,7 @@ function Dashboard(props) {
 
   const slideNavbar = () => {
     navbarRef.current.classList.toggle("nav-bar-slide");
+    menuRef.current.classList.toggle("spin");
   };
 
   const updateFriends = (data) => {
@@ -199,6 +201,7 @@ function Dashboard(props) {
           alt="Navbar"
           className="nav-bar-toggle-btn"
           onClick={slideNavbar}
+          ref={menuRef}
         ></img>
         <div className="notification-container" ref={notificationRef}>
           {notification && (

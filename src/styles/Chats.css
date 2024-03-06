@@ -198,6 +198,8 @@
   width: 25px;
   left: 5px;
   bottom: 10px;
+  background-color: transparent;
+  border: none;
 }
 
 .back-btn:hover {
@@ -338,5 +340,10 @@
 
   .chat-container {
     width: auto;
+  }
+
+  .chats-list-container {
+    padding-left: 1rem;
+    padding-right: 0;
   }
 }
