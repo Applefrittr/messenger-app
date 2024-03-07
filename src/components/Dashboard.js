@@ -62,7 +62,7 @@ function Dashboard(props) {
   if (props.user) base = `/${props.user.username}`;
 
   // This clears the local storage of web tokens and navigates to login page, effectively logging out the user.
-  // Also emits to the server that the user has logged out, whihc will inturn update DB and broadcast
+  // Also emits to the server that the user has logged out, which will inturn update DB and broadcast
   // th logout to other users
   const logout = async () => {
     SOCKET.emit("user logout", props.user.username);
@@ -79,6 +79,7 @@ function Dashboard(props) {
     }, 500);
   };
 
+  ///// Remove http request and use WS listener!!!!!!!
   // on Dashbaord mount, retrieve fully popualted User object (token payload is only partial object)
   useEffect(() => {
     const getCurrUser = async () => {

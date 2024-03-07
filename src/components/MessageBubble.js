@@ -60,10 +60,6 @@ function MessageBubble(props) {
     }
   }, []);
 
-  const linkOptions = {
-    target: "_blank",
-  };
-
   return (
     <div className="message-container">
       {dateLine && (
@@ -105,7 +101,7 @@ function MessageBubble(props) {
                 ref={imgRef}
               />
             )}
-            <Linkify options={{ truncate: 55 }}>
+            <Linkify options={{ truncate: 55, target: "_blank" }}>
               <p className="linkify-text">{props.message.text}</p>
             </Linkify>
           </div>

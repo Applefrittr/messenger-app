@@ -36,10 +36,6 @@ function Friends(props) {
     setIncoming(data);
   };
 
-  // const updateFriends = (data) => {
-  //   setFriends(data);
-  // };
-
   // Set up socket listeners for changes to both incoming and outgoing friend requests as well as any changes to the firends list (removals).
   // Get all current requests as well as the friends list on component mount.  Clean up listeners when unmounted
   useEffect(() => {

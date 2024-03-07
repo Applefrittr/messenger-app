@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
 
 // FriendSearch component filters through all users in the database by the characters entered into the search field by the user.  results displayed in the UI.
@@ -10,7 +8,6 @@ function FriendSearch(props) {
   const [users, setUsers] = useState();
   const [filteredUsers, setFilteredUsers] = useState([]);
   const formRef = useRef();
-  const navigate = useNavigate();
 
   // Friend request function.  Call to API to add targeted user to the current logged in user's pending friend requests and then update UI with returned user
   const sendRequest = async (e) => {
@@ -37,14 +34,12 @@ function FriendSearch(props) {
     });
   }, []);
 
-  // handleSearch is fired everythime there is a change to the search input.  Will filter the Users state varible by the current input value and then create DOM elements based on the results.
+  // handleSearch is fired everytime there is a change to the search input.  Will filter the Users state varible by the current input value and then create DOM elements based on the results.
   const handleSearch = (e) => {
     e.preventDefault();
 
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
-
-    //console.log(dataObj);
 
     if (!dataObj.search) {
       setFilteredUsers([]);
@@ -52,7 +47,6 @@ function FriendSearch(props) {
     }
 
     const filteredObjs = users.filter((user) => {
-      //console.log(user.username, dataObj.search);
       return user.username.indexOf(dataObj.search) >= 0;
     });
 
