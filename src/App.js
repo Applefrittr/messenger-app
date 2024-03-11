@@ -33,6 +33,7 @@ function App() {
         // if token expired, navigate to to login page.  Else, navigate to user dashboard
         if (response.error) {
           localStorage.clear();
+          setTokenErr(response.error);
           navigate("/");
         } else {
           console.log("user reset");

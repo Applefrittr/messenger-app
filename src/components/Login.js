@@ -80,8 +80,9 @@ function Login(props) {
       setErrors(errorArray);
     } else {
       if (response.accessToken) {
-        //localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
-        props.updateToken(response.accessToken); // Call updateToken to update token state in App.js
+        localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
+        props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
+        //props.updateToken(response.accessToken);
         setErrors();
         navigate(`/${dataObj.username}/`); // navigate to the Dashboard component with the current username as the URL base
       }
@@ -93,12 +94,6 @@ function Login(props) {
 
     const formData = new FormData(testForm.current);
     const dataObj = Object.fromEntries(formData.entries());
-
-    //console.log(dataObj.url);
-
-    //const output = useLinkify(dataObj.url);
-
-    //console.log("output:", output);
 
     const request = await fetch(`${URL}/fetchURL`, {
       mode: "cors",

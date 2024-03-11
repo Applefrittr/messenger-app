@@ -6,7 +6,6 @@ import Profile from "./Profile";
 import FriendProfile from "./FriendProfile";
 import Error from "./Error";
 import { useEffect, useRef, useState } from "react";
-import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
 import CommentIcon from "../assets/comment.png";
 import MsgIcon from "../assets/message.png";
@@ -38,6 +37,7 @@ function Dashboard(props) {
   const slideNavbar = () => {
     navbarRef.current.classList.toggle("nav-bar-slide");
     menuRef.current.classList.toggle("spin");
+    //SOCKET.emit("all connections");
   };
 
   const updateFriends = (data) => {
@@ -69,6 +69,11 @@ function Dashboard(props) {
     props.updateToken();
     props.updateUser();
     navigate("/");
+  };
+
+  // logs the user out of the app but keeps webtoken of user saved to save the user's session
+  const appClose = async () => {
+    SOCKET.emit("user logout", props.user.username);
   };
 
   const closeNotification = () => {
@@ -132,15 +137,21 @@ function Dashboard(props) {
       navigate("/");
     });
 
-    window.addEventListener("unload", logout);
+    SOCKET.on("duplicate login", () => {
+      props.updateTokenErr("Account logged in elsewhere...");
+      navigate("/");
+    });
+
+    window.addEventListener("unload", appClose);
 
     return () => {
-      window.removeEventListener("unload", logout);
+      window.removeEventListener("unload", appClose);
       SOCKET.off("connect");
       SOCKET.off("notification");
       SOCKET.off("connect_error");
       SOCKET.off("friend login");
       SOCKET.off("friend logout");
+      SOCKET.off("duplicate login");
       SOCKET.disconnect();
     };
   }, []);
