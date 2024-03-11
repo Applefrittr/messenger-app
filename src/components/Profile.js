@@ -54,29 +54,31 @@ function Profile(props) {
 
     dataObj.avatar = editAvatar;
 
-    const request = await fetch(`${URL}/users/${user.username}/profile`, {
-      mode: "cors",
-      method: "POST",
-      body: JSON.stringify(dataObj),
-      headers: {
-        Authorization: `Bearer ${props.token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    const response = await request.json();
+    // const request = await fetch(`${URL}/users/${user.username}/profile`, {
+    //   mode: "cors",
+    //   method: "POST",
+    //   body: JSON.stringify(dataObj),
+    //   headers: {
+    //     Authorization: `Bearer ${props.token}`,
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    // const response = await request.json();
 
-    if (response.error) {
-      console.log(response);
-      props.updateTokenErr(response.error);
-      navigate(`/`);
-    } else {
-      console.log(response.message);
+    SOCKET.emit("edit profile", props.user.username, dataObj);
 
-      props.updateUser({ ...user, avatar: editAvatar }); // Update the Dashboard state user with the edits
-      setUser({ ...user, avatar: editAvatar }); // Update local state user to display current info in the form fields
-      setUserAvatar(editAvatar); // Update profile avatar to match form avatar selection
-      toggleModal();
-    }
+    // if (response.error) {
+    //   console.log(response);
+    //   props.updateTokenErr(response.error);
+    //   navigate(`/`);
+    // } else {
+    //   console.log(response.message);
+
+    props.updateUser({ ...user, avatar: editAvatar }); // Update the Dashboard state user with the edits
+    setUser({ ...user, avatar: editAvatar }); // Update local state user to display current info in the form fields
+    setUserAvatar(editAvatar); // Update profile avatar to match form avatar selection
+    toggleModal();
+    // }
   };
 
   // function will handle changes to form fields "title", "text", or the checkbox. Updates the local state user (handles form manipulation), which is a copy of the App state user

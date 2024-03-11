@@ -1,5 +1,6 @@
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import Error from "./components/Error";
 import { useState, useEffect } from "react";
 import "./styles/App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -28,8 +29,6 @@ function App() {
         });
 
         const response = await request.json();
-
-        //console.log(response.payload);
 
         // if token expired, navigate to to login page.  Else, navigate to user dashboard
         if (response.error) {
@@ -87,6 +86,8 @@ function App() {
           }
         />
       )}
+
+      {!user && <Route path="/*" element={<Error />} />}
     </Routes>
   );
 }

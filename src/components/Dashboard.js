@@ -21,7 +21,6 @@ function Dashboard(props) {
   const [friends, setFriends] = useState();
   const [notification, setNotification] = useState();
   const [chatCount, setChatCount] = useState(0);
-  //const [currChat, setCurrChat] = useState();
   const navigate = useNavigate();
   const viewRef = useRef();
   const chatIDRef = useRef();
@@ -79,23 +78,8 @@ function Dashboard(props) {
     }, 500);
   };
 
-  ///// Remove http request and use WS listener!!!!!!!
-  // on Dashbaord mount, retrieve fully popualted User object (token payload is only partial object)
+  // on Dashbaord mount, retrieve fully populated User object (token payload is only partial object)
   useEffect(() => {
-    const getCurrUser = async () => {
-      const request = await fetch(
-        `${URL}/users/${props.user.username}/profile`
-      );
-
-      const response = await request.json();
-
-      console.log("dashboard user", response.user);
-      setCurrUser(response.user);
-      setFriends(response.user.friends);
-    };
-
-    getCurrUser();
-
     SOCKET.auth.token = props.token;
     SOCKET.connect();
 
@@ -104,7 +88,10 @@ function Dashboard(props) {
         console.log("connection re-established");
       } else {
         console.log("new connection established", SOCKET.recovered);
-        SOCKET.emit("hello", props.user.username);
+        SOCKET.emit("user login", props.user.username, (response) => {
+          setCurrUser(response.user);
+          setFriends(response.user.friends);
+        });
       }
     });
 
