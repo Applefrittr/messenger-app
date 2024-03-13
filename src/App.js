@@ -4,6 +4,7 @@ import Error from "./components/Error";
 import { useState, useEffect } from "react";
 import "./styles/App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import URL from "./API/apiURL";
 
 // Main App.  Uses state to determine if there is a jwt in localStorage which sets the user state to be passed to the rest of the app.  Effectively checks if a user is logged in or not and will render either
 // the login page or the dashboard.  The token payload (user object) is used to to route the user's Dashboard, in which the full user object is then pulled from the API to be used for the rest of the App.
@@ -19,7 +20,7 @@ function App() {
     // GET call to the back end to have web token decoded and the user payload sent back for use
     const getUser = async () => {
       if (token) {
-        const request = await fetch("http://localhost:5000/users/login", {
+        const request = await fetch(`${URL}/users/login`, {
           mode: "cors",
           method: "GET",
           headers: {

@@ -1,22 +1,20 @@
 import NewChat from "./NewChat";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NewIcon from "../assets/newChat.png";
 import Arrow from "../assets/forward.png";
-import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
 
 // ChatLists displays a list of chats that the current user is involved in with each chat card displying the other user/users involded, their avatars, and the most recent message and timestamp.  Each card is a link
 // which will route to the Chat.js component with that specific chat's data displayed
 // IMPORTANT:  Group chat origination and functionality currently not implemented
 function ChatList(props) {
-  const [chats, setChats] = useState();
+  // const [chats, setChats] = useState();
   const [renderModal, setRenderModal] = useState(false);
   const modalRef = useRef();
-  const navigate = useNavigate();
 
   const chatsRef = useRef();
-  chatsRef.current = chats;
+  chatsRef.current = props.chats;
 
   //toggle New Message modal overlay
   const toggleModal = () => {
@@ -24,10 +22,10 @@ function ChatList(props) {
     setRenderModal(!renderModal);
   };
 
-  // setChats helper function passed to NewChat component to update chat list when a new message is sent
-  const updateChats = (data) => {
-    setChats(data);
-  };
+  // // setChats helper function passed to NewChat component to update chat list when a new message is sent
+  // const updateChats = (data) => {
+  //   setChats(data);
+  // };
 
   const readMessages = (chatID, username) => {
     SOCKET.emit("read messages", chatID, username);
@@ -49,26 +47,26 @@ function ChatList(props) {
   };
 
   // on render and whenever the logged in user is updated, retrieve all active chats
-  useEffect(() => {
-    SOCKET.emit("get all chats", props.user.username, (response) => {
-      setChats(response.chats);
-    });
+  // useEffect(() => {
+  //   SOCKET.emit("get all chats", props.user.username, (response) => {
+  //     setChats(response.chats);
+  //   });
 
-    SOCKET.on("update chat list", () => {
-      SOCKET.emit("get all chats", props.user.username, (response) => {
-        setChats(response.chats);
-      });
-    });
-    return () => {
-      SOCKET.off("update chat list");
-    };
-  }, []);
+  //   SOCKET.on("update chat list", () => {
+  //     SOCKET.emit("get all chats", props.user.username, (response) => {
+  //       setChats(response.chats);
+  //     });
+  //   });
+  //   return () => {
+  //     SOCKET.off("update chat list");
+  //   };
+  // }, []);
 
   useEffect(() => {
-    if (chats) {
+    if (props.chats) {
       let unreadCount = 0;
 
-      chats.forEach((chat) => {
+      props.chats.forEach((chat) => {
         if (chat.newMsgCounter) {
           const unreadObj = chat.newMsgCounter.find(
             (obj) => obj.user === props.user.username
@@ -79,7 +77,7 @@ function ChatList(props) {
 
       props.updateChatCount(unreadCount);
     }
-  }, [chats]);
+  }, [props.chats]);
 
   return (
     <section className="component-view">
@@ -98,8 +96,8 @@ function ChatList(props) {
         </div>
         <div className="chats-list-container">
           {/* MAP out an array of HTML elements based on the chat state data */}
-          {chats &&
-            chats.map((chat) => {
+          {props.chats &&
+            props.chats.map((chat) => {
               const users = chat.users
                 .filter((user) => user.username !== props.user.username)
                 .map((user) => {
@@ -164,8 +162,8 @@ function ChatList(props) {
               user={props.user}
               token={props.token}
               updateUser={props.updateUser}
-              chats={chats}
-              updateChats={updateChats}
+              chats={props.chats}
+              updateChats={props.updateChats}
               friends={props.friends}
             />
           )}

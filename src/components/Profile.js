@@ -16,7 +16,6 @@ function Profile(props) {
   const formRef = useRef();
   const toolRef = useRef();
   const avatarEdit = useRef();
-  const navigate = useNavigate();
 
   // Toggle display of the edit form
   const toggleModal = () => {

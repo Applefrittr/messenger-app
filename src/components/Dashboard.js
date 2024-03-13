@@ -19,6 +19,7 @@ function Dashboard(props) {
   const [currUser, setCurrUser] = useState();
   const [friends, setFriends] = useState();
   const [notification, setNotification] = useState();
+  const [chats, setChats] = useState();
   const [chatCount, setChatCount] = useState(0);
   const navigate = useNavigate();
   const viewRef = useRef();
@@ -55,6 +56,11 @@ function Dashboard(props) {
 
   const updateChatCount = (count) => {
     setChatCount(count);
+  };
+
+  // setChats helper function passed to NewChat component to update chat list when a new message is sent
+  const updateChats = (data) => {
+    setChats(data);
   };
 
   let base; // the base to our URL paths is the current logged in user
@@ -96,6 +102,9 @@ function Dashboard(props) {
         SOCKET.emit("user login", props.user.username, (response) => {
           setCurrUser(response.user);
           setFriends(response.user.friends);
+        });
+        SOCKET.emit("get all chats", props.user.username, (response) => {
+          setChats(response.chats);
         });
       }
     });
@@ -142,6 +151,12 @@ function Dashboard(props) {
       navigate("/");
     });
 
+    SOCKET.on("update chat list", () => {
+      SOCKET.emit("get all chats", props.user.username, (response) => {
+        setChats(response.chats);
+      });
+    });
+
     window.addEventListener("unload", appClose);
 
     return () => {
@@ -152,6 +167,7 @@ function Dashboard(props) {
       SOCKET.off("friend login");
       SOCKET.off("friend logout");
       SOCKET.off("duplicate login");
+      SOCKET.off("update chat list");
       SOCKET.disconnect();
     };
   }, []);
@@ -228,6 +244,8 @@ function Dashboard(props) {
                   updateTokenErr={props.updateTokenErr}
                   updateChatCount={updateChatCount}
                   friends={friends}
+                  chats={chats}
+                  updateChats={updateChats}
                 />
               }
             />
