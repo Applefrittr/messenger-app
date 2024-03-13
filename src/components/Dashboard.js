@@ -152,6 +152,7 @@ function Dashboard(props) {
     });
 
     SOCKET.on("update chat list", () => {
+      console.log("updaing list...");
       SOCKET.emit("get all chats", props.user.username, (response) => {
         setChats(response.chats);
       });

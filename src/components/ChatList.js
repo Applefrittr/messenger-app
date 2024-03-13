@@ -7,7 +7,6 @@ import SOCKET from "../API/websocket";
 
 // ChatLists displays a list of chats that the current user is involved in with each chat card displying the other user/users involded, their avatars, and the most recent message and timestamp.  Each card is a link
 // which will route to the Chat.js component with that specific chat's data displayed
-// IMPORTANT:  Group chat origination and functionality currently not implemented
 function ChatList(props) {
   // const [chats, setChats] = useState();
   const [renderModal, setRenderModal] = useState(false);
@@ -21,11 +20,6 @@ function ChatList(props) {
     modalRef.current.classList.toggle("toggle-modal");
     setRenderModal(!renderModal);
   };
-
-  // // setChats helper function passed to NewChat component to update chat list when a new message is sent
-  // const updateChats = (data) => {
-  //   setChats(data);
-  // };
 
   const readMessages = (chatID, username) => {
     SOCKET.emit("read messages", chatID, username);
@@ -45,22 +39,6 @@ function ChatList(props) {
     else if (yesterday.getDate() === messageTime) return "Yesterday";
     else return new Date(time).toLocaleString("en", { dateStyle: "short" });
   };
-
-  // on render and whenever the logged in user is updated, retrieve all active chats
-  // useEffect(() => {
-  //   SOCKET.emit("get all chats", props.user.username, (response) => {
-  //     setChats(response.chats);
-  //   });
-
-  //   SOCKET.on("update chat list", () => {
-  //     SOCKET.emit("get all chats", props.user.username, (response) => {
-  //       setChats(response.chats);
-  //     });
-  //   });
-  //   return () => {
-  //     SOCKET.off("update chat list");
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (props.chats) {

@@ -113,7 +113,7 @@ function Chat(props) {
     // Socket event listener for new messages recieved from the API
     SOCKET.on("new msg", (message, chatID) => {
       if (chatID === id) {
-        console.log(message);
+        //console.log(message);
         setMessages((prevMsgs) => [...prevMsgs, message]);
         setTypingUser();
         setTimeout(() => {
@@ -126,7 +126,6 @@ function Chat(props) {
       typing = false;
 
     SOCKET.on("user typing", (username) => {
-      //console.log(`${username} is typing...`);
       if (!typing) {
         typing = true;
         setTypingUser(username);
