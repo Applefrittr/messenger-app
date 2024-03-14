@@ -38,14 +38,12 @@ function Login(props) {
 
     const response = await submit.json();
     if (response.errors) {
-      console.log(response.errors);
       const errorArray = [];
       response.errors.forEach((error) => {
         errorArray.push(<p>- {error.msg}</p>);
       });
       setErrors(errorArray);
     } else {
-      console.log(response.message);
       setNewUserMsg(true);
       toggleForms();
     }
@@ -71,7 +69,6 @@ function Login(props) {
 
     const response = await request.json();
     if (response.errors) {
-      console.log(response.errors);
       const errorArray = [];
       response.errors.forEach((error) => {
         errorArray.push(<p>- {error.msg}</p>);
@@ -79,9 +76,8 @@ function Login(props) {
       setErrors(errorArray);
     } else {
       if (response.accessToken) {
-        // localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
-        // props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
-        props.updateToken(response.accessToken);
+        localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
+        props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
         setErrors();
         navigate(`/${dataObj.username}/`); // navigate to the Dashboard component with the current username as the URL base
       }

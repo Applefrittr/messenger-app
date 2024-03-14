@@ -34,22 +34,14 @@ function NewChat(props) {
   // search bar to choose recipient of new message.  If a chat already exists with selected recipient(s),
   // message log will be displayed.  Will remove the selected target from eligible recipeint list
   const chooseRecipient = (e) => {
-    //e.preventDefault();
     if (e.target.value) {
       searchFieldRef.current.value = e.target.value;
-      //searchFieldRef.current.disabled = true;
       sendRef.current.disabled = false;
-
-      console.log(e.target.value);
 
       // Check to see if there is an existing chat by iterating through user's exisiting chats.  If so, set hidden input value to chat's ._id to be passed to API
       const chatMembers = [props.user.username, e.target.value, ...recipients];
-      //console.log(chatMembers);
-
-      //console.log(JSON.stringify(chatMembers));
 
       for (const chat of props.chats) {
-        //console.log(chat);
         if (
           JSON.stringify(chatMembers.sort()) ===
           JSON.stringify(chat.usernames.sort())
@@ -85,7 +77,6 @@ function NewChat(props) {
     const chatGroup = [props.user.username, ...chatMembers];
 
     for (const chat of props.chats) {
-      //console.log(chat);
       if (
         JSON.stringify(chatGroup.sort()) ===
         JSON.stringify(chat.usernames.sort())
@@ -105,14 +96,8 @@ function NewChat(props) {
 
     const formData = new FormData(formRef.current);
     const dataObj = Object.fromEntries(formData.entries());
-
-    // if (!dataObj.users) console.log("Choose recipient");
-    // else {
     // create an array of users to be passed to the API
     dataObj.users = recipients;
-
-    // console.log(dataObj.users);
-    // console.log(recipients);
 
     SOCKET.emit(
       "send new message",
@@ -122,7 +107,6 @@ function NewChat(props) {
         navigate(`/${props.user.username}/chats/${response.id}`);
       }
     );
-    //}
   };
 
   useEffect(() => {

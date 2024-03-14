@@ -86,7 +86,6 @@ function Profile(props) {
     getAvatars();
 
     SOCKET.on("new comment", (comment) => {
-      console.log("new comment event");
       setComments((prevComments) => [comment, ...prevComments]);
     });
 

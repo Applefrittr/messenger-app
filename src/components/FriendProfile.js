@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Comment from "./Comment";
 import GIFSearch from "./GIFSearch";
-import URL from "../API/apiURL.js";
 import SOCKET from "../API/websocket";
 
 // FriendProfile displays the profile of another user other than the currently logged in user.  This displayed user can either be or not be a friend to the currently logged in user.  There is also the functionalty to leave

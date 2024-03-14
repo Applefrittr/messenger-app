@@ -38,7 +38,6 @@ function Dashboard(props) {
   const slideNavbar = () => {
     navbarRef.current.classList.toggle("nav-bar-slide");
     menuRef.current.classList.toggle("spin");
-    //SOCKET.emit("all connections");
   };
 
   const updateFriends = (data) => {

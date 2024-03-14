@@ -15,7 +15,6 @@ function MessageBubble(props) {
 
   // resize the img to ensure it's aspect ratio is preserved
   const imgResize = () => {
-    console.log(imgRef.current);
     imgRef.current.style.width = 200;
     imgRef.current.style.height = "auto";
   };

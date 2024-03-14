@@ -37,9 +37,6 @@ function App() {
           setTokenErr(response.error);
           navigate("/");
         } else {
-          console.log("user reset");
-          console.log("user", user);
-          console.log("payload", response.payload);
           setUser(response.payload);
           navigate(`/${response.payload.username}/chats`);
         }

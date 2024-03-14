@@ -8,7 +8,6 @@ import SOCKET from "../API/websocket";
 // ChatLists displays a list of chats that the current user is involved in with each chat card displying the other user/users involded, their avatars, and the most recent message and timestamp.  Each card is a link
 // which will route to the Chat.js component with that specific chat's data displayed
 function ChatList(props) {
-  // const [chats, setChats] = useState();
   const [renderModal, setRenderModal] = useState(false);
   const modalRef = useRef();
 
@@ -62,9 +61,6 @@ function ChatList(props) {
       <section className="component-container">
         <div className="chats-nav">
           <p className="chats-nav-btn">Messages</p>
-          {/* <p className="new-msg-btn" onClick={toggleModal}>
-            NM
-          </p> */}
           <img
             src={NewIcon}
             alt="new chat"
@@ -81,8 +77,6 @@ function ChatList(props) {
                 .map((user) => {
                   return { username: user.username, avatar: user.avatar };
                 });
-
-              //const latestMsg = chat.messages[0];
               let unreadMsgs;
               if (chat.newMsgCounter) {
                 const unreadObj = chat.newMsgCounter.find(

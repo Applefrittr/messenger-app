@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import SOCKET from "../API/websocket";
 
 // FriendRequests which display pending incoming and outgoing friend request for the user.  Each request element displays the friend's username and avatar, as well as
 // buttons to either accept or deny (incoming) or cancel (outgoing) the friend request
 function FriendRequests(props) {
-  const navigate = useNavigate();
-
   // Accepted friend request call to API.  Returned updated user used to update UI with changes
   const handleAccept = async (e) => {
     SOCKET.emit(
