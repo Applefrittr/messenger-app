@@ -13,6 +13,15 @@
   --main-accent-color: #464d5a;
 }
 
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+html {
+  min-height: 100vh;
+}
+
 .App {
   text-align: center;
 }

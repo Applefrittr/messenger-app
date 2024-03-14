@@ -25,6 +25,7 @@
 .dashboard {
   display: flex;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   position: relative;
   overflow-x: hidden;
 }
@@ -154,16 +155,6 @@
   transform: rotate(90deg);
 }
 
-/* @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(90deg);
-  }
-} */
-
 .nav-bar-toggle-btn:hover {
   cursor: pointer;
 }
@@ -179,15 +170,6 @@
 }
 
 @media screen and (max-width: 600px) {
-  /* .nav-bar {
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-    border-top: solid 1px white;
-    border-right: none;
-    gap: 0.9rem;
-  } */
-
   .nav-bar {
     position: absolute;
     height: 100%;
@@ -199,15 +181,6 @@
   .nav-bar-slide {
     transform: translateX(0);
   }
-
-  /* .nav-bar-header {
-    display: none;
-  } */
-
-  /* .dashboard {
-    flex-direction: column-reverse;
-    height: 100vh;
-  } */
 
   .notification-bubble {
     padding: 1rem 2rem;
