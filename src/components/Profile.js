@@ -176,7 +176,7 @@ function Profile(props) {
       <div className="modal" ref={modalRef}>
         <form className="edit-form" ref={formRef}>
           <div>
-            <div className="avatar-container">
+            <div className="img-container">
               <img
                 className="avatar-edit"
                 src={editAvatar}
@@ -217,7 +217,6 @@ function Profile(props) {
           <textarea
             name="personal"
             rows="7"
-            cols="35"
             onChange={handleChange}
             value={user.personal ? user.personal : ""}
           />

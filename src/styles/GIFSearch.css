@@ -26,7 +26,6 @@
 .gif-btns {
   display: flex;
   gap: 1rem;
-  width: 400px;
 }
 
 .gif-btns > input {

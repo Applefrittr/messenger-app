@@ -57,8 +57,13 @@
   position: relative;
 }
 
+.friends-container {
+  width: fit-content;
+}
+
 .comment-container {
   flex: 1;
+  width: 100%;
 }
 
 .edit-form {
@@ -104,7 +109,6 @@
 
 .avatar-selection-tool {
   position: absolute;
-  width: 375px;
   background-color: #464d5a;
   display: none;
   flex-wrap: wrap;
@@ -112,6 +116,8 @@
   max-height: 0;
   transition: all ease-in 0.5s;
   overflow: scroll;
+  z-index: 5;
+  max-width: 298px;
 }
 
 .toggle-tool {
@@ -140,5 +146,10 @@
   .img-container {
     max-width: 100px;
     max-height: 100px;
+  }
+
+  .profile-content {
+    flex-direction: column;
+    flex-wrap: nowrap;
   }
 }
