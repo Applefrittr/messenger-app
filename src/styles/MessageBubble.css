@@ -110,9 +110,13 @@
   text-decoration: none;
 }
 
+.md-text-block {
+  overflow-wrap: break-word;
+}
+
 .md-descrip {
   font-size: 0.85rem;
-  max-width: 50ch;
+  overflow-wrap: break-word;
 }
 
 .md-site-name {
