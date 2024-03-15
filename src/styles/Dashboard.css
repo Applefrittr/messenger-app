@@ -114,6 +114,7 @@
   flex-direction: column;
   gap: 2rem;
   height: inherit;
+  padding-bottom: 0;
 }
 
 .close {
