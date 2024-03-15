@@ -112,10 +112,12 @@
 
 .md-text-block {
   overflow-wrap: break-word;
+  max-width: inherit;
 }
 
 .md-descrip {
   font-size: 0.85rem;
+  max-width: inherit;
   overflow-wrap: break-word;
 }
 
