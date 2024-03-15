@@ -231,7 +231,7 @@
   gap: 1px;
   position: relative;
   scrollbar-width: thin;
-  scrollbar-color: var(--main-theme-color) transparent;
+  scrollbar-color: lightblue transparent;
 }
 
 .chat-last-el {
