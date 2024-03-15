@@ -110,7 +110,7 @@ function FriendProfile(props) {
   return (
     <section className="component-view">
       {profile && (
-        <section className="component-container">
+        <section className="component-container profile-container-scroll">
           <div className="profile-header">
             <div className="img-container">
               <img src={profile.avatar} alt="avatar"></img>

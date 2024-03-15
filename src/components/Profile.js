@@ -100,7 +100,7 @@ function Profile(props) {
 
   return (
     <section className="component-view">
-      <section className="component-container">
+      <section className="component-container profile-container-scroll">
         <div className="profile-header">
           <div className="img-container">
             <img src={userAvatar} alt="avatar"></img>
