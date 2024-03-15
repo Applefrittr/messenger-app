@@ -118,3 +118,9 @@
 .md-site-name {
   color: darkslategrey;
 }
+
+@media screen and (max-width: 600px) {
+  .bubble-md-container {
+    max-width: 350px;
+  }
+}

@@ -278,26 +278,6 @@
   flex: auto;
 }
 
-/* .chat-component-view {
-  width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  height: inherit;
-}
-
-.chat-component-container {
-  width: 75%;
-  background-color: var(--main-theme-color);
-  color: white;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  height: inherit;
-} */
-
 .chat-view-gif-container {
   display: flex;
   gap: 1rem;
@@ -347,5 +327,10 @@
   .chats-list-container {
     padding-left: 1rem;
     padding-right: 0;
+  }
+
+  /* cause safari is weird */
+  .chat-view-container {
+    margin: 0 -2rem -2rem -2rem;
   }
 }
