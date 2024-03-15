@@ -284,7 +284,6 @@
   display: flex;
   justify-content: center;
   position: relative;
-  flex: 1;
   height: inherit;
 }
 

@@ -16,6 +16,6 @@ code {
   scrollbar-color: #00b7ff transparent;
 }
 
-* ::-webkit-scrollbar {
+/* * ::-webkit-scrollbar {
   display: none;
-}
+} */
