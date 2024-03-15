@@ -162,8 +162,8 @@ function Chat(props) {
   }, [prevScrollHeight]);
 
   return (
-    <section className="chat-component-view">
-      <section className="chat-component-container">
+    <section className="component-view white-background">
+      <section className="component-container">
         <div className="chat-view-header">
           <button className="back-btn">
             <img src={Back} alt="Back" onClick={back}></img>
@@ -230,7 +230,6 @@ function Chat(props) {
             </div>
           </form>
         </div>
-
         <div className="modal" ref={modalRef}>
           {renderModal && (
             <GIFSearch

@@ -12,7 +12,7 @@ code {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* -ms-overflow-style: none; */
-  scrollbar-width: thin;
+  /* scrollbar-width: thin; */
   scrollbar-color: #00b7ff transparent;
 }
 
