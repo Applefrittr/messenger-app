@@ -11,8 +11,9 @@ code {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  /* -ms-overflow-style: none; */
+  scrollbar-width: thin;
+  scrollbar-color: #00b7ff transparent;
 }
 
 * ::-webkit-scrollbar {
