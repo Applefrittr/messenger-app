@@ -218,7 +218,7 @@
   flex: auto;
   margin: 0 -2rem 0 -2rem;
   background-color: var(--main-accent-color);
-  height: 80%;
+  height: 80svh;
 }
 
 .chat-view-messages {
