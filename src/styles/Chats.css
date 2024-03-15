@@ -230,6 +230,8 @@
   flex: 1;
   gap: 1px;
   position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--main-theme-color) transparent;
 }
 
 .chat-last-el {

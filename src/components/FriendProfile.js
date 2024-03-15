@@ -118,6 +118,11 @@ function FriendProfile(props) {
             <div className="profile-info">
               <div>
                 <h2>{profile.username}</h2>
+                {profile.online && (
+                  <p className="online-status">
+                    <i>ONLINE</i>
+                  </p>
+                )}
                 <p>country: {profile.country}</p>
               </div>
               <p>
@@ -216,11 +221,6 @@ function FriendProfile(props) {
                 })}
             </div>
             <div className="friends-container">
-              {profile.online && (
-                <p className="online-status">
-                  <i>ONLINE</i>
-                </p>
-              )}
               <div className="friend-list">
                 Friends <i className="big-font">{profile.friends.length}</i>
               </div>
