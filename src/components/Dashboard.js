@@ -27,8 +27,10 @@ function Dashboard(props) {
   const notificationRef = useRef();
   const navbarRef = useRef();
   const friendsRef = useRef();
+  const currUserRef = useRef();
   const menuRef = useRef();
   friendsRef.current = friends;
+  currUserRef.current = currUser;
 
   // CSS toggle class to disable page scrolling when a modal is open
   const toggleScroll = () => {
@@ -69,7 +71,7 @@ function Dashboard(props) {
   // Also emits to the server that the user has logged out, which will inturn update DB and broadcast
   // th logout to other users
   const logout = async () => {
-    SOCKET.emit("user logout", currUser.username);
+    SOCKET.emit("user logout", currUserRef.current.username);
     localStorage.clear();
     props.updateToken();
     props.updateUser();
@@ -78,7 +80,7 @@ function Dashboard(props) {
 
   // logs the user out of the app but keeps webtoken of user saved to save the user's session
   const appClose = async () => {
-    SOCKET.emit("user logout", currUser.username);
+    SOCKET.emit("user logout", currUserRef.current.username);
   };
 
   const closeNotification = () => {
@@ -125,16 +127,18 @@ function Dashboard(props) {
     });
 
     SOCKET.on("friend login", (friendname) => {
+      console.log(`${friendname} logged in!`);
       if (friendsRef.current.find((friend) => friend.username === friendname)) {
-        SOCKET.emit("get friends", currUser.username, (response) => {
+        SOCKET.emit("get friends", currUserRef.current.username, (response) => {
           updateFriends(response.friends);
         });
       }
     });
 
     SOCKET.on("friend logout", (friendname) => {
+      console.log(`${friendname} logged out :(`);
       if (friendsRef.current.find((friend) => friend.username === friendname)) {
-        SOCKET.emit("get friends", currUser.username, (response) => {
+        SOCKET.emit("get friends", currUserRef.current.username, (response) => {
           updateFriends(response.friends);
         });
       }
@@ -155,7 +159,7 @@ function Dashboard(props) {
 
     SOCKET.on("update chat list", () => {
       console.log("updaing list...");
-      SOCKET.emit("get all chats", currUser.username, (response) => {
+      SOCKET.emit("get all chats", currUserRef.current.username, (response) => {
         setChats(response.chats);
       });
     });

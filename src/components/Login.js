@@ -78,6 +78,7 @@ function Login(props) {
       if (response.accessToken) {
         localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
         props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
+        //props.updateToken(response.accessToken);
         setErrors();
         navigate(`/${dataObj.username}/`); // navigate to the Dashboard component with the current username as the URL base
       }
