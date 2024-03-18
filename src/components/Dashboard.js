@@ -147,6 +147,9 @@ function Dashboard(props) {
 
     SOCKET.on("duplicate login", () => {
       props.updateTokenErr("Account logged in elsewhere...");
+      localStorage.clear();
+      props.updateToken();
+      props.updateUser();
       navigate("/");
     });
 
