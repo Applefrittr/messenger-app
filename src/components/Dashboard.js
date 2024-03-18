@@ -69,7 +69,7 @@ function Dashboard(props) {
   // Also emits to the server that the user has logged out, which will inturn update DB and broadcast
   // th logout to other users
   const logout = async () => {
-    SOCKET.emit("user logout", props.user.username);
+    SOCKET.emit("user logout", currUser.username);
     localStorage.clear();
     props.updateToken();
     props.updateUser();
@@ -78,7 +78,7 @@ function Dashboard(props) {
 
   // logs the user out of the app but keeps webtoken of user saved to save the user's session
   const appClose = async () => {
-    SOCKET.emit("user logout", props.user.username);
+    SOCKET.emit("user logout", currUser.username);
   };
 
   const closeNotification = () => {
@@ -126,7 +126,7 @@ function Dashboard(props) {
 
     SOCKET.on("friend login", (friendname) => {
       if (friendsRef.current.find((friend) => friend.username === friendname)) {
-        SOCKET.emit("get friends", props.user.username, (response) => {
+        SOCKET.emit("get friends", currUser.username, (response) => {
           updateFriends(response.friends);
         });
       }
@@ -134,7 +134,7 @@ function Dashboard(props) {
 
     SOCKET.on("friend logout", (friendname) => {
       if (friendsRef.current.find((friend) => friend.username === friendname)) {
-        SOCKET.emit("get friends", props.user.username, (response) => {
+        SOCKET.emit("get friends", currUser.username, (response) => {
           updateFriends(response.friends);
         });
       }
@@ -155,7 +155,7 @@ function Dashboard(props) {
 
     SOCKET.on("update chat list", () => {
       console.log("updaing list...");
-      SOCKET.emit("get all chats", props.user.username, (response) => {
+      SOCKET.emit("get all chats", currUser.username, (response) => {
         setChats(response.chats);
       });
     });
