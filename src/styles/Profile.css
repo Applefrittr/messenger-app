@@ -28,7 +28,6 @@
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  overflow-y: auto;
 }
 
 .comment-header {

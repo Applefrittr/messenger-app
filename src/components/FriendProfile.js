@@ -118,7 +118,7 @@ function FriendProfile(props) {
             <div className="profile-info">
               <div>
                 <h2>{profile.username}</h2>
-                {profile.online && (
+                {profile.online === true && (
                   <p className="online-status">
                     <i>ONLINE</i>
                   </p>

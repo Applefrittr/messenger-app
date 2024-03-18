@@ -33,7 +33,7 @@
 .dashboard-view-container {
   flex: 1;
   height: inherit;
-  /* overflow-y: auto; */
+  background-color: var(--main-accent-color);
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
