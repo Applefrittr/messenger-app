@@ -145,7 +145,7 @@ function Dashboard(props) {
     });
 
     SOCKET.on("connect_error", (err) => {
-      props.updateTokenErr(err.message);
+      props.updateTokenErr("Connection error, please try again later");
       navigate("/");
     });
 

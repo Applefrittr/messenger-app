@@ -78,11 +78,24 @@ function Login(props) {
       if (response.accessToken) {
         localStorage.setItem("webToken", response.accessToken); // Store token in localStorage
         props.updateToken(localStorage["webToken"]); // Call updateToken to update token state in App.js
-        //props.updateToken(response.accessToken);
         setErrors();
         navigate(`/${dataObj.username}/`); // navigate to the Dashboard component with the current username as the URL base
       }
     }
+  };
+
+  const demoSite = async () => {
+    props.updateTokenErr();
+    const request = await fetch(`${URL}/users/demologin`, {
+      mode: "cors",
+      method: "Get",
+    });
+
+    const response = await request.json();
+    localStorage.setItem("webToken", response.accessToken); // Store token in localStorage, demo user token expires in 5 minutes
+    props.updateToken(localStorage["webToken"]);
+    setErrors();
+    navigate(`/apple/`); // demo user is apple
   };
 
   return (
@@ -131,6 +144,9 @@ function Login(props) {
         {errors && <div className="login-msg-container">{errors}</div>}
         <div className="label">Mylo Messenger</div>
       </div>
+      <button className="demo-button" onClick={demoSite}>
+        Demo Site
+      </button>
     </div>
   );
 }
