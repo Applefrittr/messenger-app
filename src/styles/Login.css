@@ -71,3 +71,7 @@
   flex-basis: auto;
   position: relative;
 }
+
+.demo-button:hover {
+  cursor: pointer;
+}
