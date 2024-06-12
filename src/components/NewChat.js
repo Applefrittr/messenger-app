@@ -12,6 +12,7 @@ function NewChat(props) {
   const [displayChat, setDisplayChat] = useState();
   const [recipients, setRecipients] = useState([]);
   const [eligibleRecipients, setEligibleRecipients] = useState(props.friends);
+  const [errMsg, setErrMsg] = useState();
   const formRef = useRef();
   const searchFieldRef = useRef();
   const sendRef = useRef();
@@ -92,6 +93,14 @@ function NewChat(props) {
   };
 
   const sendMsg = async (e) => {
+    if (recipients.length === 0) {
+      console.log("please select at least one recipeint!");
+      setErrMsg("Select a recipient(s)");
+      setTimeout(() => {
+        setErrMsg();
+      }, 3000);
+      return;
+    }
     e.preventDefault();
 
     const formData = new FormData(formRef.current);
@@ -144,6 +153,7 @@ function NewChat(props) {
             ref={searchFieldRef}
           ></input>
         </div>
+        {errMsg && <div className="new-chat-errMsg">{errMsg}</div>}
 
         <div className="chat-view">
           {search && (

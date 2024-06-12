@@ -109,6 +109,9 @@
 
 .search-field {
   padding: 0.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .search-results {
@@ -122,6 +125,15 @@
   display: flex;
   flex-direction: column;
   z-index: 5;
+}
+
+.new-chat-errMsg {
+  padding: 0.5rem;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  width: max-content;
+  margin: 0 1rem;
 }
 
 .result-card {
